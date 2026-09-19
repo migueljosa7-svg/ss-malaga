@@ -8,8 +8,6 @@ services:
     buildCommand: npm install && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
     startCommand: node .next/standalone/server.js
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: PORT
         value: 3000
       - key: HOSTNAME

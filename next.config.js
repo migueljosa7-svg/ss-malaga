@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const path = require("path");
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
@@ -42,6 +43,12 @@ const nextConfig = {
   poweredByHeader: false,
   output: "standalone",
   images: { remotePatterns: [{ protocol: "https", hostname: "**" }] },
+  webpack: (config) => {
+    // Alias explícito: '@/*' debe resolver SIEMPRE contra la raíz del proyecto,
+    // independientemente del SO (Windows/Linux) o de la lectura de tsconfig paths.
+    config.resolve.alias["@"] = path.resolve(__dirname);
+    return config;
+  },
   async headers() {
     return [
       {
