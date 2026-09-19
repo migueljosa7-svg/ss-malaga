@@ -4,11 +4,14 @@ services:
     env: node
     region: frankfurt
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    # El output standalone necesita los assets estáticos y public/ DENTRO de .next/standalone
+    buildCommand: npm install && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
+    startCommand: node .next/standalone/server.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 3000
+      - key: HOSTNAME
+        value: 0.0.0.0
     healthCheckPath: /
