@@ -1,0 +1,116 @@
+import type { Hermandad } from "@/types/hermandad";
+
+export const hermandadesBatch3: Hermandad[] = [
+  {
+    id: "h-san-bernardo",
+    slug: "san-bernardo",
+    nombre: "Hermandad de San Bernardo",
+    nombrePopular: "San Bernardo",
+    sede: "Iglesia de San Bernardo, Calle Santa María la Blanca",
+    diaSemana: "Miércoles Santo",
+    añoFundacion: 1760,
+    numeroHermanos: 2300,
+    numeroNazarenos: 750,
+    tiempoPaso: 50,
+    musica: ["Banda de Música Virgen de los Reyes", "Banda de Música de Coria del Río"],
+    vestimenta: {
+      descripcionTunica: "Túnica de raso blanco, antifaz azul con escudo bordado, capa azul rey y cirio azul.",
+      colorAntifaz: "azul",
+      capa: true,
+      cirios: "Cirios azules",
+    },
+    pasos: [
+      {
+        tipo: "Misterio",
+        nombre: "Oración en el Huerto",
+        escultores: ["Anónimo (s. XVIII)", "Manuel Gutiérrez Reyes Cano"],
+        capataz: "Manuel García",
+        costaleros: 42,
+        anio: 1771,
+        descripcion: "El Señor en el Huerto de los Olivos acompañado de un ángel que le consuela.",
+      },
+      {
+        tipo: "Palio",
+        nombre: "María Santísima del Rosario en sus Misterios Dolorosos",
+        escultores: ["Anónima (s. XVIII)"],
+        capataz: "Manuel García",
+        costaleros: 36,
+        anio: 1771,
+      },
+    ],
+    historia:
+      "Radica en la iglesia de San Bernardo desde el siglo XVIII. Es la hermandad señera del Miércoles Santo, con un misterio del Huerto muy popular entre los jóvenes del barrio de Santa Cruz.",
+    curiosidades: [
+      "Es una de las hermandades preferidas del público joven del Miércoles Santo.",
+      "Su palio de malla granate con bambalinas del Rosario es de los más fotografiados.",
+    ],
+    itinerario: [
+      { id: "sb1", nombre: "Iglesia de San Bernardo (Salida)", lat: 37.3879, lng: -5.9918, horaTeorica: "16:45", estadoPaso: "en_templo" },
+      { id: "sb2", nombre: "Calle Santa María la Blanca", lat: 37.3866, lng: -5.9905, horaTeorica: "17:45", estadoPaso: "en_templo" },
+      { id: "sb3", nombre: "Puerta de la Carne", lat: 37.3868, lng: -5.9924, horaTeorica: "18:30", estadoPaso: "en_templo" },
+      { id: "sb4", nombre: "Catedral (Carrera Oficial)", lat: 37.3867, lng: -5.9942, horaTeorica: "20:00", estadoPaso: "en_templo" },
+      { id: "sb5", nombre: "Plaza del Salvador (regreso)", lat: 37.3905, lng: -5.9939, horaTeorica: "23:30", estadoPaso: "en_templo" },
+    ],
+    videos: [
+      { id: "sb-v1", titulo: "San Bernardo en la Carrera Oficial", youtubeId: "5qap5aO4i9A" },
+    ],
+    imagenes: [],
+  },
+  {
+    id: "h-pasion",
+    slug: "pasion",
+    nombre: "Hermandad de la Pasión",
+    nombrePopular: "Pasión",
+    sede: "Capilla de la Pasión, Calle Álvarez Quintero",
+    diaSemana: "Jueves Santo",
+    añoFundacion: 1431,
+    numeroHermanos: 3500,
+    numeroNazarenos: 1200,
+    tiempoPaso: 55,
+    musica: ["Banda de Música Municipal de Sevilla", "Banda de Música de Nuestra Señora de la Oliva (Salteras)"],
+    vestimenta: {
+      descripcionTunica: "Túnica de raso azul con botonadura plateada, antifaz azul, capa azul y cirio de papelón azul.",
+      colorAntifaz: "azul",
+      capa: true,
+      cirios: "Cirios azules",
+    },
+    pasos: [
+      {
+        tipo: "Misterio",
+        nombre: "Santísimo Cristo de la Pasión",
+        escultores: ["Jacinto Tintoretto (lienzo, 1577)"],
+        capataz: "Álvaro Jiménez",
+        costaleros: 0,
+        anio: 1577,
+        descripcion: "Paso con lienzo del Cristo atado a la columna, es un paso de palio con lienzo, sin imagen de talla.",
+      },
+      {
+        tipo: "Palio",
+        nombre: "Nuestra Señora de la Merced y Misericordia",
+        escultores: ["Anónima (s. XVII)"],
+        capataz: "Álvaro Jiménez",
+        costaleros: 36,
+        anio: 1640,
+        descripcion: "Coronada canónicamente en 1972, con palio de terciopelo azul bordado en oro.",
+      },
+    ],
+    historia:
+      "Es una de las hermandades más antiguas y señeras de Sevilla, fundada en 1431. Su palio azul de terciopelo bordado en oro es único en la Semana Santa. Reside en su capilla propia de la calle Álvarez Quintero.",
+    curiosidades: [
+      "Es la única hermandad cuyo Misterio es un lienzo (Tintoretto) y no una talla.",
+      "Su palio azul terciopelo con bordados en oro es el único de estas características.",
+      "Su lluvia fina de toreros y jóvenes sevillanos es una de las más populares del Jueves Santo.",
+    ],
+    itinerario: [
+      { id: "p1", nombre: "Capilla de la Pasión (Salida)", lat: 37.3907, lng: -5.9926, horaTeorica: "17:00", estadoPaso: "en_templo" },
+      { id: "p2", nombre: "Calle Álvarez Quintero", lat: 37.391, lng: -5.9931, horaTeorica: "17:20", estadoPaso: "en_templo" },
+      { id: "p3", nombre: "Plaza del Salvador", lat: 37.3905, lng: -5.9939, horaTeorica: "18:00", estadoPaso: "en_templo" },
+      { id: "p4", nombre: "Catedral (Carrera Oficial)", lat: 37.3867, lng: -5.9942, horaTeorica: "20:30", estadoPaso: "en_templo" },
+      { id: "p5", nombre: "Campana (regreso)", lat: 37.3938, lng: -5.9961, horaTeorica: "00:30", estadoPaso: "en_templo" },
+    ],
+    videos: [
+      { id: "p-v1", titulo: "El palio azul de Pasión", youtubeId: "xGBiK7xH-eU" },
+    ],
+    imagenes: [],
+  },
+];

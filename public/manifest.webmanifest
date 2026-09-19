@@ -1,0 +1,18 @@
+{
+  "name": "SS Sevilla — Semana Santa de Sevilla",
+  "short_name": "SS Sevilla",
+  "description": "Incidencias en vivo, mapa e itinerarios de la Semana Santa de Sevilla. Funciona offline.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#7f1d1d",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

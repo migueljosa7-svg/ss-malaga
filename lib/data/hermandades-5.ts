@@ -1,0 +1,117 @@
+import type { Hermandad } from "@/types/hermandad";
+
+export const hermandadesBatch5: Hermandad[] = [
+  {
+    id: "h-cachorro",
+    slug: "el-cachorro",
+    nombre: "Hermandad del Cristo de la Expiración",
+    nombrePopular: "El Cachorro",
+    sede: "Capilla del Cachorro, Calle Castilla (Triana)",
+    diaSemana: "Viernes Santo",
+    añoFundacion: 1689,
+    numeroHermanos: 4000,
+    numeroNazarenos: 1500,
+    tiempoPaso: 60,
+    musica: ["Banda de Cornetas y Tambores Lágrimas en el Huerto", "Banda de Música de Coria del Río"],
+    vestimenta: {
+      descripcionTunica: "Túnica de raso blanco, antifaz morado con escudo bordado, capa morada y cinturón de cáñamo blanco.",
+      colorAntifaz: "morado",
+      capa: true,
+      cirios: "Cirios blancos",
+    },
+    pasos: [
+      {
+        tipo: "Misterio",
+        nombre: "Santísimo Cristo de la Expiración",
+        escultores: ["Francisco Antonio Ruiz Gijón (1675)"],
+        capataz: "Joaquín Domínguez",
+        costaleros: 48,
+        anio: 1675,
+        descripcion: "Obra maestra de Ruiz Gijón, conocido popularmente como 'El Cachorro'. Sus brazos son de una perfección anatómica legendaria.",
+      },
+      {
+        tipo: "Palio",
+        nombre: "María Santísima de la Angustia",
+        escultores: ["Sebastián Santos (1937)"],
+        capataz: "Joaquín Domínguez",
+        costaleros: 42,
+        anio: 1937,
+      },
+    ],
+    historia:
+      "Es una de las hermandades más queridas de Triana, con el Cristo de la Expiración (El Cachorro) de Ruiz Gijón como una de las mejores tallas del barroco sevillano. Sale en la madrugada del Viernes Santo, la noche más largas y devota de la Semana Santa en Triana.",
+    curiosidades: [
+      "El 'Cachorro' tiene los brazos de una perfección anatómica legendaria.",
+      "Cuenta la leyenda que el escultor se inspiró en un gachó (gitano) muerto de Triana.",
+      "Su salida de madrugada es la noche más multitudinaria de Triana.",
+    ],
+    itinerario: [
+      { id: "cch1", nombre: "Capilla del Cachorro (Salida, Triana)", lat: 37.3863, lng: -6.0048, horaTeorica: "01:00", estadoPaso: "en_templo" },
+      { id: "cch2", nombre: "Calle Castilla", lat: 37.3865, lng: -6.0028, horaTeorica: "02:15", estadoPaso: "en_templo" },
+      { id: "cch3", nombre: "Puente de Triana", lat: 37.3862, lng: -6.0013, horaTeorica: "04:00", estadoPaso: "en_templo" },
+      { id: "cch4", nombre: "Catedral (Carrera Oficial)", lat: 37.3867, lng: -5.9942, horaTeorica: "08:30", estadoPaso: "en_templo" },
+      { id: "cch5", nombre: "Puente de Triana (regreso)", lat: 37.3862, lng: -6.0013, horaTeorica: "14:00", estadoPaso: "en_templo" },
+    ],
+    videos: [
+      { id: "cch-v1", titulo: "El Cachorro en la calle Castilla", youtubeId: "5qap5aO4i9A" },
+    ],
+    imagenes: [],
+  },
+  {
+    id: "h-soledad-san-lorenzo",
+    slug: "la-soledad-de-san-lorenzo",
+    nombre: "Hermandad de la Soledad de San Lorenzo",
+    nombrePopular: "La Soledad de San Lorenzo",
+    sede: "Iglesia de San Lorenzo, Calle Jesús del Gran Poder",
+    diaSemana: "Sábado Santo",
+    añoFundacion: 1344,
+    numeroHermanos: 2200,
+    numeroNazarenos: 500,
+    tiempoPaso: 50,
+    musica: ["Banda de Música Filarmónica de Sevilla", "Banda de Música del Maestro Tejera"],
+    vestimenta: {
+      descripcionTunica: "Túnica de vellón negro, capuz de raso negro con bordados plateados, cordón de seda negra y plata.",
+      colorAntifaz: "negro",
+      capa: true,
+      cirios: "Cirios negros",
+    },
+    pasos: [
+      {
+        tipo: "Misterio",
+        nombre: "Santísimo Cristo de la Buena Muerte y Ánimas",
+        escultores: ["José de Arce (1660)"],
+        capataz: "Ángel Peralta",
+        costaleros: 40,
+        anio: 1660,
+        descripcion: "Crucificado de José de Arce de gran patetismo, con el punto 'Mater Mea' de Braana como marcha señera.",
+      },
+      {
+        tipo: "Palio",
+        nombre: "Nuestra Señora de la Soledad",
+        escultores: ["Anónima (s. XVI)"],
+        capataz: "Ángel Peralta",
+        costaleros: 36,
+        anio: 1550,
+        descripcion: "La Virgen de la Soledad es la dolorosa más antigua de Sevilla que procesiona.",
+      },
+    ],
+    historia:
+      "Es la hermandad más antigua de Sevilla que procesiona, fundada en 1344. Cierra la Semana Santa en el Sábado Santo con la solemnidad del luto sagrado. Su Cristo de Arce es una obra de gran patetismo.",
+    curiosidades: [
+      "Es la hermandad más antigua de Sevilla que procesiona (1344).",
+      "La marcha 'Mater Mea' de Braana es la marcha dedicada más antigua de la Semana Santa.",
+      "Cierra la Semana Santa sevillana en el Sábado Santo.",
+    ],
+    itinerario: [
+      { id: "ssl1", nombre: "Iglesia de San Lorenzo (Salida)", lat: 37.3943, lng: -5.9973, horaTeorica: "18:00", estadoPaso: "en_templo" },
+      { id: "ssl2", nombre: "Calle Jesús del Gran Poder", lat: 37.3947, lng: -5.9959, horaTeorica: "18:45", estadoPaso: "en_templo" },
+      { id: "ssl3", nombre: "Plaza del Duque", lat: 37.3947, lng: -5.9949, horaTeorica: "19:30", estadoPaso: "en_templo" },
+      { id: "ssl4", nombre: "Catedral (Carrera Oficial)", lat: 37.3867, lng: -5.9942, horaTeorica: "21:15", estadoPaso: "en_templo" },
+      { id: "ssl5", nombre: "Campana (regreso)", lat: 37.3938, lng: -5.9961, horaTeorica: "01:00", estadoPaso: "en_templo" },
+    ],
+    videos: [
+      { id: "ssl-v1", titulo: "La Soledad de San Lorenzo", youtubeId: "zOzO7ZK6cAo" },
+    ],
+    imagenes: [],
+  },
+];
