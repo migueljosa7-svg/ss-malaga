@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, useMap } from "react-leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { useUIStore } from "@/lib/store";
@@ -167,10 +167,35 @@ export function MapaInteligente() {
                   setMinutoSimulado(v);
                 }}
                 className="min-w-[220px] flex-1"
+                aria-label="Hora simulada"
               />
               <span className="font-mono text-lg font-bold text-primary">
                 {formatearMinutos(minutoActual)}
               </span>
+              <div className="w-full sm:w-auto">
+                <p className="mb-1 text-[11px] text-muted-foreground">Saltar a un momento clave:</p>
+                <div className="flex flex-wrap gap-1.5 text-xs">
+                  {([
+                    ["0", "00:00 Salidas Madrugá"],
+                    ["300", "05:00 Puentes"],
+                    ["490", "08:10 Carrera Oficial"],
+                    ["780", "13:00 Regresos"],
+                  ] as Array<[string, string]>).map(([v, label]) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => {
+                        const n = Number(v);
+                        setSliderValor(n);
+                        setMinutoSimulado(n);
+                      }}
+                      className="rounded-full border border-border bg-background px-2.5 py-1 transition-colors hover:border-primary hover:text-primary"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </>
           )}
           {minutoSimulado === null && (
@@ -210,8 +235,10 @@ export function MapaInteligente() {
                 </p>
                 <p className="text-muted-foreground">
                   {(ruta.distanciaTotal / 1000).toFixed(1)} km · ≈ {ruta.pasosEstimados} min andando
+                  {ruta.distanciaSinCortes < ruta.distanciaTotal &&
+                    ` · +${Math.round(ruta.distanciaTotal - ruta.distanciaSinCortes)} m de desvío por cortes`}
                   {ruta.tramosCortadosEvitados.length > 0 &&
-                    ` · Evita ${ruta.tramosCortadosEvitados.length} tramo(s) cortado(s)`}
+                    ` · Rodea ${ruta.tramosCortadosEvitados.length} tramo(s) cortado(s)`}
                 </p>
               </>
             ) : (
@@ -222,13 +249,24 @@ export function MapaInteligente() {
       </div>
 
       {/* Capas */}
-      <div className="flex flex-wrap gap-3 text-sm">
+      <div className="flex flex-wrap items-center gap-3 text-sm">
         {(["pasos", "callesCortadas", "itinerarios"] as const).map((capa) => (
           <label key={capa} className="flex items-center gap-1.5">
             <input type="checkbox" checked={capas[capa]} onChange={() => useUIStore.getState().toggleCapa(capa)} />
             {capa === "pasos" ? "Posición de pasos" : capa === "callesCortadas" ? "Calles cortadas" : "Itinerarios"}
           </label>
         ))}
+        <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-3 w-3 rounded-full bg-[#7f1d1d] ring-2 ring-[#fde68a]" /> Cruz de guía
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-3 w-3 rounded-full bg-[#b45309] ring-2 ring-[#fbbf24]" /> Palio
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-1.5 w-6 rounded bg-[#dc2626]" /> Tramo cortado
+          </span>
+        </span>
       </div>
 
       <MapContainer center={SEVILLA} zoom={13} className="h-[520px] rounded-lg z-0">
@@ -253,34 +291,56 @@ export function MapaInteligente() {
             </Polyline>
           ))}
 
-        {/* Posición simulada / en vivo de las cruces de guía */}
+        {/* Posición simulada / en vivo de las cruces de guía y palios */}
         {capas.pasos &&
           (hermandades ?? []).map((h) => {
             const pos = posicionEnMinuto(h, minutoActual);
             if (!pos) return null;
             const enCalle = pos.estado === "en_calle";
+            // El palio camina por el mismo itinerario ≈tiempoPaso por detrás de la cruz de guía
+            const posPalio = posicionEnMinuto(h, minutoActual - h.tiempoPaso);
+            const palioEnCalle = posPalio?.estado === "en_calle";
             return (
-              <CircleMarker
-                key={`pos-${h.slug}`}
-                center={[pos.lat, pos.lng]}
-                radius={9}
-                pathOptions={{
-                  color: enCalle ? "#fde68a" : "#94a3b8",
-                  fillColor: enCalle ? "#7f1d1d" : "#64748b",
-                  fillOpacity: 0.95,
-                  weight: 2,
-                }}
-              >
-                <Popup>
-                  <strong>{h.nombrePopular ?? h.nombre}</strong>
-                  <br />
-                  {enCalle
-                    ? `En itinerario — ${formatearMinutos(minutoActual)}`
-                    : pos.estado === "antes"
-                    ? "Aún no ha salido"
-                    : "Ya está en su templo"}
-                </Popup>
-              </CircleMarker>
+              <Fragment key={`pos-${h.slug}`}>
+                {palioEnCalle && posPalio && (
+                  <CircleMarker
+                    center={[posPalio.lat, posPalio.lng]}
+                    radius={7}
+                    pathOptions={{
+                      color: "#fbbf24",
+                      fillColor: "#b45309",
+                      fillOpacity: 0.95,
+                      weight: 2,
+                    }}
+                  >
+                    <Popup>
+                      <strong>Palio — {h.nombrePopular ?? h.nombre}</strong>
+                      <br />
+                      {formatearMinutos(minutoActual)} · camina ≈{h.tiempoPaso} min tras la cruz de guía
+                    </Popup>
+                  </CircleMarker>
+                )}
+                <CircleMarker
+                  center={[pos.lat, pos.lng]}
+                  radius={9}
+                  pathOptions={{
+                    color: enCalle ? "#fde68a" : "#94a3b8",
+                    fillColor: enCalle ? "#7f1d1d" : "#64748b",
+                    fillOpacity: 0.95,
+                    weight: 2,
+                  }}
+                >
+                  <Popup>
+                    <strong>Cruz de guía — {h.nombrePopular ?? h.nombre}</strong>
+                    <br />
+                    {enCalle
+                      ? `En itinerario — ${formatearMinutos(minutoActual)}`
+                      : pos.estado === "antes"
+                      ? "Aún no ha salido"
+                      : "Ya está en su templo"}
+                  </Popup>
+                </CircleMarker>
+              </Fragment>
             );
           })}
 

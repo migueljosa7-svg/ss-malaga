@@ -11,54 +11,48 @@ export interface ResultadoRuta {
   mensaje?: string;
   nodosCamino: NodoRuta[];
   aristasCamino: string[]; // ids de aristas recorridas
-  tramosCortadosEvitados: string[]; // ids de calles cortadas que rodeó
+  tramosCortadosEvitados: string[]; // ids de tramos cortados que rodeó el camino
   distanciaTotal: number; // metros
+  distanciaSinCortes: number; // metros del mejor camino si no hubiera cortes
   pasosEstimados: number; // minutos andando
 }
 
-/**
- * Dijkstra sobre el grafo peatonal del centro evitando las aristas
- * que corresponden a calles cortadas activas.
- */
-export function calcularRutaPeatonal(
-  desdeId: string,
-  hastaId: string,
-  callesCortadas: CalleCortada[]
-): ResultadoRuta {
-  const cortadasIds = new Set(callesCortadas.map((c) => c.id));
+const FALLBACK: ResultadoRuta = {
+  exito: false,
+  nodosCamino: [],
+  aristasCamino: [],
+  tramosCortadosEvitados: [],
+  distanciaTotal: 0,
+  distanciaSinCortes: 0,
+  pasosEstimados: 0,
+};
 
-  const nodoInicio = nodosRuta.find((n) => n.id === desdeId);
-  const nodoFin = nodosRuta.find((n) => n.id === hastaId);
-  if (!nodoInicio || !nodoFin) {
-    return {
-      exito: false,
-      mensaje: "Origen o destino no encontrados en el mapa.",
-      nodosCamino: [],
-      aristasCamino: [],
-      tramosCortadosEvitados: [],
-      distanciaTotal: 0,
-      pasosEstimados: 0,
-    };
-  }
+interface SolucionDijkstra {
+  dist: Map<string, number>;
+  prev: Map<string, { nodo: string; aristaId: string }>;
+}
 
-  // Lista de adyacencia
-  const adyacencia = new Map<string, Array<{ hasta: string; aristaId: string; peso: number; cortada: string | null }>>();
+/** Lista de adyacencia del grafo peatonal excluyendo las aristas bloqueadas. */
+function construirAdyacencia(bloqueadas: Set<string>) {
+  const adyacencia = new Map<string, Array<{ hasta: string; aristaId: string; peso: number }>>();
   for (const a of aristasRuta) {
-    const bloqueada = cortadasIds.has(a.id);
-    const n1 = nodosRuta.find((n) => n.id === a.desde)!;
-    const n2 = nodosRuta.find((n) => n.id === a.hasta)!;
+    if (bloqueadas.has(a.id)) continue; // tramo cortado: excluido del grafo
+    const n1 = nodosRuta.find((n) => n.id === a.desde);
+    const n2 = nodosRuta.find((n) => n.id === a.hasta);
+    if (!n1 || !n2) continue;
     const peso = distanciaMetros(n1, n2);
-
     if (!adyacencia.has(a.desde)) adyacencia.set(a.desde, []);
     if (!adyacencia.has(a.hasta)) adyacencia.set(a.hasta, []);
-    // Aristas bidireccionales; las cortadas quedan excluidas del grafo
-    if (!bloqueada) {
-      adyacencia.get(a.desde)!.push({ hasta: a.hasta, aristaId: a.id, peso, cortada: null });
-      adyacencia.get(a.hasta)!.push({ hasta: a.desde, aristaId: a.id, peso, cortada: null });
-    }
+    // Aristas bidireccionales peatonales
+    adyacencia.get(a.desde)!.push({ hasta: a.hasta, aristaId: a.id, peso });
+    adyacencia.get(a.hasta)!.push({ hasta: a.desde, aristaId: a.id, peso });
   }
+  return adyacencia;
+}
 
-  // Dijkstra
+/** Dijkstra simple (nodos ~15): O(n²) más que suficiente para el centro de Sevilla. */
+function dijkstra(desdeId: string, bloqueadas: Set<string>): SolucionDijkstra {
+  const adyacencia = construirAdyacencia(bloqueadas);
   const dist = new Map<string, number>();
   const prev = new Map<string, { nodo: string; aristaId: string }>();
   const visitados = new Set<string>();
@@ -85,45 +79,78 @@ export function calcularRutaPeatonal(
       }
     }
   }
+  return { dist, prev };
+}
 
-  if (!isFinite(dist.get(hastaId) ?? Infinity)) {
+function reconstruirCamino(
+  desdeId: string,
+  hastaId: string,
+  prev: SolucionDijkstra["prev"]
+): { nodos: NodoRuta[]; aristas: string[] } {
+  const nodos: NodoRuta[] = [];
+  const aristas: string[] = [];
+  let cursor = hastaId;
+  let seguro = 0; // guarda anti-bucle con grafos inconsistentes
+  while (cursor !== desdeId && seguro < 100) {
+    const nodo = nodosRuta.find((n) => n.id === cursor);
+    if (nodo) nodos.unshift(nodo);
+    const p = prev.get(cursor);
+    if (!p) break;
+    aristas.unshift(p.aristaId);
+    cursor = p.nodo;
+    seguro++;
+  }
+  const inicio = nodosRuta.find((n) => n.id === desdeId);
+  if (inicio) nodos.unshift(inicio);
+  return { nodos, aristas };
+}
+
+/**
+ * Ruta peatonal A -> B (Dijkstra) evitando los tramos con calles cortadas.
+ * Además, calcula el camino de referencia sin cortes para saber qué tramos
+ * cortados ha rodeado realmente y cuántos metros de desvío provocan.
+ */
+export function calcularRutaPeatonal(
+  desdeId: string,
+  hastaId: string,
+  callesCortadas: CalleCortada[]
+): ResultadoRuta {
+  const cortadasIds = new Set(callesCortadas.map((c) => c.id));
+
+  const existe =
+    nodosRuta.some((n) => n.id === desdeId) && nodosRuta.some((n) => n.id === hastaId);
+  if (!existe) {
+    return { ...FALLBACK, mensaje: "Origen o destino no encontrados en el mapa." };
+  }
+
+  // 1) Camino final respetando los cortes activos
+  const conCortes = dijkstra(desdeId, cortadasIds);
+  if (!isFinite(conCortes.dist.get(hastaId) ?? Infinity)) {
     return {
-      exito: false,
+      ...FALLBACK,
       mensaje:
         "No hay ruta peatonal disponible evitando las calles cortadas. Prueba otro origen/destino.",
-      nodosCamino: [],
-      aristasCamino: [],
-      tramosCortadosEvitados: [],
-      distanciaTotal: 0,
-      pasosEstimados: 0,
     };
   }
 
-  // Reconstruir camino
-  const caminoNodos: NodoRuta[] = [];
-  const caminoAristas: string[] = [];
-  let cursor = hastaId;
-  while (cursor !== desdeId) {
-    caminoNodos.unshift(nodosRuta.find((n) => n.id === cursor)!);
-    const p = prev.get(cursor);
-    if (!p) break;
-    caminoAristas.unshift(p.aristaId);
-    cursor = p.nodo;
-  }
-  caminoNodos.unshift(nodoInicio);
+  // 2) Camino de referencia sin cortes (para medir el desvío que provocan)
+  const sinCortes = dijkstra(desdeId, new Set<string>());
 
-  // Calles cortadas evitadas = las cortadas conectadas a los nodos que rodeamos
-  const tramosEvitados = callesCortadas
-    .map((c) => c.id)
-    .filter((id) => !caminoAristas.includes(id));
+  const camino = reconstruirCamino(desdeId, hastaId, conCortes.prev);
+  const caminoBase = reconstruirCamino(desdeId, hastaId, sinCortes.prev);
 
-  const distanciaTotal = dist.get(hastaId)!;
+  // Un tramo cortado está "rodeado" cuando formaba parte del camino ideal sin cortes.
+  const evitados = [...new Set(caminoBase.aristas.filter((id) => cortadasIds.has(id)))];
+
+  const distanciaTotal = conCortes.dist.get(hastaId)!;
+  const distBase = sinCortes.dist.get(hastaId) ?? Infinity;
   return {
     exito: true,
-    nodosCamino: caminoNodos,
-    aristasCamino: caminoAristas,
-    tramosCortadosEvitados: tramosEvitados,
+    nodosCamino: camino.nodos,
+    aristasCamino: camino.aristas,
+    tramosCortadosEvitados: evitados,
     distanciaTotal,
+    distanciaSinCortes: isFinite(distBase) ? distBase : distanciaTotal,
     pasosEstimados: Math.ceil(distanciaTotal / 80), // 80 m/min andando con gente
   };
 }

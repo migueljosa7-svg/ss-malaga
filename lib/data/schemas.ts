@@ -26,6 +26,7 @@ export const vestimentaSchema = z.object({
   descripcionTunica: z.string().max(1000),
   colorAntifaz: z.string().max(60),
   capa: z.boolean(),
+  escudo: z.string().max(200).optional(),
   escudoImg: z.string().url().optional(),
   cirios: z.string().max(300).optional(),
 });

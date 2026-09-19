@@ -7,7 +7,7 @@ import { TimelineItinerario } from "@/components/hermandades/timeline-itinerario
 import { FichaPaso } from "@/components/hermandades/ficha-paso";
 import type { Hermandad } from "@/types/hermandad";
 import { cn } from "@/lib/utils";
-import { Lightbulb, Music, Users, Shirt, History } from "lucide-react";
+import { Lightbulb, Music, Users, Shirt, History, Shield } from "lucide-react";
 
 type Pestana = "historia" | "pasos" | "itinerario" | "galeria";
 
@@ -97,6 +97,14 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
             </CardHeader>
             <CardContent className="text-sm">
               <p>{h.vestimenta.descripcionTunica}</p>
+              {h.vestimenta.escudo && (
+                <p className="mt-2 flex items-start gap-1.5 text-muted-foreground">
+                  <Shield className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    <strong className="text-foreground">Escudo:</strong> {h.vestimenta.escudo}
+                  </span>
+                </p>
+              )}
               <div className="mt-2 flex flex-wrap gap-2">
                 <Badge>Antifaz: {h.vestimenta.colorAntifaz}</Badge>
                 <Badge>{h.vestimenta.capa ? "Con capa" : "Sin capa"}</Badge>

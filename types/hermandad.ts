@@ -46,6 +46,7 @@ export interface Vestimenta {
   descripcionTunica: string;
   colorAntifaz: string;
   capa: boolean;
+  escudo?: string;
   escudoImg?: string;
   cirios?: string;
 }
