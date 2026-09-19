@@ -4,6 +4,12 @@ import { hermandadSchema, incidenciaSchema, calleCortadaSchema } from "./schemas
 import type { Hermandad, Incidencia, CalleCortada } from "@/types/hermandad";
 import { DIAS_SEMANA } from "@/lib/utils";
 
+// Re-exports explícitos: permite `import { hermandadesMock } from "@/lib/data"`,
+// `import { apiQuerySchema } from "@/lib/data"` y `import { incidenciasMock } from "@/lib/data"`.
+export * from "./hermandades";
+export * from "./incidencias";
+export * from "./schemas";
+
 /**
  * Validación Zod en el límite de los datos (defensa en profundidad).
  * En producción estos datos vendrán de la API/BBDD.
