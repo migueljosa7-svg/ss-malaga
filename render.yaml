@@ -4,8 +4,10 @@ services:
     env: node
     region: frankfurt
     plan: free
-    # El output standalone necesita los assets estáticos y public/ DENTRO de .next/standalone
-    buildCommand: npm install && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
+    # El output standalone necesita los assets estáticos y public/ DENTRO de .next/standalone.
+    # --include=dev es CRÍTICO: Render construye con NODE_ENV=production y npm omite
+    # las devDependencies (tailwindcss, typescript, postcss...) sin este flag.
+    buildCommand: npm install --include=dev && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
     startCommand: node .next/standalone/server.js
     envVars:
       - key: PORT
