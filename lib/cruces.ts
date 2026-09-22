@@ -5,7 +5,7 @@
  * encuentros dentro de un horizonte temporal.
  */
 import type { Hermandad } from "@/types/hermandad";
-import { calcularTelemetria, distanciaMetros } from "@/lib/telemetria";
+import { calcularTelemetria, distanciaMetros, hermandadEnDirecto } from "@/lib/telemetria";
 
 export interface TronoEnCalle {
   slug: string;
@@ -31,6 +31,9 @@ export interface CruceProximo extends CruceTronos {
 
 function tronosEnCalle(h: Hermandad, minuto: number): TronoEnCalle[] {
   const res: TronoEnCalle[] = [];
+  // v6.0: se descarta toda hermandad fuera de su franja procesional — no hay
+  // cruces "fantasma" de tronos en templo, aún sin salir o ya encerrados.
+  if (!hermandadEnDirecto(h, minuto)) return res;
   const cristo = calcularTelemetria(h, minuto);
   if (cristo?.estado === "en_calle") {
     res.push({

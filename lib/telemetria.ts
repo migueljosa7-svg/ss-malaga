@@ -134,7 +134,17 @@ export function calcularTelemetria(h: Hermandad, minuto: number): Telemetria | n
 }
 
 /**
- * Polilínea realista del itinerario completo (v4.0), ajustada a la trama
+ * v6.0: ¿Está la hermandad activamente en la calle (en directo)?
+ * Un trono está "en directo" solo si su cruz de guía (o el palio) está
+ * procesionando AHORA — se filtran templos, salidas futuras y encierros.
+ */
+export function hermandadEnDirecto(h: Hermandad, minuto: number): boolean {
+  const t = calcularTelemetria(h, minuto);
+  return t?.estado === "en_calle";
+}
+
+/**
+ * v6.0: Polilínea realista del itinerario completo (v4.0), ajustada a la trama
  * urbana de Málaga. La usa el mapa para dibujar los recorridos por las
  * calles reales en vez de líneas rectas entre puntos clave.
  */

@@ -10,6 +10,7 @@ import { Directos } from "@/components/hermandades/directos";
 import { CromoHolofoil } from "@/components/hermandades/cromo-holofoil";
 import { TunicaCapirote } from "@/components/ilustraciones/tunica-capirote";
 import { HombreTrono } from "@/components/ilustraciones/hombre-trono";
+import { FonotecaToques } from "@/components/sonidos/fonoteca-toques";
 import { Lightbox } from "@/components/ui/lightbox";
 import type { Hermandad } from "@/types/hermandad";
 import { cn } from "@/lib/utils";
@@ -167,6 +168,12 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
 
       {activa === "sonidos" && (
         <div className="space-y-4">
+          {/* v6.0: Fonoteca Sonora del Mayordomo de Trono */}
+          <Card>
+            <CardContent className="pt-6">
+              <FonotecaToques />
+            </CardContent>
+          </Card>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

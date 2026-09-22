@@ -6,12 +6,13 @@ import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { useUIStore } from "@/lib/store";
 import { calcularRutaPeatonal } from "@/lib/rutas";
-import { itinerarioRealista } from "@/lib/telemetria";
+import { itinerarioRealista, hermandadEnDirecto } from "@/lib/telemetria";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
 import { iconoTronoCristo, iconoTronoVirgen } from "@/lib/iconos-tronos";
 import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
 import { RadarCruces } from "@/components/mapa/radar-cruces";
 import { DirectosFlotantes } from "@/components/mapa/directos-flotantes";
+import { SelectorEnDirecto } from "@/components/mapa/selector-en-directo";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
 import "leaflet/dist/leaflet.css";
 
@@ -94,6 +95,7 @@ function AjustarVista({ bounds }: { bounds: [number, number][] | null }) {
 export function MapaInteligente() {
   const [mounted, setMounted] = useState(false);
   const capas = useUIStore((s) => s.capasMapa);
+  const modoAhorro = useUIStore((s) => s.modoAhorro);
 
   // Simulador de hora: null = en vivo
   const [minutoSimulado, setMinutoSimulado] = useState<number | null>(null);
@@ -110,6 +112,10 @@ export function MapaInteligente() {
   // Radar de cruces: foco del mapa sobre un encuentro cofrade
   const [focoCruce, setFocoCruce] = useState<[number, number][] | null>(null);
 
+  // v6.0: filtrado estricto — por defecto solo se dibujan las procesiones
+  // activamente en la calle (evita saturación de rutas y cruces fantasma).
+  const [soloEnCalle, setSoloEnCalle] = useState(true);
+
   useEffect(() => setMounted(true), []);
 
   const { data: calles } = useQuery<CalleCortada[]>({
@@ -119,6 +125,10 @@ export function MapaInteligente() {
       if (!res.ok) throw new Error("Error cargando calles cortadas");
       return res.json();
     },
+    // v6.0: en modo ahorro se reduce el refetch y se confía en la caché PWA
+    refetchInterval: modoAhorro ? 300_000 : 60_000,
+    staleTime: modoAhorro ? 300_000 : 30_000,
+    gcTime: 3_600_000, // retiene datos en caché para fallback offline
   });
 
   const { data: hermandades } = useQuery<Hermandad[]>({
@@ -129,6 +139,9 @@ export function MapaInteligente() {
       const json = await res.json();
       return json.data as Hermandad[];
     },
+    refetchInterval: modoAhorro ? 300_000 : 60_000,
+    staleTime: modoAhorro ? 300_000 : 30_000,
+    gcTime: 3_600_000,
   });
 
   const minutoActual = useMemo(() => {
@@ -148,6 +161,12 @@ export function MapaInteligente() {
   function calcularRuta() {
     setRuta(calcularRutaPeatonal(origen, destino, calles ?? []));
   }
+
+  // v6.0: lista efectiva de hermandades a dibujar (filtrado en directo)
+  const visibles = useMemo(() => {
+    const todas = hermandades ?? [];
+    return soloEnCalle ? todas.filter((h) => hermandadEnDirecto(h, minutoActual)) : todas;
+  }, [hermandades, soloEnCalle, minutoActual]);
 
   if (!mounted) {
     return <div className="h-[520px] animate-pulse rounded-lg bg-muted" aria-label="Cargando mapa…" />;
@@ -276,6 +295,11 @@ export function MapaInteligente() {
             {capa === "pasos" ? "Posición de pasos" : capa === "callesCortadas" ? "Calles cortadas" : "Itinerarios"}
           </label>
         ))}
+        {/* v6.0: filtrado estricto de procesiones activas */}
+        <label className="flex items-center gap-1.5 font-medium text-primary">
+          <input type="checkbox" checked={soloEnCalle} onChange={() => setSoloEnCalle((v) => !v)} />
+          Solo en la calle
+        </label>
         <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-3 w-3 rounded-full bg-[#4A154B] ring-2 ring-[#D4AF37]" /> Trono de Cristo
@@ -289,14 +313,23 @@ export function MapaInteligente() {
         </span>
       </div>
 
-      {/* Leyenda de protocolo cofrade malagueño (v4.0) */}
-      <div className="borde-destello-dorado flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-lg border border-[#D4AF37]/40 bg-card px-3 py-2 text-[11px] text-muted-foreground">
-        <span className="font-semibold uppercase tracking-wider text-[#D4AF37]">Protocolo:</span>
-        <span title="Abre la procesión portando la cruz de la hermandad">✝️ Cruz de Guía</span>
-        <span title="Oficial que gobierna el trono y toca la campana">🔔 Mayordomo de Campana</span>
-        <span title="Cuadrilla que porta el trono a hombros">💪 Hombres de Trono</span>
-        <span title="Punto donde la cofradía espera su turno en la Carrera Oficial">🚩 Cabeza de Procesión</span>
-        <span title="Coro de saetas y cantos que acompaña al paso">🎼 Masa Coral</span>
+      {/* Leyenda de protocolo cofrade malagueño (v4.0, ampliada v6.0) */}
+      <div className="borde-destello-dorado rounded-lg border border-[#D4AF37]/40 bg-card px-3 py-2 text-[11px] text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          <span className="font-semibold uppercase tracking-wider text-[#D4AF37]">Protocolo:</span>
+          <span title="Abre la procesión portando la cruz de la hermandad">✝️ Cruz de Guía</span>
+          <span title="Oficial que gobierna el trono y toca la campana">🔔 Mayordomo de Campana</span>
+          <span title="Cuadrilla que porta el trono a hombros">💪 Hombres de Trono</span>
+          <span title="Brazos metálicos que flanquean al trono del Señor">🕯️ Varales</span>
+          <span title="Coro de saetas y cantos que acompaña al paso">🎼 Masa Coral</span>
+          <span title="Punto donde la cofradía espera su turno en la Carrera Oficial">🚩 Cabeza de Procesión</span>
+        </div>
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-[#D4AF37]/20 pt-1.5">
+          <span className="font-semibold uppercase tracking-wider text-[#D4AF37]">Puntos icónicos:</span>
+          <span title="Balcón oficial desde donde la autoridad saluda a los tronos">🏛️ Tribuna de los Pobres</span>
+          <span title="Eje de la Carrera Oficial malagueña">🛍️ Calle Larios</span>
+          <span title="Fachada donde los tronos estacionan ante la Santa Iglesia Catedral">⛪ Entorno de la Catedral</span>
+        </div>
       </div>
 
       {/* Radar de cruces de tronos (v2.0 Max) */}
@@ -313,9 +346,11 @@ export function MapaInteligente() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <AjustarVista bounds={boundsObjetivo} />
-        {/* Itinerarios teóricos (v4.0: trazado realista por calles de Málaga) */}
+        {/* v6.0: dropdown de procesiones en la calle con flyTo */}
+        <SelectorEnDirecto hermandades={hermandades ?? []} minuto={minutoActual} />
+        {/* Itinerarios teóricos (v4.0 realista; v6.0: solo hermandades en directo) */}
         {capas.itinerarios &&
-          (hermandades ?? []).map((h) => (
+          visibles.map((h) => (
             <Polyline
               key={h.slug}
               positions={itinerarioRealista(h)}
@@ -330,9 +365,9 @@ export function MapaInteligente() {
             </Polyline>
           ))}
 
-        {/* Posición simulada / en vivo de las cruces de guía y palios */}
+        {/* Posición simulada / en vivo de las cruces de guía y palios (v6.0: filtrado) */}
         {capas.pasos &&
-          (hermandades ?? []).map((h) => {
+          visibles.map((h) => {
             const pos = posicionEnMinuto(h, minutoActual);
             if (!pos) return null;
             const enCalle = pos.estado === "en_calle";
