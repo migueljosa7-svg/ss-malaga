@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Church, MapPin, AlertTriangle, Scale, Route } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const links = [
   { href: "/", label: "Inicio", icon: Church },
@@ -32,6 +33,9 @@ export function Navbar() {
               </Link>
             </li>
           ))}
+          <li className="flex items-center pl-1">
+            <ThemeToggle />
+          </li>
         </ul>
       </div>
     </nav>

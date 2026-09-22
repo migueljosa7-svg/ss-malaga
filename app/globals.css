@@ -11,6 +11,47 @@
   --crema-cera: #faf7f2;
 }
 
+/* ---------- v8.0: paleta semántica DÍA (blanco/orfebrería) ---------- */
+:root {
+  color-scheme: light;
+  --background: 250 247 242; /* crema cera */
+  --foreground: 26 26 26; /* negro calvario */
+  --card: 255 255 255;
+  --primary: 74 21 75; /* púrpura nazareno */
+  --primary-foreground: 250 247 242;
+  --secondary: 212 175 55; /* dorado orfebre */
+  --secondary-foreground: 26 26 26;
+  --esperanza: 27 77 62; /* verde esperanza */
+  --esperanza-foreground: 250 247 242;
+  --calvario: 26 26 26;
+  --muted: 241 235 224;
+  --muted-foreground: 92 83 70;
+  --border: 228 220 203;
+}
+
+/* ---------- v8.0: paleta semántica NOCHE (morado nazareno/negro) ---------- */
+.dark {
+  color-scheme: dark;
+  --background: 15 23 42; /* azul noche */
+  --foreground: 240 237 230; /* crema cera */
+  --card: 26 20 45; /* púrpura noche */
+  --primary: 109 40 117; /* púrpura nazareno iluminado */
+  --primary-foreground: 245 241 232;
+  --secondary: 212 175 55;
+  --secondary-foreground: 15 23 42;
+  --esperanza: 45 122 98;
+  --esperanza-foreground: 15 23 42;
+  --calvario: 8 8 10;
+  --muted: 36 30 60;
+  --muted-foreground: 168 160 190;
+  --border: 60 52 92;
+}
+.dark body {
+  background-image:
+    radial-gradient(circle at top left, rgba(212, 175, 55, 0.08), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(109, 40, 117, 0.3), transparent 55%);
+}
+
 body {
   background-image: radial-gradient(
       circle at top left,

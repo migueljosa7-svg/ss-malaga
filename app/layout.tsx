@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import { Navbar } from "@/components/ui/navbar";
 import { WidgetsFlotantes } from "@/components/ui/widgets-flotantes";
+import { Footer } from "@/components/ui/footer";
 // Nota: NO se importa `leaflet/dist/leaflet.css` aquí a propósito. El CSS de Leaflet
 // vive únicamente en el chunk dinámico del mapa (components/mapa/MapaSemanaSanta.tsx).
 // Importarlo en el layout emitía un <link rel="preload"> no utilizado en rutas sin
@@ -17,13 +18,15 @@ export const metadata: Metadata = {
   description:
     "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Málaga. Offline-first, con audio de toques de campana.",
   keywords: ["Semana Santa Málaga", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
-  manifest: "/manifest.webmanifest",
+  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
       { url: "/favicon.ico", sizes: "any" },
     ],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
   },
   openGraph: {
     title: "SS Málaga — Semana Santa de Málaga en tiempo real",
@@ -53,18 +56,22 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#4A154B",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Providers>
           <Navbar />
           <main className="mx-auto max-w-6xl px-4 pb-16">{children}</main>
+          <Footer />
           <WidgetsFlotantes />
         </Providers>
       </body>

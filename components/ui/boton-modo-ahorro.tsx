@@ -20,7 +20,7 @@ export function BotonModoAhorro() {
       className={`fixed bottom-4 right-4 z-[90] flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-lg transition-colors ${
         modoAhorro
           ? "border-[#1B4D3E] bg-[#1B4D3E] text-white"
-          : "border-[#D4AF37]/60 bg-white text-[#4A154B] hover:bg-amber-50"
+          : "border-[#D4AF37]/60 bg-card text-primary hover:bg-muted dark:text-[#D4AF37]"
       }`}
     >
       {modoAhorro ? <WifiOff className="h-4 w-4" /> : <Wifi className="h-4 w-4" />}

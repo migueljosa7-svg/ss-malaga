@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker, useMap } from "react-leaflet";
 import { useQuery } from "@tanstack/react-query";
+import { useTheme } from "next-themes";
 import { useUIStore } from "@/lib/store";
 import { calcularRutaPeatonal } from "@/lib/rutas";
 import { itinerarioRealista, hermandadEnDirecto, posicionEnMinuto } from "@/lib/telemetria";
@@ -51,6 +52,8 @@ export function MapaInteligente() {
   const [mounted, setMounted] = useState(false);
   const capas = useUIStore((s) => s.capasMapa);
   const modoAhorro = useUIStore((s) => s.modoAhorro);
+  // v8.0: tema activo para alternar los tiles del mapa (Positron / Dark Matter)
+  const { resolvedTheme } = useTheme();
 
   // Simulador de hora: null = en vivo
   const [minutoSimulado, setMinutoSimulado] = useState<number | null>(null);
@@ -299,10 +302,15 @@ export function MapaInteligente() {
 
       <div className="relative">
       <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
-        {/* v7.0: capa base clara (CartoDB Positron) — etiquetado nítido de calles */}
+        {/* v8.0: capa base según tema — CartoDB Positron (Claro) / Dark Matter (Oscuro) */}
         <TileLayer
+          key={resolvedTheme ?? "light"}
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          url={
+            resolvedTheme === "dark"
+              ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          }
           subdomains={["a", "b", "c", "d"]}
           maxZoom={20}
         />
