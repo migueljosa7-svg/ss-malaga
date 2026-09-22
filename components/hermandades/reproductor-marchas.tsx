@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { Music, Pause, Play, X } from "lucide-react";
 import { getHermandades } from "@/lib/data";
+import { tocarMarchaSintetica } from "@/lib/audio/sintetizador";
 
 interface Marcha {
   titulo: string;
@@ -38,9 +39,21 @@ export function ReproductorGlobalMarchas() {
       audio.pause();
       setReproduciendo(false);
     } else {
-      audio.play().catch(() => setReproduciendo(false));
+      audio.play().catch(() => {
+        // v3.0: si el navegador bloquea o el archivo es mudo, sintetiza la marcha
+        tocarMarchaSintetica();
+        setReproduciendo(true);
+      });
       setReproduciendo(true);
     }
+  }
+
+  // v3.0: el .mp3 está vacío/corrupto (duración 0) o falla → marcha sintética
+  function alDetectarAudioMudo() {
+    const audio = audioRef.current;
+    if (audio && Number.isFinite(audio.duration) && audio.duration > 0) return;
+    audio?.pause();
+    tocarMarchaSintetica();
   }
 
   return (
@@ -50,7 +63,7 @@ export function ReproductorGlobalMarchas() {
           type="button"
           onClick={() => setAbierto(true)}
           aria-label="Abrir reproductor de marchas"
-          className="flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-4 py-2.5 text-sm font-medium text-[#D4AF37] shadow-lg"
+          className="flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-4 py-2.5 text-sm font-medium text-[#D4AF37] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
         >
           <Music className="h-4 w-4" />
           <span className="hidden sm:inline">Marchas cofrades</span>
@@ -118,7 +131,10 @@ export function ReproductorGlobalMarchas() {
               if (el) audioRef.current = el;
             }}
             src={marcha.src}
-            preload="none"
+            crossOrigin="anonymous"
+            preload="metadata"
+            onError={alDetectarAudioMudo}
+            onLoadedMetadata={alDetectarAudioMudo}
             onTimeUpdate={(e) => {
               const a = e.currentTarget;
               if (a.duration) setProgreso(Math.round((a.currentTime / a.duration) * 100));

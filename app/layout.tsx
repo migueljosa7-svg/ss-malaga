@@ -18,11 +18,36 @@ export const metadata: Metadata = {
     "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Málaga. Offline-first, con audio de toques de campana.",
   keywords: ["Semana Santa Málaga", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
     title: "SS Málaga — Semana Santa de Málaga en tiempo real",
-    description: "Tronos, traslados, mapa e itinerarios de las hermandades de Málaga.",
+    description:
+      "Tronos, traslados, mapa e itinerarios en vivo de las hermandades de Málaga. Semana Santa de Málaga con toques de campana 3D y rutas sin calles cortadas.",
     locale: "es_ES",
     type: "website",
+    siteName: "SS Málaga",
+    url: "/",
+    images: [
+      {
+        url: "/icon.svg",
+        width: 512,
+        height: 512,
+        alt: "SS Málaga — cruz de nazareno dorada sobre púrpura nazareno",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "SS Málaga — Semana Santa de Málaga en tiempo real",
+    description:
+      "Mapa cofrade en vivo: tronos, traslados, incidencias e itinerarios de la Semana Santa de Málaga.",
+    images: ["/icon.svg"],
   },
   appleWebApp: { capable: true, title: "SS Málaga", statusBarStyle: "black-translucent" },
 };

@@ -8,6 +8,8 @@ import { FichaPaso } from "@/components/hermandades/ficha-paso";
 import { BotonCampana } from "@/components/hermandades/boton-campana";
 import { Directos } from "@/components/hermandades/directos";
 import { CromoHolofoil } from "@/components/hermandades/cromo-holofoil";
+import { TunicaCapirote } from "@/components/ilustraciones/tunica-capirote";
+import { HombreTrono } from "@/components/ilustraciones/hombre-trono";
 import { Lightbox } from "@/components/ui/lightbox";
 import type { Hermandad } from "@/types/hermandad";
 import { cn } from "@/lib/utils";
@@ -40,8 +42,8 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
             className={cn(
               "rounded-t-md px-4 py-2 text-sm font-medium transition-colors",
               activa === p.id
-                ? "border-b-2 border-primary text-primary"
-                : "text-muted-foreground hover:text-foreground"
+                ? "border-b-2 border-primary text-primary active:scale-95"
+                : "text-muted-foreground hover:text-foreground hover:-translate-y-0.5 active:scale-95"
             )}
           >
             {p.label}
@@ -117,6 +119,19 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
                 <Badge>{h.vestimenta.capa ? "Con capa" : "Sin capa"}</Badge>
                 {h.vestimenta.cirios && <Badge>{h.vestimenta.cirios}</Badge>}
               </div>
+              {/* v3.0: ilustraciones SVG interactivas con colores exactos */}
+              {h.vestimenta.correas && (
+                <p className="mt-3 flex items-start gap-1.5 text-muted-foreground">
+                  <Users className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    <strong className="text-foreground">Hombres de trono:</strong> {h.vestimenta.correas}
+                  </span>
+                </p>
+              )}
+              <div className="mt-4 flex flex-wrap items-start justify-center gap-6 sm:justify-start">
+                <TunicaCapirote slug={h.slug} />
+                <HombreTrono slug={h.slug} />
+              </div>
             </CardContent>
           </Card>
           {h.pasos.map((p, idx) => (
@@ -188,7 +203,7 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
                     </div>
                   )}
                   {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                  <audio controls preload="none" className="w-full" src={s.src}>
+                  <audio controls preload="metadata" crossOrigin="anonymous" className="w-full" src={s.src}>
                     Tu navegador no soporta audio HTML5.
                   </audio>
                 </div>

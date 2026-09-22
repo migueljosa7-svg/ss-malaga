@@ -135,6 +135,14 @@ export function MapaInteligente() {
     return ahora.getHours() * 60 + ahora.getMinutes();
   }, [minutoSimulado]);
 
+  // v3.0 Fix React #310: este hook DEBE ejecutarse en TODOS los renderizados.
+  // Antes estaba tras el `if (!mounted) return`, provocando que el número de
+  // hooks difiriera entre el primer render (SSR/skeleton) y el segundo.
+  const boundsObjetivo = useMemo<[number, number][] | null>(() => {
+    if (focoCruce) return focoCruce;
+    return ruta?.exito ? ruta.nodosCamino.map((n) => [n.lat, n.lng] as [number, number]) : null;
+  }, [focoCruce, ruta]);
+
   function calcularRuta() {
     setRuta(calcularRutaPeatonal(origen, destino, calles ?? []));
   }
@@ -143,10 +151,6 @@ export function MapaInteligente() {
     return <div className="h-[520px] animate-pulse rounded-lg bg-muted" aria-label="Cargando mapa…" />;
   }
 
-  const boundsObjetivo = useMemo<[number, number][] | null>(() => {
-    if (focoCruce) return focoCruce;
-    return ruta?.exito ? ruta.nodosCamino.map((n) => [n.lat, n.lng] as [number, number]) : null;
-  }, [focoCruce, ruta]);
 
   return (
     <div className="space-y-4">
@@ -235,7 +239,7 @@ export function MapaInteligente() {
               <option key={n.id} value={n.id}>{n.nombre}</option>
             ))}
           </select>
-          <button onClick={calcularRuta} className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90">
+          <button onClick={calcularRuta} className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 hover:opacity-90">
             Calcular ruta
           </button>
         </div>
@@ -318,6 +322,8 @@ export function MapaInteligente() {
             const pos = posicionEnMinuto(h, minutoActual);
             if (!pos) return null;
             const enCalle = pos.estado === "en_calle";
+            // v3.0: indicador de pulso animado sobre el trono seleccionado
+            const esSeleccionado = seleccion?.slug === h.slug;
             // El palio camina por el mismo itinerario ≈tiempoPaso por detrás de la cruz de guía
             const posPalio = posicionEnMinuto(h, minutoActual - h.tiempoPaso);
             const palioEnCalle = posPalio?.estado === "en_calle";
@@ -335,6 +341,21 @@ export function MapaInteligente() {
             });
             return (
               <Fragment key={`pos-${h.slug}`}>
+                {/* v3.0: anillo de pulso animado sobre el trono seleccionado */}
+                {esSeleccionado && enCalle && (
+                  <CircleMarker
+                    center={[pos.lat, pos.lng]}
+                    radius={18}
+                    pathOptions={{
+                      color: seleccion?.tipo === "virgen" ? "#1B4D3E" : "#4A154B",
+                      fillColor: "#D4AF37",
+                      fillOpacity: 0.15,
+                      weight: 3,
+                      className: "pulso-trono",
+                    }}
+                    interactive={false}
+                  />
+                )}
                 {palioEnCalle && posPalio && (
                   <Marker
                     position={[posPalio.lat, posPalio.lng]}
@@ -343,11 +364,14 @@ export function MapaInteligente() {
                     eventHandlers={{ click: () => setSeleccion({ slug: h.slug, tipo: "virgen" }) }}
                   >
                     <Popup>
-                      <strong>Trono de Virgen (Palio) — {h.nombrePopular ?? h.nombre}</strong>
-                      <br />
-                      {formatearMinutos(minutoActual)} · camina ≈{h.tiempoPaso} min tras la cruz de guía
-                      <br />
-                      <em>Clic en el marcador para ver telemetría</em>
+                      <div className="popup-cofrade min-w-[200px] max-w-[260px]">
+                        <p className="popup-titulo">✨ Trono de Virgen (Palio)</p>
+                        <p className="popup-nombre">{h.nombrePopular ?? h.nombre}</p>
+                        <p className="popup-meta">
+                          🕒 {formatearMinutos(minutoActual)} · camina ≈{h.tiempoPaso} min tras la cruz de guía
+                        </p>
+                        <span className="popup-accion">Toca el marcador para ver telemetría</span>
+                      </div>
                     </Popup>
                   </Marker>
                 )}
@@ -358,11 +382,12 @@ export function MapaInteligente() {
                     eventHandlers={{ click: () => setSeleccion({ slug: h.slug, tipo: "cristo" }) }}
                   >
                     <Popup>
-                      <strong>Trono de Cristo — {h.nombrePopular ?? h.nombre}</strong>
-                      <br />
-                      En itinerario — {formatearMinutos(minutoActual)}
-                      <br />
-                      <em>Clic en el marcador para ver telemetría</em>
+                      <div className="popup-cofrade min-w-[200px] max-w-[260px]">
+                        <p className="popup-titulo">✝ Trono de Cristo</p>
+                        <p className="popup-nombre">{h.nombrePopular ?? h.nombre}</p>
+                        <p className="popup-meta">🕒 En itinerario — {formatearMinutos(minutoActual)}</p>
+                        <span className="popup-accion">Toca el marcador para ver telemetría</span>
+                      </div>
                     </Popup>
                   </Marker>
                 ) : (
@@ -372,9 +397,12 @@ export function MapaInteligente() {
                     pathOptions={{ color: "#94a3b8", fillColor: "#64748b", fillOpacity: 0.8, weight: 2 }}
                   >
                     <Popup>
-                      <strong>{h.nombrePopular ?? h.nombre}</strong>
-                      <br />
-                      {pos.estado === "antes" ? "Aún no ha salido" : "Ya está en su templo"}
+                      <div className="popup-cofrade min-w-[200px] max-w-[260px]">
+                        <p className="popup-nombre">{h.nombrePopular ?? h.nombre}</p>
+                        <p className="popup-meta">
+                          {pos.estado === "antes" ? "⏳ Aún no ha salido" : "⛪ Ya está en su templo"}
+                        </p>
+                      </div>
                     </Popup>
                   </CircleMarker>
                 )}

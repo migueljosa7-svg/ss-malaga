@@ -1,7 +1,11 @@
+import { decodificarValidandoSilencio, tocarCampanaSintetica } from "./sintetizador";
+
 /**
  * Audio 3D posicional para toques de campana (v2.0 Max).
  * Usa un PannerNode HRTF de la Web Audio API para orientar el sonido según la
  * posición geográfica del trono respecto al centro del mapa.
+ * v3.0: si el archivo .mp3 no existe o es mudo (placeholder vacío), se
+ * sintetiza la campana con OscillatorNodes como respaldo — nunca queda muda.
  */
 
 export interface PosicionGeo {
@@ -27,13 +31,12 @@ export function getAudioContext(): AudioContext | null {
   return audioCtx;
 }
 
-async function obtenerBuffer(ctx: AudioContext, src: string): Promise<AudioBuffer> {
+async function obtenerBuffer(ctx: AudioContext, src: string): Promise<AudioBuffer | null> {
   const cacheado = bufferCache.get(src);
   if (cacheado) return cacheado;
-  const res = await fetch(src);
-  if (!res.ok) throw new Error(`No se pudo cargar el audio: ${src}`);
-  const buffer = await ctx.decodeAudioData(await res.arrayBuffer());
-  bufferCache.set(src, buffer);
+  // v3.0: valida silencio; los .mp3 placeholder (2 KB vacíos) devuelven null
+  const buffer = await decodificarValidandoSilencio(ctx, src);
+  if (buffer) bufferCache.set(src, buffer);
   return buffer;
 }
 
@@ -110,6 +113,12 @@ export async function tocarCampana3d(opts: {
 
   const buffer = await obtenerBuffer(ctx, src);
   const ahora = ctx.currentTime;
+  if (!buffer) {
+    // v3.0: el archivo no existe o es mudo → campana sintética de respaldo
+    // por el mismo canal (conserva la posición 3D si hay `posicion`).
+    tocarCampanaSintetica({ toques, destino });
+    return;
+  }
   for (let i = 0; i < toques; i++) {
     const fuente = ctx.createBufferSource();
     fuente.buffer = buffer;

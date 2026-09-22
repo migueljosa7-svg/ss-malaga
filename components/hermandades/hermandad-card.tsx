@@ -21,7 +21,7 @@ export function HermandadCard({ hermandad }: { hermandad: Hermandad }) {
   const estado = hermandad.itinerario[0]?.estadoPaso ?? "en_templo";
   return (
     <Link href={`/hermandades/${hermandad.slug}`} className="block">
-      <Card className="h-full transition-shadow hover:shadow-md">
+      <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] borde-destello-dorado">
         <CardHeader className="flex-row items-start justify-between space-y-0">
           <div>
             <CardTitle>{hermandad.nombrePopular ?? hermandad.nombre}</CardTitle>
