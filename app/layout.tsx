@@ -5,26 +5,26 @@ import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ss-sevilla.example.com"),
+  metadataBase: new URL("https://ss-malaga.example.com"),
   title: {
-    default: "SS Sevilla — Semana Santa de Sevilla en tiempo real",
-    template: "%s | SS Sevilla",
+    default: "SS Málaga — Semana Santa de Málaga en tiempo real",
+    template: "%s | SS Málaga",
   },
   description:
-    "Incidencias en vivo, retrasos de pasos, itinerarios reales vs teóricos, calles cortadas y mapa interactivo de la Semana Santa de Sevilla. Offline-first.",
-  keywords: ["Semana Santa Sevilla", "cofradías", "hermandades", "incidencias", "mapa cofrade"],
+    "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Málaga. Offline-first, con audio de toques de campana.",
+  keywords: ["Semana Santa Málaga", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
   manifest: "/manifest.webmanifest",
   openGraph: {
-    title: "SS Sevilla — Semana Santa de Sevilla en tiempo real",
-    description: "Avisos en vivo, mapa e itinerarios de las hermandades de Sevilla.",
+    title: "SS Málaga — Semana Santa de Málaga en tiempo real",
+    description: "Tronos, traslados, mapa e itinerarios de las hermandades de Málaga.",
     locale: "es_ES",
     type: "website",
   },
-  appleWebApp: { capable: true, title: "SS Sevilla", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "SS Málaga", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#7f1d1d",
+  themeColor: "#4A154B",
   width: "device-width",
   initialScale: 1,
 };

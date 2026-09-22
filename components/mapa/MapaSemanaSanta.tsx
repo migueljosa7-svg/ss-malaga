@@ -1,15 +1,17 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker, useMap } from "react-leaflet";
+import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { useUIStore } from "@/lib/store";
 import { calcularRutaPeatonal } from "@/lib/rutas";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
+import { iconoTronoCristo, iconoTronoVirgen } from "@/lib/iconos-tronos";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
 import "leaflet/dist/leaflet.css";
 
-const SEVILLA: [number, number] = [37.3925, -5.9945];
+const MALAGA: [number, number] = [36.7213, -4.4214];
 
 // ---------- Utilidades de tiempo ----------
 function minutosDeHora(hhmm: string): number {
@@ -94,7 +96,7 @@ export function MapaInteligente() {
   const [sliderValor, setSliderValor] = useState(0);
 
   // Buscador de rutas A -> B
-  const [origen, setOrigen] = useState("alameda");
+  const [origen, setOrigen] = useState("larios-alameda");
   const [destino, setDestino] = useState("catedral");
   const [ruta, setRuta] = useState<ReturnType<typeof calcularRutaPeatonal> | null>(null);
 
@@ -176,10 +178,10 @@ export function MapaInteligente() {
                 <p className="mb-1 text-[11px] text-muted-foreground">Saltar a un momento clave:</p>
                 <div className="flex flex-wrap gap-1.5 text-xs">
                   {([
-                    ["0", "00:00 Salidas Madrugá"],
-                    ["300", "05:00 Puentes"],
-                    ["490", "08:10 Carrera Oficial"],
-                    ["780", "13:00 Regresos"],
+                    ["540", "09:00 Pollinica"],
+                    ["1080", "18:00 Cautivo / Sepulcro"],
+                    ["1200", "20:00 Tribuna"],
+                    ["180", "03:00 Esperanza Madrugá"],
                   ] as Array<[string, string]>).map(([v, label]) => (
                     <button
                       key={v}
@@ -258,18 +260,18 @@ export function MapaInteligente() {
         ))}
         <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-[#7f1d1d] ring-2 ring-[#fde68a]" /> Cruz de guía
+            <span className="inline-block h-3 w-3 rounded-full bg-[#4A154B] ring-2 ring-[#D4AF37]" /> Trono de Cristo
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-[#b45309] ring-2 ring-[#fbbf24]" /> Palio
+            <span className="inline-block h-3 w-3 rounded-full bg-[#1B4D3E] ring-2 ring-[#D4AF37]" /> Trono de Virgen (Palio)
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-6 rounded bg-[#dc2626]" /> Tramo cortado
+            <span className="inline-block h-1.5 w-6 rounded bg-[#B3261E]" /> Tramo cortado
           </span>
         </span>
       </div>
 
-      <MapContainer center={SEVILLA} zoom={13} className="h-[520px] rounded-lg z-0">
+      <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -300,46 +302,54 @@ export function MapaInteligente() {
             // El palio camina por el mismo itinerario ≈tiempoPaso por detrás de la cruz de guía
             const posPalio = posicionEnMinuto(h, minutoActual - h.tiempoPaso);
             const palioEnCalle = posPalio?.estado === "en_calle";
+            const iconoCristo = L.icon({
+              iconUrl: iconoTronoCristo(),
+              iconSize: [30, 42],
+              iconAnchor: [15, 42],
+              popupAnchor: [0, -38],
+            });
+            const iconoVirgen = L.icon({
+              iconUrl: iconoTronoVirgen(),
+              iconSize: [30, 42],
+              iconAnchor: [15, 42],
+              popupAnchor: [0, -38],
+            });
             return (
               <Fragment key={`pos-${h.slug}`}>
                 {palioEnCalle && posPalio && (
-                  <CircleMarker
-                    center={[posPalio.lat, posPalio.lng]}
-                    radius={7}
-                    pathOptions={{
-                      color: "#fbbf24",
-                      fillColor: "#b45309",
-                      fillOpacity: 0.95,
-                      weight: 2,
-                    }}
+                  <Marker
+                    position={[posPalio.lat, posPalio.lng]}
+                    icon={iconoVirgen}
+                    opacity={0.95}
                   >
                     <Popup>
-                      <strong>Palio — {h.nombrePopular ?? h.nombre}</strong>
+                      <strong>Trono de Virgen (Palio) — {h.nombrePopular ?? h.nombre}</strong>
                       <br />
                       {formatearMinutos(minutoActual)} · camina ≈{h.tiempoPaso} min tras la cruz de guía
                     </Popup>
+                  </Marker>
+                )}
+                {enCalle ? (
+                  <Marker position={[pos.lat, pos.lng]} icon={iconoCristo}>
+                    <Popup>
+                      <strong>Trono de Cristo — {h.nombrePopular ?? h.nombre}</strong>
+                      <br />
+                      En itinerario — {formatearMinutos(minutoActual)}
+                    </Popup>
+                  </Marker>
+                ) : (
+                  <CircleMarker
+                    center={[pos.lat, pos.lng]}
+                    radius={8}
+                    pathOptions={{ color: "#94a3b8", fillColor: "#64748b", fillOpacity: 0.8, weight: 2 }}
+                  >
+                    <Popup>
+                      <strong>{h.nombrePopular ?? h.nombre}</strong>
+                      <br />
+                      {pos.estado === "antes" ? "Aún no ha salido" : "Ya está en su templo"}
+                    </Popup>
                   </CircleMarker>
                 )}
-                <CircleMarker
-                  center={[pos.lat, pos.lng]}
-                  radius={9}
-                  pathOptions={{
-                    color: enCalle ? "#fde68a" : "#94a3b8",
-                    fillColor: enCalle ? "#7f1d1d" : "#64748b",
-                    fillOpacity: 0.95,
-                    weight: 2,
-                  }}
-                >
-                  <Popup>
-                    <strong>Cruz de guía — {h.nombrePopular ?? h.nombre}</strong>
-                    <br />
-                    {enCalle
-                      ? `En itinerario — ${formatearMinutos(minutoActual)}`
-                      : pos.estado === "antes"
-                      ? "Aún no ha salido"
-                      : "Ya está en su templo"}
-                  </Popup>
-                </CircleMarker>
               </Fragment>
             );
           })}

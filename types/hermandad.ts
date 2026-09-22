@@ -37,9 +37,12 @@ export interface Paso {
   nombre: string;
   escultores: string[];
   capataz: string;
-  costaleros: number;
+  costaleros: number; // Hombres de trono en Málaga
+  mayordomos?: number;
+  banda?: string; // Banda que acompaña al trono
   anio: number;
   descripcion?: string;
+  img?: string; // Imagen/ilustración del trono (fallback SVG en /public/images)
 }
 
 export interface Vestimenta {
@@ -49,6 +52,17 @@ export interface Vestimenta {
   escudo?: string;
   escudoImg?: string;
   cirios?: string;
+  habitoImg?: string; // Ilustración del hábito/capirote (fallback SVG)
+  correas?: string; // Correas y detalles del uniforme de Hombres de Trono
+  uniformeTronoImg?: string;
+}
+
+export interface Sonido {
+  id: string;
+  titulo: string;
+  tipo: "campana_trono" | "marcha" | "saeta" | "ambiente";
+  src: string; // Ruta pública en /public/audio/
+  descripcion?: string;
 }
 
 export interface VideoEmbed {
@@ -70,6 +84,7 @@ export interface Hermandad {
   numeroNazarenos: number;
   tiempoPaso: number; // minutos
   musica: string[];
+  sonidos?: Sonido[];
   vestimenta: Vestimenta;
   pasos: Paso[];
   historia: string;
@@ -77,6 +92,7 @@ export interface Hermandad {
   itinerario: PuntoItinerario[];
   videos: VideoEmbed[];
   imagenes: string[];
+  callesCortadas?: string[]; // ids de CalleCortada relacionadas
 }
 
 export interface Incidencia {

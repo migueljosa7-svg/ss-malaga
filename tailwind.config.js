@@ -8,16 +8,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#faf7f2",
-        foreground: "#1c1917",
-        primary: { DEFAULT: "#7f1d1d", foreground: "#fef2f2" }, // granate cofrade
-        secondary: { DEFAULT: "#fde68a", foreground: "#78350f" }, // oro
-        muted: { DEFAULT: "#f5f5f4", foreground: "#57534e" },
-        card: "#ffffff",
-        border: "#e7e5e4",
-        danger: "#dc2626",
-        warning: "#f59e0b",
-        info: "#2563eb",
+        background: "#FAF7F2", // Crema cera
+        foreground: "#1A1A1A", // Negro Calvario
+        primary: { DEFAULT: "#4A154B", foreground: "#FAF7F2" }, // Púrpura Nazareno
+        secondary: { DEFAULT: "#D4AF37", foreground: "#1A1A1A" }, // Dorado Orfebre
+        esperanza: { DEFAULT: "#1B4D3E", foreground: "#FAF7F2" }, // Verde Esperanza / Romero
+        calvario: "#1A1A1A",
+        muted: { DEFAULT: "#F1EBE0", foreground: "#5C5346" },
+        card: "#FFFFFF",
+        border: "#E4DCCB",
+        danger: "#B3261E",
+        warning: "#C77D0A",
+        info: "#2E5E8C",
       },
       borderRadius: { lg: "0.75rem", md: "0.5rem" },
     },

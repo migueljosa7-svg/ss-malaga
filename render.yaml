@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ss-sevilla
+    name: ss-malaga
     env: node
     region: frankfurt
     plan: free

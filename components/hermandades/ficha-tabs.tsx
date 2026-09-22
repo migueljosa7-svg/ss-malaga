@@ -9,13 +9,14 @@ import type { Hermandad } from "@/types/hermandad";
 import { cn } from "@/lib/utils";
 import { Lightbulb, Music, Users, Shirt, History, Shield } from "lucide-react";
 
-type Pestana = "historia" | "pasos" | "itinerario" | "galeria";
+type Pestana = "historia" | "pasos" | "itinerario" | "galeria" | "sonidos";
 
 const pestanas: Array<{ id: Pestana; label: string }> = [
   { id: "historia", label: "Historia & Datos" },
-  { id: "pasos", label: "Pasos & Túnica" },
+  { id: "pasos", label: "Tronos & Túnica" },
   { id: "itinerario", label: "Itinerario" },
   { id: "galeria", label: "Vídeos" },
+  { id: "sonidos", label: "Sonidos" },
 ];
 
 export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
@@ -119,6 +120,40 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
       )}
 
       {activa === "itinerario" && <TimelineItinerario itinerario={h.itinerario} />}
+
+      {activa === "sonidos" && (
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Music className="h-5 w-5 text-primary" /> Toques de campana y marchas
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {(h.sonidos ?? []).length === 0 && (
+                <p className="text-sm text-muted-foreground">
+                  No hay audios disponibles para esta hermandad todavía.
+                </p>
+              )}
+              {(h.sonidos ?? []).map((s) => (
+                <div key={s.id} className="rounded-lg border border-border bg-muted/40 p-3">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <span className="font-medium">{s.titulo}</span>
+                    <Badge variant="secondary">{s.tipo.replace("_", " ")}</Badge>
+                  </div>
+                  {s.descripcion && (
+                    <p className="mb-2 text-xs text-muted-foreground">{s.descripcion}</p>
+                  )}
+                  {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+                  <audio controls preload="none" className="w-full" src={s.src}>
+                    Tu navegador no soporta audio HTML5.
+                  </audio>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {activa === "galeria" && (
         <div className="grid gap-4 sm:grid-cols-2">

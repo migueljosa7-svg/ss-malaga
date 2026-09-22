@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import dynamic from "next/dynamic";
 
 // Leaflet requiere window: se carga solo en el cliente
-export const MapaSevilla = dynamic(
+export const MapaMalaga = dynamic(
   () => import("./MapaSemanaSanta").then((m) => m.MapaInteligente),
   {
     ssr: false,

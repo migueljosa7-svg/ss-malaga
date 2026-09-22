@@ -1,7 +1,7 @@
 import type { CalleCortada } from "@/types/hermandad";
 
 /**
- * Grafo peatonal simplificado del centro de Sevilla para el calculador de rutas.
+ * Grafo peatonal simplificado del Centro Histórico de Málaga para el calculador de rutas.
  * Los nodos son puntos clave (plazas, cruces) y las aristas, tramos de calle.
  * Las aristas cuyo id coincide con un `id` de CalleCortada quedan bloqueadas.
  */
@@ -21,42 +21,42 @@ export interface AristaRuta {
 }
 
 export const nodosRuta: NodoRuta[] = [
-  { id: "campana", nombre: "La Campana", lat: 37.3938, lng: -5.9961 },
-  { id: "duque", nombre: "Plaza del Duque", lat: 37.3947, lng: -5.9949 },
-  { id: "alameda", nombre: "Alameda de Hércules", lat: 37.3961, lng: -5.9983 },
-  { id: "feria", nombre: "Calle Feria (Mercado)", lat: 37.3981, lng: -5.9957 },
-  { id: "macarena", nombre: "Puerta de la Macarena", lat: 37.4033, lng: -5.9907 },
-  { id: "salvador", nombre: "Plaza del Salvador", lat: 37.3905, lng: -5.9939 },
-  { id: "sierpes", nombre: "Calle Sierpes (centro)", lat: 37.3909, lng: -5.9945 },
-  { id: "catedral", nombre: "Catedral", lat: 37.3867, lng: -5.9942 },
-  { id: "jerez", nombre: "Puerta de Jerez", lat: 37.3854, lng: -5.993 },
-  { id: "arenal", nombre: "El Arenal", lat: 37.3861, lng: -5.9973 },
-  { id: "triana", nombre: "Puente de Triana", lat: 37.3862, lng: -6.0013 },
-  { id: "castilla", nombre: "Calle Castilla (Triana)", lat: 37.3865, lng: -6.0028 },
-  { id: "san-gonzalo", nombre: "San Gonzalo (Triana)", lat: 37.3846, lng: -6.0068 },
-  { id: "san-lorenzo", nombre: "Plaza de San Lorenzo", lat: 37.3943, lng: -5.9973 },
-  { id: "san-vicente", nombre: "Plaza de San Vicente", lat: 37.3946, lng: -5.9986 },
+  { id: "larios-alameda", nombre: "Calle Larios (Alameda)", lat: 36.7198, lng: -4.4207 },
+  { id: "larios-constitucion", nombre: "Plaza de la Constitución", lat: 36.7211, lng: -4.4195 },
+  { id: "granada", nombre: "Calle Granada (centro)", lat: 36.7222, lng: -4.4186 },
+  { id: "tribuna", nombre: "Tribuna de los Pobres", lat: 36.7238, lng: -4.4169 },
+  { id: "catedral", nombre: "Plaza del Obispo / Catedral", lat: 36.7206, lng: -4.4203 },
+  { id: "pasillo-santa-isabel", nombre: "Pasillo de Santa Isabel", lat: 36.7216, lng: -4.4212 },
+  { id: "carreteria", nombre: "Calle Carretería", lat: 36.7230, lng: -4.4237 },
+  { id: "alameda-centro", nombre: "Alameda Principal (centro)", lat: 36.7196, lng: -4.4223 },
+  { id: "alameda-pasanteria", nombre: "Alameda Principal (Pasantería)", lat: 36.7192, lng: -4.4247 },
+  { id: "cortina-del-muelle", nombre: "Cortina del Muelle", lat: 36.7206, lng: -4.4215 },
+  { id: "atasozarral", nombre: "Calle Atarazanas / Atazarral", lat: 36.7221, lng: -4.4247 },
+  { id: "cacabelos", nombre: "Puente de los Alemanes / Cacabelos", lat: 36.7240, lng: -4.4251 },
+  { id: "la-marina", nombre: "Paseo de la Farola / La Marina", lat: 36.7192, lng: -4.4195 },
+  { id: "victoria", nombre: "Plaza de la Merced / Victoria", lat: 36.7240, lng: -4.4174 },
+  { id: "cristo-de-la-espiracion", nombre: "Calle Andrés Pérez (Expiración)", lat: 36.7220, lng: -4.4252 },
 ];
 
 export const aristasRuta: AristaRuta[] = [
-  { id: "cc-2", desde: "feria", hasta: "macarena", nombreCalle: "Calle Feria" },
-  { id: "e-campana-feria", desde: "campana", hasta: "feria", nombreCalle: "Calle Feria (tramo bajo)" },
-  { id: "e-campana-duque", desde: "campana", hasta: "duque", nombreCalle: "Calle Teodosio" },
-  { id: "e-duque-alameda", desde: "duque", hasta: "alameda", nombreCalle: "Calle Trajano" },
-  { id: "e-alameda-sanvicente", desde: "alameda", hasta: "san-vicente", nombreCalle: "Calle San Vicente de Paúl" },
-  { id: "e-sanvicente-sanlorenzo", desde: "san-vicente", hasta: "san-lorenzo", nombreCalle: "Calle Castelar" },
-  { id: "e-sanlorenzo-campana", desde: "san-lorenzo", hasta: "campana", nombreCalle: "Calle Jesús del Gran Poder" },
-  { id: "e-campana-sierpes", desde: "campana", hasta: "sierpes", nombreCalle: "Calle Sierpes (norte)" },
-  { id: "e-sierpes-salvador", desde: "sierpes", hasta: "salvador", nombreCalle: "Calle Córdoba" },
-  { id: "cc-1", desde: "salvador", hasta: "sierpes", nombreCalle: "Calle Sierpes (sur)" },
-  { id: "e-salvador-catedral", desde: "salvador", hasta: "catedral", nombreCalle: "Avenida de la Constitución" },
-  { id: "cc-4", desde: "salvador", hasta: "catedral", nombreCalle: "Calle Álvarez Quintero" },
-  { id: "e-catedral-jerez", desde: "catedral", hasta: "jerez", nombreCalle: "Avenida de la Constitución (sur)" },
-  { id: "e-catedral-arenal", desde: "catedral", hasta: "arenal", nombreCalle: "Calle Pastor y Landero" },
-  { id: "e-arenal-triana", desde: "arenal", hasta: "triana", nombreCalle: "Puente de Triana" },
-  { id: "e-triana-castilla", desde: "triana", hasta: "castilla", nombreCalle: "Calle Castilla" },
-  { id: "cc-3", desde: "castilla", hasta: "san-gonzalo", nombreCalle: "Calle Castilla (oeste)" },
-  { id: "e-jerez-triana-alt", desde: "jerez", hasta: "triana", nombreCalle: "Calle Reyes Católicos - Puente" },
+  { id: "cc-1", desde: "larios-alameda", hasta: "larios-constitucion", nombreCalle: "Calle Larios" },
+  { id: "e-larios-catedral", desde: "larios-constitucion", hasta: "catedral", nombreCalle: "Calle Molina Lario" },
+  { id: "e-larios-granada", desde: "larios-constitucion", hasta: "granada", nombreCalle: "Calle Granada (tramo bajo)" },
+  { id: "cc-2", desde: "granada", hasta: "tribuna", nombreCalle: "Calle Granada (Tribuna de los Pobres)" },
+  { id: "e-tribuna-victoria", desde: "tribuna", hasta: "victoria", nombreCalle: "Calle Victoria" },
+  { id: "e-granada-pasillo", desde: "granada", hasta: "pasillo-santa-isabel", nombreCalle: "Pasillo de Santa Isabel" },
+  { id: "cc-3", desde: "pasillo-santa-isabel", hasta: "carreteria", nombreCalle: "Pasillo de Santa Isabel / Carretería" },
+  { id: "e-carreteria-atasozarral", desde: "carreteria", hasta: "atasozarral", nombreCalle: "Calle Carretería (oeste)" },
+  { id: "e-atasozarral-expiracion", desde: "atasozarral", hasta: "cristo-de-la-espiracion", nombreCalle: "Calle Andrés Pérez" },
+  { id: "e-atasozarral-cacabelos", desde: "atasozarral", hasta: "cacabelos", nombreCalle: "Calle Cacabelos" },
+  { id: "e-cacabelos-tribuna-alt", desde: "cacabelos", hasta: "tribuna", nombreCalle: "Puente de los Alemanes - Calle Trinidad" },
+  { id: "cc-4", desde: "larios-alameda", hasta: "alameda-centro", nombreCalle: "Alameda Principal (Larios)" },
+  { id: "e-alameda-pasanteria", desde: "alameda-centro", hasta: "alameda-pasanteria", nombreCalle: "Alameda Principal (oeste)" },
+  { id: "e-alameda-carreteria", desde: "alameda-pasanteria", hasta: "carreteria", nombreCalle: "Calle Puente de la Alcazaba / Esperanto" },
+  { id: "e-catedral-cortina", desde: "catedral", hasta: "cortina-del-muelle", nombreCalle: "Calle Císter" },
+  { id: "e-cortina-marina", desde: "cortina-del-muelle", hasta: "la-marina", nombreCalle: "Paseo del Parque" },
+  { id: "e-marina-larios", desde: "la-marina", hasta: "larios-alameda", nombreCalle: "Paseo de la Farola" },
+  { id: "e-victoria-tribuna-alt", desde: "victoria", hasta: "tribuna", nombreCalle: "Calle Álamos" },
 ];
 
 /** Distancia aproximada en metros entre dos coordenadas (haversine). */

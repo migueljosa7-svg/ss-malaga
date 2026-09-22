@@ -17,12 +17,12 @@ export default function DashboardPage() {
   return (
     <div className="py-8">
       <section className="mb-8 text-center">
-        <h1 className="text-3xl font-bold sm:text-4xl">
-          Semana Santa de Sevilla <span className="text-primary">en tiempo real</span>
+        <h1 className="barroco-title text-3xl font-bold sm:text-4xl">
+          Semana Santa de Málaga <span className="text-primary">en tiempo real</span>
         </h1>
         <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Retrasos de pasos, cambios de itinerario, calles cortadas y mapas — todo en una sola app,
-          con modo offline cuando la red se satura.
+          Tronos, traslados, retrasos, cambios de itinerario, calles cortadas y mapas — todo en una
+          sola app, con modo offline cuando la red se satura.
         </p>
       </section>
 

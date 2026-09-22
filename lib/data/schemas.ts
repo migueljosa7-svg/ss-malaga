@@ -17,9 +17,12 @@ export const pasoSchema = z.object({
   nombre: z.string().min(1).max(200),
   escultores: z.array(z.string().max(120)).default([]),
   capataz: z.string().max(120),
-  costaleros: z.number().int().min(0).max(100),
+  costaleros: z.number().int().min(0).max(1000), // Hombres de trono
+  mayordomos: z.number().int().min(0).max(100).optional(),
+  banda: z.string().max(200).optional(),
   anio: z.number().int().min(1500).max(2100),
   descripcion: z.string().max(2000).optional(),
+  img: z.string().max(300).optional(),
 });
 
 export const vestimentaSchema = z.object({
@@ -27,8 +30,19 @@ export const vestimentaSchema = z.object({
   colorAntifaz: z.string().max(60),
   capa: z.boolean(),
   escudo: z.string().max(200).optional(),
-  escudoImg: z.string().url().optional(),
+  escudoImg: z.string().max(300).optional(),
   cirios: z.string().max(300).optional(),
+  habitoImg: z.string().max(300).optional(),
+  correas: z.string().max(300).optional(),
+  uniformeTronoImg: z.string().max(300).optional(),
+});
+
+export const sonidoSchema = z.object({
+  id: z.string(),
+  titulo: z.string().max(200),
+  tipo: z.enum(["campana_trono", "marcha", "saeta", "ambiente"]),
+  src: z.string().min(1).max(300),
+  descripcion: z.string().max(300).optional(),
 });
 
 export const videoEmbedSchema = z.object({
@@ -56,13 +70,15 @@ export const hermandadSchema = z.object({
   numeroNazarenos: z.number().int().min(0),
   tiempoPaso: z.number().int().min(1).max(120),
   musica: z.array(z.string().max(120)),
+  sonidos: z.array(sonidoSchema).optional(),
   vestimenta: vestimentaSchema,
   pasos: z.array(pasoSchema).min(1),
   historia: z.string().max(8000),
   curiosidades: z.array(z.string().max(500)),
   itinerario: z.array(puntoItinerarioSchema).min(1),
   videos: z.array(videoEmbedSchema),
-  imagenes: z.array(z.string().url()),
+  imagenes: z.array(z.string().max(300)),
+  callesCortadas: z.array(z.string().max(80)).optional(),
 });
 
 export const incidenciaSchema = z.object({

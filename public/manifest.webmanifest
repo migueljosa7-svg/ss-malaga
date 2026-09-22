@@ -1,11 +1,11 @@
 {
-  "name": "SS Sevilla — Semana Santa de Sevilla",
-  "short_name": "SS Sevilla",
-  "description": "Incidencias en vivo, mapa e itinerarios de la Semana Santa de Sevilla. Funciona offline.",
+  "name": "SS Málaga — Semana Santa de Málaga",
+  "short_name": "SS Málaga",
+  "description": "Tronos, traslados e itinerarios en tiempo real de la Semana Santa de Málaga. Funciona offline.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#faf7f2",
-  "theme_color": "#7f1d1d",
+  "theme_color": "#4a154b",
   "lang": "es",
   "icons": [
     {

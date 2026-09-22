@@ -1,6 +1,6 @@
 {
-  "name": "ss-sevilla",
-  "version": "0.1.0",
+  "name": "ss-malaga",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
