@@ -61,6 +61,13 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   output: "standalone",
+  experimental: {
+    // El CSS crítico agresivo (optimizeCss/critters) emitía <link rel="preload">
+    // de hojas no utilizadas en rutas sin el mapa ("/comparador"), provocando el
+    // warning de rendimiento "was preloaded but not used". Se desactiva
+    // explícitamente: el CSS de Leaflet se sirve solo en su chunk dinámico.
+    optimizeCss: false,
+  },
   images: { remotePatterns: [{ protocol: "https", hostname: "**" }] },
   webpack: (config) => {
     // Alias explícito: '@/*' debe resolver SIEMPRE contra la raíz del proyecto,

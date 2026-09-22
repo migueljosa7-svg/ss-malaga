@@ -1,19 +1,26 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { tocarCampana3d, type PosicionGeo } from "@/lib/audio/campana-3d";
 
 /**
- * Botón "Tocar Campana de Trono" — v1.0 Pro.
- * - Audio de baja latencia con Web Audio API (decodifica campana-trono.mp3 y lo
- *   reproduce 3 veces simulando los 3 toques del mayordomo).
- * - Vibración háptica en móviles: navigator.vibrate([100, 50, 100, 50, 100]).
+ * Botón "Tocar Campana de Trono" — v2.0 Max.
+ * - Audio con Web Audio API; si se proporciona `posicion` (lat/lng del trono),
+ *   suena con PannerNode HRTF orientado en 3D respecto al centro del mapa.
+ * - 3 toques tradicionales de mayordomo + vibración háptica sincronizada.
  * - Microanimación visual de balanceo con destellos dorados.
  */
-export function BotonCampana({ src = "/audio/campana-trono.mp3", compacto = false }: { src?: string; compacto?: boolean }) {
-  const bufferRef = useRef<ArrayBuffer | null>(null);
-  const ctxRef = useRef<AudioContext | null>(null);
+export function BotonCampana({
+  src = "/audio/campana-trono.mp3",
+  compacto = false,
+  posicion = null,
+}: {
+  src?: string;
+  compacto?: boolean;
+  posicion?: PosicionGeo | null;
+}) {
   const [tocando, setTocando] = useState(false);
   const [soportaVibracion, setSoportaVibracion] = useState(false);
 
@@ -25,31 +32,13 @@ export function BotonCampana({ src = "/audio/campana-trono.mp3", compacto = fals
     if (tocando) return;
     setTocando(true);
     try {
-      if (!ctxRef.current) ctxRef.current = new AudioContext();
-      const ctx = ctxRef.current;
-      if (ctx.state === "suspended") await ctx.resume();
-      if (!bufferRef.current) {
-        const res = await fetch(src);
-        if (!res.ok) throw new Error("No se pudo cargar el audio");
-        bufferRef.current = await res.arrayBuffer();
-      }
-      const buffer = await ctx.decodeAudioData(bufferRef.current!.slice(0));
-      // 3 toques tradicionales de mayordomo de trono
-      for (let i = 0; i < 3; i++) {
-        const fuente = ctx.createBufferSource();
-        fuente.buffer = buffer;
-        fuente.connect(ctx.destination);
-        fuente.start(ctx.currentTime + i * 0.7);
-      }
-      // Vibración háptica sincronizada con los 3 toques
-      navigator.vibrate?.([100, 50, 100, 50, 100]);
-      setTimeout(() => setTocando(false), 2300);
+      await tocarCampana3d({ src, posicion });
     } catch {
-      // Fallback: vibración aunque no haya audio disponible
-      navigator.vibrate?.([100, 50, 100, 50, 100]);
-      setTimeout(() => setTocando(false), 800);
+      // Fallback silencioso: aunque el audio falle, se mantiene la respuesta háptica
     }
-  }, [src, tocando]);
+    navigator.vibrate?.([100, 50, 100, 50, 100]);
+    setTimeout(() => setTocando(false), 2300);
+  }, [src, tocando, posicion]);
 
   return (
     <button

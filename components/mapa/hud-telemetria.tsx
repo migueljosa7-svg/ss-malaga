@@ -75,7 +75,7 @@ export function HudTelemetria({
             </div>
           </dl>
           <div className="mt-3">
-            <BotonCampana compacto />
+            <BotonCampana compacto posicion={{ lat: t.lat, lng: t.lng }} />
           </div>
         </div>
       ),

@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { Church, MapPin, AlertTriangle, Scale } from "lucide-react";
+import { Church, MapPin, AlertTriangle, Scale, Route } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Inicio", icon: Church },
   { href: "/hermandades", label: "Hermandades", icon: Church },
   { href: "/mapa", label: "Mapa", icon: MapPin },
+  { href: "/mi-ruta", label: "Mi Ruta", icon: Route },
   { href: "/comparador", label: "Comparador", icon: Scale },
   { href: "/incidencias", label: "Incidencias", icon: AlertTriangle },
 ];

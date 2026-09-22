@@ -9,6 +9,7 @@ import { calcularRutaPeatonal } from "@/lib/rutas";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
 import { iconoTronoCristo, iconoTronoVirgen } from "@/lib/iconos-tronos";
 import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
+import { RadarCruces } from "@/components/mapa/radar-cruces";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
 import "leaflet/dist/leaflet.css";
 
@@ -104,6 +105,9 @@ export function MapaInteligente() {
   // HUD de telemetría: trono seleccionado al hacer clic en un marcador
   const [seleccion, setSeleccion] = useState<TronoSeleccionado>(null);
 
+  // Radar de cruces: foco del mapa sobre un encuentro cofrade
+  const [focoCruce, setFocoCruce] = useState<[number, number][] | null>(null);
+
   useEffect(() => setMounted(true), []);
 
   const { data: calles } = useQuery<CalleCortada[]>({
@@ -139,7 +143,10 @@ export function MapaInteligente() {
     return <div className="h-[520px] animate-pulse rounded-lg bg-muted" aria-label="Cargando mapa…" />;
   }
 
-  const boundsRuta = ruta?.exito ? ruta.nodosCamino.map((n) => [n.lat, n.lng] as [number, number]) : null;
+  const boundsObjetivo = useMemo<[number, number][] | null>(() => {
+    if (focoCruce) return focoCruce;
+    return ruta?.exito ? ruta.nodosCamino.map((n) => [n.lat, n.lng] as [number, number]) : null;
+  }, [focoCruce, ruta]);
 
   return (
     <div className="space-y-4">
@@ -275,13 +282,20 @@ export function MapaInteligente() {
         </span>
       </div>
 
+      {/* Radar de cruces de tronos (v2.0 Max) */}
+      <RadarCruces
+        hermandades={hermandades ?? []}
+        minuto={minutoActual}
+        onCentrar={setFocoCruce}
+      />
+
       <div className="relative">
       <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <AjustarVista bounds={boundsRuta} />
+        <AjustarVista bounds={boundsObjetivo} />
         {/* Itinerarios teóricos */}
         {capas.itinerarios &&
           (hermandades ?? []).map((h) => (

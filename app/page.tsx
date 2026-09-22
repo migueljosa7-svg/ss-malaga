@@ -3,6 +3,7 @@ import { Search, MapPin, AlertTriangle, Church, Scale } from "lucide-react";
 import { getHermandades, getIncidencias } from "@/lib/data";
 import { HermandadCard } from "@/components/hermandades/hermandad-card";
 import { BannerAlertaCritica } from "@/components/incidencias/alertas-live";
+import { ParticulasIncienso } from "@/components/ui/particulas-incienso";
 import { Buscador } from "@/components/ui/buscador";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,11 +17,12 @@ export default function DashboardPage() {
 
   return (
     <div className="py-8">
-      <section className="mb-8 text-center">
-        <h1 className="barroco-title text-3xl font-bold sm:text-4xl">
+      <section className="relative mb-8 overflow-hidden text-center">
+        <ParticulasIncienso />
+        <h1 className="barroco-title relative z-10 text-3xl font-bold sm:text-4xl">
           Semana Santa de Málaga <span className="text-primary">en tiempo real</span>
         </h1>
-        <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">
+        <p className="relative z-10 mx-auto mt-2 max-w-2xl text-muted-foreground">
           Tronos, traslados, retrasos, cambios de itinerario, calles cortadas y mapas — todo en una
           sola app, con modo offline cuando la red se satura.
         </p>

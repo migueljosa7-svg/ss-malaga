@@ -2,7 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import { Navbar } from "@/components/ui/navbar";
 import { WidgetsFlotantes } from "@/components/ui/widgets-flotantes";
-import "leaflet/dist/leaflet.css";
+// Nota: NO se importa `leaflet/dist/leaflet.css` aquí a propósito. El CSS de Leaflet
+// vive únicamente en el chunk dinámico del mapa (components/mapa/MapaSemanaSanta.tsx).
+// Importarlo en el layout emitía un <link rel="preload"> no utilizado en rutas sin
+// mapa (p. ej. /comparador), generando el warning "preloaded but not used".
 import "./globals.css";
 
 export const metadata: Metadata = {

@@ -7,6 +7,7 @@ import { TimelineItinerario } from "@/components/hermandades/timeline-itinerario
 import { FichaPaso } from "@/components/hermandades/ficha-paso";
 import { BotonCampana } from "@/components/hermandades/boton-campana";
 import { Directos } from "@/components/hermandades/directos";
+import { CromoHolofoil } from "@/components/hermandades/cromo-holofoil";
 import { Lightbox } from "@/components/ui/lightbox";
 import type { Hermandad } from "@/types/hermandad";
 import { cn } from "@/lib/utils";
@@ -119,7 +120,7 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
             </CardContent>
           </Card>
           {h.pasos.map((p, idx) => (
-            <div key={p.nombre} className="space-y-2">
+            <CromoHolofoil key={p.nombre} className="space-y-2">
               <FichaPaso paso={p} />
               {p.img && (
                 <button
@@ -132,7 +133,7 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
                   <img src={p.img} alt={`Trono: ${p.nombre}`} className="h-48 w-full object-cover" loading="lazy" />
                 </button>
               )}
-            </div>
+            </CromoHolofoil>
           ))}
           {lightbox !== null && (
             <Lightbox

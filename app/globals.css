@@ -78,6 +78,39 @@ body {
   transition: none;
 }
 
+/* ---------- v2.0 Max: Cromos Holofoil 3D ---------- */
+.cromo-holofoil {
+  perspective: 900px;
+}
+.cromo-holofoil-inner {
+  transform: rotateX(var(--rot-x, 0deg)) rotateY(var(--rot-y, 0deg));
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.cromo-holofoil-brillo {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--brillo-x, 50%) var(--brillo-y, 50%),
+    rgba(212, 175, 55, 0.28),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.cromo-holofoil:hover .cromo-holofoil-brillo {
+  opacity: 1;
+}
+.modo-ahorro .cromo-holofoil-inner {
+  transform: none !important;
+}
+.modo-ahorro .cromo-holofoil-brillo {
+  display: none;
+}
+
 /* Modo ahorro / aglomeración: desactiva transiciones y animaciones complejas */
 .modo-ahorro *,
 .modo-ahorro *::before,
