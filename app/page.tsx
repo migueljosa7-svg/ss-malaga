@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Search, MapPin, AlertTriangle, Church } from "lucide-react";
+import { Search, MapPin, AlertTriangle, Church, Scale } from "lucide-react";
 import { getHermandades, getIncidencias } from "@/lib/data";
 import { HermandadCard } from "@/components/hermandades/hermandad-card";
 import { BannerAlertaCritica } from "@/components/incidencias/alertas-live";
@@ -98,6 +98,26 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </Link>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold">
+          <Scale className="h-5 w-5 text-primary" /> Comparador de tronos
+        </h2>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground">
+              ¿250 Hombres de Trono en la Esperanza frente a 200 en el Cautivo? Compara peso,
+              cuadrillas y hechuras de los tronos de Málaga cara a cara.
+            </p>
+            <Link
+              href="/comparador"
+              className="mt-3 inline-block text-sm font-medium text-primary hover:underline"
+            >
+              Abrir comparador de tronos →
+            </Link>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

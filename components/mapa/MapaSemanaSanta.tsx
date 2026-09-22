@@ -8,6 +8,7 @@ import { useUIStore } from "@/lib/store";
 import { calcularRutaPeatonal } from "@/lib/rutas";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
 import { iconoTronoCristo, iconoTronoVirgen } from "@/lib/iconos-tronos";
+import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
 import "leaflet/dist/leaflet.css";
 
@@ -99,6 +100,9 @@ export function MapaInteligente() {
   const [origen, setOrigen] = useState("larios-alameda");
   const [destino, setDestino] = useState("catedral");
   const [ruta, setRuta] = useState<ReturnType<typeof calcularRutaPeatonal> | null>(null);
+
+  // HUD de telemetría: trono seleccionado al hacer clic en un marcador
+  const [seleccion, setSeleccion] = useState<TronoSeleccionado>(null);
 
   useEffect(() => setMounted(true), []);
 
@@ -271,6 +275,7 @@ export function MapaInteligente() {
         </span>
       </div>
 
+      <div className="relative">
       <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -321,20 +326,29 @@ export function MapaInteligente() {
                     position={[posPalio.lat, posPalio.lng]}
                     icon={iconoVirgen}
                     opacity={0.95}
+                    eventHandlers={{ click: () => setSeleccion({ slug: h.slug, tipo: "virgen" }) }}
                   >
                     <Popup>
                       <strong>Trono de Virgen (Palio) — {h.nombrePopular ?? h.nombre}</strong>
                       <br />
                       {formatearMinutos(minutoActual)} · camina ≈{h.tiempoPaso} min tras la cruz de guía
+                      <br />
+                      <em>Clic en el marcador para ver telemetría</em>
                     </Popup>
                   </Marker>
                 )}
                 {enCalle ? (
-                  <Marker position={[pos.lat, pos.lng]} icon={iconoCristo}>
+                  <Marker
+                    position={[pos.lat, pos.lng]}
+                    icon={iconoCristo}
+                    eventHandlers={{ click: () => setSeleccion({ slug: h.slug, tipo: "cristo" }) }}
+                  >
                     <Popup>
                       <strong>Trono de Cristo — {h.nombrePopular ?? h.nombre}</strong>
                       <br />
                       En itinerario — {formatearMinutos(minutoActual)}
+                      <br />
+                      <em>Clic en el marcador para ver telemetría</em>
                     </Popup>
                   </Marker>
                 ) : (
@@ -387,6 +401,13 @@ export function MapaInteligente() {
           </>
         )}
         </MapContainer>
+        <HudTelemetria
+          seleccion={seleccion}
+          hermandades={hermandades ?? []}
+          minuto={minutoActual}
+          onCerrar={() => setSeleccion(null)}
+        />
+      </div>
     </div>
   );
 }

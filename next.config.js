@@ -21,6 +21,25 @@ const withPWA = require("next-pwa")({
       handler: "StaleWhileRevalidate",
       options: { cacheName: "api-data" },
     },
+    {
+      // Audio (campanas, marchas) para uso offline durante encierros
+      urlPattern: /\.(?:mp3|ogg|wav)$/i,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "audio-cofrade",
+        expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+        rangeRequests: true,
+      },
+    },
+    {
+      // Ilustraciones SVG/WebP de túnicas y tronos offline
+      urlPattern: /\.(?:svg|webp|png|jpg|jpeg)$/i,
+      handler: "CacheFirst",
+      options: {
+        cacheName: "imagenes-cofrade",
+        expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+      },
+    },
   ],
 });
 

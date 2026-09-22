@@ -21,6 +21,7 @@ export const pasoSchema = z.object({
   mayordomos: z.number().int().min(0).max(100).optional(),
   banda: z.string().max(200).optional(),
   anio: z.number().int().min(1500).max(2100),
+  pesoKg: z.number().int().min(0).max(20000).optional(),
   descripcion: z.string().max(2000).optional(),
   img: z.string().max(300).optional(),
 });

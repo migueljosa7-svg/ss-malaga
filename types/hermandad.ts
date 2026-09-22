@@ -41,6 +41,7 @@ export interface Paso {
   mayordomos?: number;
   banda?: string; // Banda que acompaña al trono
   anio: number;
+  pesoKg?: number; // Peso aproximado del trono en kg (v1.0 Pro)
   descripcion?: string;
   img?: string; // Imagen/ilustración del trono (fallback SVG en /public/images)
 }

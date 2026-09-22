@@ -9,6 +9,9 @@ interface UIState {
   toggleFavorita: (id: string) => void;
   capasMapa: { pasos: boolean; callesCortadas: boolean; itinerarios: boolean };
   toggleCapa: (capa: "pasos" | "callesCortadas" | "itinerarios") => void;
+  /** Modo ahorro de datos / aglomeración: desactiva animaciones y reduce red */
+  modoAhorro: boolean;
+  toggleModoAhorro: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -24,4 +27,7 @@ export const useUIStore = create<UIState>((set) => ({
   capasMapa: { pasos: true, callesCortadas: true, itinerarios: true },
   toggleCapa: (capa) =>
     set((s) => ({ capasMapa: { ...s.capasMapa, [capa]: !s.capasMapa[capa] } })),
+  modoAhorro: false,
+  toggleModoAhorro: () => set((s) => ({ modoAhorro: !s.modoAhorro })),
 }));
+

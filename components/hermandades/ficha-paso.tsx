@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Paso } from "@/types/hermandad";
-import { Users, Hammer, Compass } from "lucide-react";
+import { Users, Hammer, Compass, Weight } from "lucide-react";
 
 export function FichaPaso({ paso }: { paso: Paso }) {
   return (
@@ -24,6 +24,11 @@ export function FichaPaso({ paso }: { paso: Paso }) {
           <span className="flex items-center gap-1.5">
             <Users className="h-4 w-4" /> {paso.costaleros} costaleros
           </span>
+          {paso.pesoKg && (
+            <span className="flex items-center gap-1.5">
+              <Weight className="h-4 w-4" /> ≈ {paso.pesoKg.toLocaleString("es-ES")} kg
+            </span>
+          )}
         </div>
       </CardContent>
     </Card>

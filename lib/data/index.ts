@@ -1,6 +1,7 @@
 import { hermandadesMock } from "./hermandades";
 import { incidenciasMock, callesCortadasMock } from "./incidencias";
 import { hermandadSchema, incidenciaSchema, calleCortadaSchema } from "./schemas";
+import { pesoDePaso } from "./pesos";
 import type { Hermandad, Incidencia, CalleCortada } from "@/types/hermandad";
 import { DIAS_SEMANA } from "@/lib/utils";
 
@@ -13,6 +14,7 @@ export * from "./schemas";
 /**
  * Validación Zod en el límite de los datos (defensa en profundidad).
  * En producción estos datos vendrán de la API/BBDD.
+ * Además, enriquece los pasos con el peso aproximado del trono (v1.0 Pro).
  */
 export function getHermandades(): Hermandad[] {
   return hermandadesMock
@@ -21,7 +23,13 @@ export function getHermandades(): Hermandad[] {
       if (!r.success) console.error("Hermandad inválida:", r.error.issues);
       return r.success;
     })
-    .map((r) => r.data as Hermandad);
+    .map((r) => {
+      const h = r.data as Hermandad;
+      return {
+        ...h,
+        pasos: h.pasos.map((p) => ({ ...p, pesoKg: p.pesoKg ?? pesoDePaso(p.nombre) })),
+      };
+    });
 }
 
 export function getHermandadBySlug(slug: string): Hermandad | undefined {

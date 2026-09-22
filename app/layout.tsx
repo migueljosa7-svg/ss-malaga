@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import { Navbar } from "@/components/ui/navbar";
+import { WidgetsFlotantes } from "@/components/ui/widgets-flotantes";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <Navbar />
           <main className="mx-auto max-w-6xl px-4 pb-16">{children}</main>
+          <WidgetsFlotantes />
         </Providers>
       </body>
     </html>

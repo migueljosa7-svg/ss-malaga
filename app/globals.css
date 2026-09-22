@@ -34,3 +34,59 @@ body {
   border: 1px solid rgba(212, 175, 55, 0.45);
   box-shadow: inset 0 0 0 3px rgba(212, 175, 55, 0.12);
 }
+
+/* ---------- v1.0 Pro: audio-háptico, lightbox y modo ahorro ---------- */
+
+/* Balanceo de campana */
+@keyframes campana-balanceo {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(18deg); }
+  35% { transform: rotate(-14deg); }
+  55% { transform: rotate(10deg); }
+  75% { transform: rotate(-6deg); }
+  90% { transform: rotate(3deg); }
+}
+.campana-balanceo {
+  display: inline-block;
+  animation: campana-balanceo 0.7s ease-in-out 3;
+  transform-origin: top center;
+}
+
+/* Destellos dorados al tocar la campana */
+.destello-dorado {
+  position: absolute;
+  top: -6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #d4af37 0%, rgba(212, 175, 55, 0) 70%);
+  animation: destello-flotante 0.7s ease-out 2;
+  pointer-events: none;
+}
+.destello-1 { left: -4px; }
+.destello-2 { right: -4px; animation-delay: 0.15s; }
+@keyframes destello-flotante {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-14px) scale(1.6); }
+}
+
+/* Transición suave de los marcadores GPS (interpolación fluida al mover el slider) */
+.leaflet-marker-icon {
+  transition: transform 0.8s linear;
+}
+.modo-ahorro .leaflet-marker-icon {
+  transition: none;
+}
+
+/* Modo ahorro / aglomeración: desactiva transiciones y animaciones complejas */
+.modo-ahorro *,
+.modo-ahorro *::before,
+.modo-ahorro *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+.modo-ahorro .leaflet-tile {
+  filter: grayscale(0.4);
+}
+

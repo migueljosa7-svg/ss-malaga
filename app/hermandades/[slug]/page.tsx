@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getHermandadBySlug, getHermandades } from "@/lib/data";
 import { FichaTabs } from "@/components/hermandades/ficha-tabs";
+import { EstadoHermandad } from "@/components/hermandades/estado-hermandad";
 import { Badge } from "@/components/ui/badge";
 import { Users } from "lucide-react";
 import type { Metadata } from "next";
@@ -33,7 +34,10 @@ export default async function FichaHermandadPage({
   return (
     <div className="py-8">
       <header className="mb-6">
-        <Badge variant="secondary">{h.diaSemana}</Badge>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary">{h.diaSemana}</Badge>
+          <EstadoHermandad hermandad={h} />
+        </div>
         <h1 className="mt-2 text-3xl font-bold">{h.nombre}</h1>
         <p className="text-muted-foreground">{h.sede}</p>
         <div className="mt-3 flex flex-wrap gap-2">
