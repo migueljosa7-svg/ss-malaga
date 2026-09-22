@@ -2,13 +2,13 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Popup, CircleMarker, Marker, useMap } from "react-leaflet";
-import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { useUIStore } from "@/lib/store";
 import { calcularRutaPeatonal } from "@/lib/rutas";
-import { itinerarioRealista, hermandadEnDirecto } from "@/lib/telemetria";
+import { itinerarioRealista, hermandadEnDirecto, posicionEnMinuto } from "@/lib/telemetria";
+import { useRutasCallejeras } from "@/lib/osrm";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
-import { iconoTronoCristo, iconoTronoVirgen } from "@/lib/iconos-tronos";
+import { divIconTrono } from "@/lib/iconos-tronos";
 import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
 import { RadarCruces } from "@/components/mapa/radar-cruces";
 import { DirectosFlotantes } from "@/components/mapa/directos-flotantes";
@@ -19,56 +19,11 @@ import "leaflet/dist/leaflet.css";
 const MALAGA: [number, number] = [36.7213, -4.4214];
 
 // ---------- Utilidades de tiempo ----------
-function minutosDeHora(hhmm: string): number {
-  const [h, m] = hhmm.split(":").map(Number);
-  return h * 60 + m;
-}
-
 function formatearMinutos(total: number): string {
   const t = ((total % 1440) + 1440) % 1440;
   const h = Math.floor(t / 60);
   const m = t % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-}
-
-/** Convierte itinerario a minutos acumulados gestionando el salto de medianoche. */
-function itinerarioEnMinutos(h: Hermandad): Array<{ punto: Hermandad["itinerario"][number]; min: number }> {
-  const puntos = h.itinerario;
-  const res: Array<{ punto: Hermandad["itinerario"][number]; min: number }> = [];
-  let offset = 0;
-  let prev = -1;
-  for (const p of puntos) {
-    let m = minutosDeHora(p.horaTeorica) + offset;
-    if (prev >= 0 && m < prev) {
-      offset += 1440;
-      m += 1440;
-    }
-    prev = m;
-    res.push({ punto: p, min: m });
-  }
-  return res;
-}
-
-/** Interpola la posición de la cruz de guía para un minuto dado. */
-function posicionEnMinuto(h: Hermandad, minuto: number) {
-  const it = itinerarioEnMinutos(h);
-  if (it.length === 0) return null;
-  if (minuto <= it[0].min) return { lat: it[0].punto.lat, lng: it[0].punto.lng, estado: "antes" };
-  if (minuto >= it[it.length - 1].min)
-    return { lat: it[it.length - 1].punto.lat, lng: it[it.length - 1].punto.lng, estado: "despues" };
-  for (let i = 0; i < it.length - 1; i++) {
-    const a = it[i];
-    const b = it[i + 1];
-    if (minuto >= a.min && minuto <= b.min) {
-      const t = b.min === a.min ? 0 : (minuto - a.min) / (b.min - a.min);
-      return {
-        lat: a.punto.lat + (b.punto.lat - a.punto.lat) * t,
-        lng: a.punto.lng + (b.punto.lng - a.punto.lng) * t,
-        estado: "en_calle",
-      };
-    }
-  }
-  return null;
 }
 
 const coloresPorDia: Record<string, string> = {
@@ -167,6 +122,9 @@ export function MapaInteligente() {
     const todas = hermandades ?? [];
     return soloEnCalle ? todas.filter((h) => hermandadEnDirecto(h, minutoActual)) : todas;
   }, [hermandades, soloEnCalle, minutoActual]);
+
+  // v7.0: rutas densas por callejero real (OSRM); fallback al grafo local.
+  const rutasCallejeras = useRutasCallejeras(visibles);
 
   if (!mounted) {
     return <div className="h-[520px] animate-pulse rounded-lg bg-muted" aria-label="Cargando mapa…" />;
@@ -341,29 +299,61 @@ export function MapaInteligente() {
 
       <div className="relative">
       <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
+        {/* v7.0: capa base clara (CartoDB Positron) — etiquetado nítido de calles */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          subdomains={["a", "b", "c", "d"]}
+          maxZoom={20}
         />
         <AjustarVista bounds={boundsObjetivo} />
         {/* v6.0: dropdown de procesiones en la calle con flyTo */}
         <SelectorEnDirecto hermandades={hermandades ?? []} minuto={minutoActual} />
-        {/* Itinerarios teóricos (v4.0 realista; v6.0: solo hermandades en directo) */}
+        {/* v7.0: itinerarios por callejero real (OSRM) — estilo GIS con casing
+            exterior contrastado + línea central del color de la cofradía.
+            Fallback: grafo local de esquinas si OSRM no responde. */}
         {capas.itinerarios &&
-          visibles.map((h) => (
-            <Polyline
-              key={h.slug}
-              positions={itinerarioRealista(h)}
-              pathOptions={{ color: coloresPorDia[h.diaSemana] ?? "#7f1d1d", weight: 3, opacity: 0.55 }}
-            >
-              <Popup>
-                <div className="popup-cofrade min-w-[200px] max-w-[260px]">
-                  <p className="popup-nombre">{h.nombrePopular ?? h.nombre}</p>
-                  <p className="popup-meta">{h.diaSemana} · itinerario por el Centro Histórico</p>
-                </div>
-              </Popup>
-            </Polyline>
-          ))}
+          visibles.map((h) => {
+            const color = coloresPorDia[h.diaSemana] ?? "#7f1d1d";
+            const trazado = rutasCallejeras[h.slug] ?? itinerarioRealista(h);
+            return (
+              <Fragment key={`itinerario-${h.slug}`}>
+                <Polyline
+                  positions={trazado}
+                  pathOptions={{
+                    color: "#0f172a",
+                    weight: 8,
+                    opacity: 0.85,
+                    lineCap: "round",
+                    lineJoin: "round",
+                  }}
+                  interactive={false}
+                />
+                <Polyline
+                  positions={trazado}
+                  pathOptions={{
+                    color,
+                    weight: 4,
+                    opacity: 0.95,
+                    lineCap: "round",
+                    lineJoin: "round",
+                  }}
+                >
+                  <Popup>
+                    <div className="popup-cofrade min-w-[200px] max-w-[260px]">
+                      <p className="popup-nombre">{h.nombrePopular ?? h.nombre}</p>
+                      <p className="popup-meta">
+                        {h.diaSemana} ·{" "}
+                        {rutasCallejeras[h.slug]
+                          ? "ruta GPS por el callejero (OSRM)"
+                          : "itinerario por el Centro Histórico"}
+                      </p>
+                    </div>
+                  </Popup>
+                </Polyline>
+              </Fragment>
+            );
+          })}
 
         {/* Posición simulada / en vivo de las cruces de guía y palios (v6.0: filtrado) */}
         {capas.pasos &&
@@ -376,17 +366,14 @@ export function MapaInteligente() {
             // El palio camina por el mismo itinerario ≈tiempoPaso por detrás de la cruz de guía
             const posPalio = posicionEnMinuto(h, minutoActual - h.tiempoPaso);
             const palioEnCalle = posPalio?.estado === "en_calle";
-            const iconoCristo = L.icon({
-              iconUrl: iconoTronoCristo(),
-              iconSize: [30, 42],
-              iconAnchor: [15, 42],
-              popupAnchor: [0, -38],
+            // v7.0: divIcon institucional — escudo, siglas (EL RICO, ZA…) y pulso GPS
+            const iconoCristo = divIconTrono(h, "cristo", {
+              enDirecto: enCalle,
+              seleccionado: esSeleccionado && seleccion?.tipo === "cristo",
             });
-            const iconoVirgen = L.icon({
-              iconUrl: iconoTronoVirgen(),
-              iconSize: [30, 42],
-              iconAnchor: [15, 42],
-              popupAnchor: [0, -38],
+            const iconoVirgen = divIconTrono(h, "virgen", {
+              enDirecto: palioEnCalle,
+              seleccionado: esSeleccionado && seleccion?.tipo === "virgen",
             });
             return (
               <Fragment key={`pos-${h.slug}`}>

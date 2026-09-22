@@ -78,6 +78,79 @@ body {
   transition: none;
 }
 
+/* ---------- v7.0: marcador divIcon cofrade (escudo + siglas + pulso GPS) ---------- */
+.divicon-trono {
+  position: relative;
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.divicon-escudo {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+  transition: transform 0.3s ease;
+}
+.divicon-trono:hover .divicon-escudo {
+  transform: scale(1.12) translateY(-3px);
+}
+.divicon-siglas {
+  margin-top: 2px;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  background: #4a154b;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.divicon-trono:hover .divicon-siglas {
+  transform: translateY(-2px);
+}
+.divicon-trono-seleccionado .divicon-siglas {
+  background: #d4af37;
+  color: #4a154b;
+}
+/* Anillo de micro-pulso: el GPS del trono emite en tiempo real */
+.divicon-pulso {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
+  border-radius: 9999px;
+  border: 2px solid #d4af37;
+  opacity: 0;
+  pointer-events: none;
+}
+.divicon-trono-live .divicon-pulso {
+  animation: pulso-gps 1.8s ease-out infinite;
+}
+@keyframes pulso-gps {
+  0% {
+    transform: scale(0.45);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+.modo-ahorro .divicon-trono-live .divicon-pulso {
+  animation: none;
+  opacity: 0.5;
+  transform: scale(1);
+}
+
 /* ---------- v2.0 Max: Cromos Holofoil 3D ---------- */
 .cromo-holofoil {
   perspective: 900px;
