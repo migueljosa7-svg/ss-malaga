@@ -6,10 +6,12 @@ import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { useUIStore } from "@/lib/store";
 import { calcularRutaPeatonal } from "@/lib/rutas";
+import { itinerarioRealista } from "@/lib/telemetria";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
 import { iconoTronoCristo, iconoTronoVirgen } from "@/lib/iconos-tronos";
 import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
 import { RadarCruces } from "@/components/mapa/radar-cruces";
+import { DirectosFlotantes } from "@/components/mapa/directos-flotantes";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
 import "leaflet/dist/leaflet.css";
 
@@ -265,8 +267,9 @@ export function MapaInteligente() {
         )}
       </div>
 
-      {/* Capas */}
+      {/* Capas + panel flotante de directos (v4.0) */}
       <div className="flex flex-wrap items-center gap-3 text-sm">
+        <DirectosFlotantes />
         {(["pasos", "callesCortadas", "itinerarios"] as const).map((capa) => (
           <label key={capa} className="flex items-center gap-1.5">
             <input type="checkbox" checked={capas[capa]} onChange={() => useUIStore.getState().toggleCapa(capa)} />
@@ -286,6 +289,16 @@ export function MapaInteligente() {
         </span>
       </div>
 
+      {/* Leyenda de protocolo cofrade malagueño (v4.0) */}
+      <div className="borde-destello-dorado flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-lg border border-[#D4AF37]/40 bg-card px-3 py-2 text-[11px] text-muted-foreground">
+        <span className="font-semibold uppercase tracking-wider text-[#D4AF37]">Protocolo:</span>
+        <span title="Abre la procesión portando la cruz de la hermandad">✝️ Cruz de Guía</span>
+        <span title="Oficial que gobierna el trono y toca la campana">🔔 Mayordomo de Campana</span>
+        <span title="Cuadrilla que porta el trono a hombros">💪 Hombres de Trono</span>
+        <span title="Punto donde la cofradía espera su turno en la Carrera Oficial">🚩 Cabeza de Procesión</span>
+        <span title="Coro de saetas y cantos que acompaña al paso">🎼 Masa Coral</span>
+      </div>
+
       {/* Radar de cruces de tronos (v2.0 Max) */}
       <RadarCruces
         hermandades={hermandades ?? []}
@@ -300,18 +313,19 @@ export function MapaInteligente() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <AjustarVista bounds={boundsObjetivo} />
-        {/* Itinerarios teóricos */}
+        {/* Itinerarios teóricos (v4.0: trazado realista por calles de Málaga) */}
         {capas.itinerarios &&
           (hermandades ?? []).map((h) => (
             <Polyline
               key={h.slug}
-              positions={itinerarioEnMinutos(h).map((i) => [i.punto.lat, i.punto.lng] as [number, number])}
+              positions={itinerarioRealista(h)}
               pathOptions={{ color: coloresPorDia[h.diaSemana] ?? "#7f1d1d", weight: 3, opacity: 0.55 }}
             >
               <Popup>
-                <strong>{h.nombrePopular ?? h.nombre}</strong>
-                <br />
-                {h.diaSemana}
+                <div className="popup-cofrade min-w-[200px] max-w-[260px]">
+                  <p className="popup-nombre">{h.nombrePopular ?? h.nombre}</p>
+                  <p className="popup-meta">{h.diaSemana} · itinerario por el Centro Histórico</p>
+                </div>
               </Popup>
             </Polyline>
           ))}

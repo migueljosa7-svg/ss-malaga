@@ -56,6 +56,17 @@ function desplazamientoRelativo(pos: PosicionGeo, centro: PosicionGeo): { x: num
  * ubicación respecto a `centro` (el usuario "está" en el centro del mapa).
  * Lanza excepción si Web Audio no está disponible; el llamador debe hacer fallback.
  */
+/**
+ * v4.0 "Audio Auténtico": cascada de carga de toques de campana de trono
+ * malagueño. Prioriza grabaciones reales en /public/audio/campana/
+ * (campana-3toques.mp3, campana-1.mp3) y solo si no hay red o el archivo no
+ * responde, cae al sintetizador Web Audio API.
+ */
+const CAMPANA_REAL_CASCADA = [
+  "/audio/campana/campana-3toques.mp3", // grabación de los 3 toques de mayordomo
+  "/audio/campana/campana-1.mp3", // toque individual (se repite `toques` veces)
+];
+
 export async function tocarCampana3d(opts: {
   src?: string;
   toques?: number;
@@ -63,7 +74,7 @@ export async function tocarCampana3d(opts: {
   centro?: PosicionGeo;
 } = {}): Promise<void> {
   const {
-    src = "/audio/campana-trono.mp3",
+    src = "/audio/campana/campana-3toques.mp3",
     toques = 3,
     posicion = null,
     centro = CENTRO_MALAGA,
@@ -111,18 +122,27 @@ export async function tocarCampana3d(opts: {
     destino = panner;
   }
 
-  const buffer = await obtenerBuffer(ctx, src);
-  const ahora = ctx.currentTime;
-  if (!buffer) {
-    // v3.0: el archivo no existe o es mudo → campana sintética de respaldo
-    // por el mismo canal (conserva la posición 3D si hay `posicion`).
-    tocarCampanaSintetica({ toques, destino });
-    return;
+  // v4.0: cascada de audio real — primero la grabación de 3 toques, luego el
+  // toque individual repetido, luego la fuente indicada y, si todo falla o es
+  // mudo, el sintetizador Web Audio API como último recurso.
+  let buffer: AudioBuffer | null = null;
+  for (const candidato of [...CAMPANA_REAL_CASCADA, src]) {
+    buffer = await obtenerBuffer(ctx, candidato);
+    if (buffer) {
+      const ahora = ctx.currentTime;
+      const es3Toques = candidato.endsWith("campana-3toques.mp3");
+      const repeticiones = es3Toques ? Math.max(1, Math.ceil(toques / 3)) : candidato.endsWith("campana-1.mp3") ? toques : toques;
+      for (let i = 0; i < repeticiones; i++) {
+        const fuente = ctx.createBufferSource();
+        fuente.buffer = buffer;
+        fuente.connect(destino);
+        fuente.start(ahora + i * 0.7);
+      }
+      return;
+    }
   }
-  for (let i = 0; i < toques; i++) {
-    const fuente = ctx.createBufferSource();
-    fuente.buffer = buffer;
-    fuente.connect(destino);
-    fuente.start(ahora + i * 0.7);
-  }
+
+  // Sin audio real disponible → campana sintética de respaldo por el mismo
+  // canal (conserva la posición 3D si hay `posicion`).
+  tocarCampanaSintetica({ toques, destino });
 }

@@ -1,5 +1,9 @@
 // ---------- Telemetría de tronos (v1.0 Pro) ----------
+// v4.0 "Málaga Real": la interpolación del GPS sigue la trama urbana del
+// Centro Histórico (esquinas de Larios, Constitución, Granada, Carretería,
+// Alameda Principal, Tribuna de los Pobres…) en lugar de líneas rectas.
 import type { Hermandad } from "@/types/hermandad";
+import { posicionEnPolilinea, polilineaTramo } from "@/lib/data/calles-malaga";
 
 export interface Telemetria {
   estado: "antes" | "en_calle" | "despues";
@@ -105,17 +109,17 @@ export function calcularTelemetria(h: Hermandad, minuto: number): Telemetria | n
     const b = it[i + 1];
     if (minuto >= a.min && minuto <= b.min) {
       const t = b.min === a.min ? 0 : (minuto - a.min) / (b.min - a.min);
-      const lat = a.lat + (b.lat - a.lat) * t;
-      const lng = a.lng + (b.lng - a.lng) * t;
-      const distTramo = distanciaMetros(a.lat, a.lng, b.lat, b.lng);
+      // v4.0: posición sobre la polilínea realista (siguiendo esquinas de calles)
+      const pos = posicionEnPolilinea(a, b, t);
+      const distTramo = pos.distanciaCalles;
       const minutosTramo = Math.max(1, b.min - a.min);
       const velocidadMH = distTramo / (minutosTramo / 60);
       const restanteMin = b.min - minuto;
       const distanciaProximo = Math.round(distTramo * (1 - t));
       return {
         estado: "en_calle",
-        lat,
-        lng,
+        lat: pos.lat,
+        lng: pos.lng,
         tramoActual: `Entre ${a.nombre} y ${b.nombre}`,
         puntoCercano: a.nombre,
         velocidadMH: Math.round(velocidadMH),
@@ -127,6 +131,24 @@ export function calcularTelemetria(h: Hermandad, minuto: number): Telemetria | n
     }
   }
   return null;
+}
+
+/**
+ * Polilínea realista del itinerario completo (v4.0), ajustada a la trama
+ * urbana de Málaga. La usa el mapa para dibujar los recorridos por las
+ * calles reales en vez de líneas rectas entre puntos clave.
+ */
+export function itinerarioRealista(h: Hermandad): Array<[number, number]> {
+  const it = itinerarioEnMinutos(h);
+  const res: Array<[number, number]> = [];
+  for (let i = 0; i < it.length - 1; i++) {
+    const puntos = polilineaTramo(it[i], it[i + 1]);
+    for (let j = res.length === 0 ? 0 : 1; j < puntos.length; j++) {
+      res.push([puntos[j].lat, puntos[j].lng]);
+    }
+  }
+  if (res.length === 0 && it.length === 1) res.push([it[0].lat, it[0].lng]);
+  return res;
 }
 
 /** Interpolación simple de posición (compatibilidad con el mapa). */

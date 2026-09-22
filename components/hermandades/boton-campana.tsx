@@ -13,7 +13,7 @@ import { tocarCampana3d, type PosicionGeo } from "@/lib/audio/campana-3d";
  * - Microanimación visual de balanceo con destellos dorados.
  */
 export function BotonCampana({
-  src = "/audio/campana-trono.mp3",
+  src = "/audio/campana/campana-3toques.mp3",
   compacto = false,
   posicion = null,
 }: {
