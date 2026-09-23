@@ -258,7 +258,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #d4af37;
+  color: #7c6318; /* v10.0: AA sobre fondo blanco del popup (5.0:1) */
 }
 .popup-nombre {
   font-size: 0.95rem;
@@ -315,4 +315,66 @@ body {
   box-shadow: 0 14px 30px -12px rgba(74, 21, 75, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.4);
 }
 
+
+
+/* ---------- v10.0 Ultimate: glassmorphism, WCAG AA y marcadores ilustrados ---------- */
+
+/* Glassmorphism cofrade: paneles flotantes traslúcidos con borde en oro viejo */
+.panel-vidrio {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 18px 44px -18px rgba(74, 21, 75, 0.45);
+}
+.dark .panel-vidrio {
+  background: rgba(15, 23, 42, 0.66);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(212, 175, 55, 0.12);
+}
+
+/* Texto dorado con contraste AA sobre fondos claros
+   (el dorado brillante #D4AF37 solo es AA sobre morado/noche) */
+.oro-texto {
+  color: #7c6318;
+}
+.dark .oro-texto {
+  color: #e8c86a;
+}
+
+/* WCAG AA modo oscuro: como COLOR DE TEXTO el primary debe ser claro.
+   Los fondos bg-primary siguen siendo morado profundo con texto crema. */
+.dark .text-primary {
+  color: #c99bdc;
+}
+.dark .hover\:text-primary:hover {
+  color: #c99bdc;
+}
+
+/* Tarjetas cofrades en modo oscuro: bordes dorados + reflejo violeta */
+.dark .tarjeta-cofrade {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 12px 32px -18px rgba(109, 40, 117, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.08);
+}
+
+/* Marcador ilustrado "Cofrade Pequeñico" (v10.0): halo dorado pulsante en vivo */
+.divicon-cofrade .divicon-escudo {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+.divicon-cofrade .divicon-pulso {
+  top: 6px;
+  width: 56px;
+  height: 56px;
+  margin-left: -28px;
+  border: 2.5px solid #d4af37;
+  box-shadow: 0 0 18px 4px rgba(212, 175, 55, 0.5);
+}
+.divicon-trono-live.divicon-cofrade .divicon-escudo {
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.65)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+.modo-ahorro .divicon-cofrade .divicon-pulso {
+  animation: none;
+  opacity: 0.45;
+  transform: scale(1);
+}
 

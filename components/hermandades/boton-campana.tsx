@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { tocarCampana3d, type PosicionGeo } from "@/lib/audio/campana-3d";
+import { PATRONES_HAPTICOS, vibrar } from "@/lib/haptica";
 
 /**
  * Botón "Tocar Campana de Trono" — v2.0 Max.
@@ -36,7 +37,7 @@ export function BotonCampana({
     } catch {
       // Fallback silencioso: aunque el audio falle, se mantiene la respuesta háptica
     }
-    navigator.vibrate?.([100, 50, 100, 50, 100]);
+    vibrar(PATRONES_HAPTICOS.levanta);
     setTimeout(() => setTocando(false), 2300);
   }, [src, tocando, posicion]);
 

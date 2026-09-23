@@ -19,15 +19,12 @@ export const metadata: Metadata = {
     "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Málaga. Offline-first, con audio de toques de campana.",
   keywords: ["Semana Santa Málaga", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
   manifest: "/manifest.json",
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
-      { url: "/favicon.ico", sizes: "any" },
-    ],
-    apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
-  },
+  // v10.0: iconos resueltos por CONVENCIÓN de ficheros (Metadata API de Next.js).
+  // `app/favicon.ico`, `app/icon.svg` y `app/apple-icon.png` se emiten
+  // automáticamente sin preloads duplicados ni 404:
+  //   - Se elimina el bloque manual `icons: { icon: [...], apple: [...] }`
+  //     que apuntaba a un `/favicon.ico` inexistente en /public (error 404)
+  //     y duplicaba el <link rel="preload"> del CSS de Leaflet en rutas sin mapa.
   openGraph: {
     title: "SS Málaga — Semana Santa de Málaga en tiempo real",
     description:

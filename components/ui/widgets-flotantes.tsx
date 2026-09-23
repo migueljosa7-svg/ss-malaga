@@ -6,6 +6,7 @@ import { ReproductorGlobalMarchas } from "@/components/hermandades/reproductor-m
 import { BotonModoAhorro } from "@/components/ui/boton-modo-ahorro";
 import { PanelCache } from "@/components/ajustes/panel-cache";
 import { InstallBanner } from "@/components/pwa/install-banner";
+import { BuscadorCofrade } from "@/components/busqueda/buscador-cofrade";
 
 /**
  * Widgets flotantes globales (v1.0 Pro):
@@ -27,6 +28,8 @@ export function WidgetsFlotantes() {
       <BotonModoAhorro />
       <PanelCache />
       <InstallBanner />
+      {/* v10.0: Command Palette ⌘K — busca hermandades y vuela sobre el mapa */}
+      <BuscadorCofrade />
     </>
   );
 }

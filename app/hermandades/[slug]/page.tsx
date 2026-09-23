@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getHermandadBySlug, getHermandades } from "@/lib/data";
 import { FichaTabs } from "@/components/hermandades/ficha-tabs";
+import { FichaModoCofrade } from "@/components/hermandades/ficha-modo-cofrade";
 import { EstadoHermandad } from "@/components/hermandades/estado-hermandad";
 import { Badge } from "@/components/ui/badge";
 import { Users } from "lucide-react";
@@ -50,6 +51,8 @@ export default async function FichaHermandadPage({
           <Badge>Fundada en {h.añoFundacion}</Badge>
         </div>
       </header>
+
+      <FichaModoCofrade hermandad={h} />
 
       <FichaTabs hermandad={h} />
     </div>

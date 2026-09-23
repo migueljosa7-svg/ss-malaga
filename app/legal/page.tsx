@@ -140,7 +140,7 @@ export default function PaginaLegal() {
   return (
     <div className="mx-auto max-w-3xl space-y-6 py-10">
       <header className="space-y-2 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37]">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] oro-texto">
           Cumplimiento normativo
         </p>
         <h1 className="barroco-title text-3xl text-[#4A154B] dark:text-[#D4AF37]">

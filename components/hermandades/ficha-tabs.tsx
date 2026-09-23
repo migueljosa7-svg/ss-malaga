@@ -14,6 +14,9 @@ import { FonotecaToques } from "@/components/sonidos/fonoteca-toques";
 import { Lightbox } from "@/components/ui/lightbox";
 import type { Hermandad } from "@/types/hermandad";
 import { cn } from "@/lib/utils";
+import { useUIStore } from "@/lib/store";
+import { PATRONES_HAPTICOS, vibrar } from "@/lib/haptica";
+import { AnimatePresence, motion } from "framer-motion";
 import { Lightbulb, Music, Users, Shirt, History, Shield, Radio, ImageIcon } from "lucide-react";
 
 type Pestana = "historia" | "pasos" | "itinerario" | "directos" | "galeria" | "sonidos";
@@ -30,29 +33,59 @@ const pestanas: Array<{ id: Pestana; label: string }> = [
 export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
   const [activa, setActiva] = useState<Pestana>("historia");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const modoAhorro = useUIStore((s) => s.modoAhorro);
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-1 border-b border-border" role="tablist">
         {pestanas.map((p) => (
-          <button
+          <motion.button
             key={p.id}
             role="tab"
             aria-selected={activa === p.id}
-            onClick={() => setActiva(p.id)}
+            onClick={() => {
+              setActiva(p.id);
+              vibrar(PATRONES_HAPTICOS.seleccion);
+            }}
+            whileHover={modoAhorro ? undefined : { y: -2 }}
+            whileTap={{ scale: 0.95 }}
             className={cn(
-              "rounded-t-md px-4 py-2 text-sm font-medium transition-colors",
-              activa === p.id
-                ? "border-b-2 border-primary text-primary active:scale-95"
-                : "text-muted-foreground hover:text-foreground hover:-translate-y-0.5 active:scale-95"
+              "relative rounded-t-md px-4 py-2 text-sm font-medium transition-colors",
+              activa === p.id ? "text-primary" : "text-muted-foreground hover:text-foreground"
             )}
           >
             {p.label}
-          </button>
+            {activa === p.id && (
+              <motion.span
+                layoutId="subrayado-pestana"
+                className="absolute inset-x-1 -bottom-px h-0.5 rounded-full bg-primary"
+                transition={{ type: "spring", stiffness: 420, damping: 34 }}
+              />
+            )}
+          </motion.button>
         ))}
       </div>
 
-      {activa === "historia" && (
+      {/* Transición de pestañas (v10.0 Ultimate): desenfoque morado + halo dorado */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activa}
+          initial={modoAhorro ? false : { opacity: 0, y: 14, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={modoAhorro ? { opacity: 0 } : { opacity: 0, y: -10, filter: "blur(6px)" }}
+          transition={{ duration: modoAhorro ? 0 : 0.3, ease: "easeOut" }}
+          className="relative"
+        >
+          {!modoAhorro && (
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute -inset-1 rounded-xl ring-1 ring-[#D4AF37]"
+              initial={{ opacity: 0.95, boxShadow: "0 0 36px 6px rgba(212,175,55,0.5)" }}
+              animate={{ opacity: 0, boxShadow: "0 0 0px 0px rgba(74,21,75,0)" }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            />
+          )}
+          {activa === "historia" && (
         <div className="grid gap-4 lg:grid-cols-2">
           <Card>
             <CardHeader>
@@ -266,6 +299,8 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
           ))}
         </div>
       )}
+          </motion.div>
+        </AnimatePresence>
     </div>
   );
 }

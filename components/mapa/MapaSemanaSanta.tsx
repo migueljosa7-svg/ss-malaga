@@ -9,9 +9,9 @@ import { calcularRutaPeatonal } from "@/lib/rutas";
 import { itinerarioRealista, hermandadEnDirecto, posicionEnMinuto } from "@/lib/telemetria";
 import { useRutasCallejeras } from "@/lib/osrm";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
-import { divIconTrono } from "@/lib/iconos-tronos";
+import { divIconCofrade } from "@/lib/iconos-tronos";
 import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
-import { RadarCruces } from "@/components/mapa/radar-cruces";
+import { RadarCruces } from "@/components/radar/radar-cruces";
 import { DirectosFlotantes } from "@/components/mapa/directos-flotantes";
 import { SelectorEnDirecto } from "@/components/mapa/selector-en-directo";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
@@ -45,6 +45,17 @@ function AjustarVista({ bounds }: { bounds: [number, number][] | null }) {
   useEffect(() => {
     if (bounds && bounds.length > 0) map.fitBounds(bounds, { padding: [40, 40] });
   }, [bounds, map]);
+  return null;
+}
+
+/** v10.0: vuela a la ubicación elegida en el Command Palette (focoBusqueda con nonce). */
+function VolarAFoco() {
+  const map = useMap();
+  const foco = useUIStore((s) => s.focoBusqueda);
+  useEffect(() => {
+    if (!foco) return;
+    map.flyTo([foco.lat, foco.lng], foco.zoom, { duration: 1.15 });
+  }, [foco, map]);
   return null;
 }
 
@@ -277,7 +288,7 @@ export function MapaInteligente() {
       {/* Leyenda de protocolo cofrade malagueño (v4.0, ampliada v6.0) */}
       <div className="borde-destello-dorado rounded-lg border border-[#D4AF37]/40 bg-card px-3 py-2 text-[11px] text-muted-foreground">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-          <span className="font-semibold uppercase tracking-wider text-[#D4AF37]">Protocolo:</span>
+          <span className="font-semibold uppercase tracking-wider oro-texto">Protocolo:</span>
           <span title="Abre la procesión portando la cruz de la hermandad">✝️ Cruz de Guía</span>
           <span title="Oficial que gobierna el trono y toca la campana">🔔 Mayordomo de Campana</span>
           <span title="Cuadrilla que porta el trono a hombros">💪 Hombres de Trono</span>
@@ -286,21 +297,26 @@ export function MapaInteligente() {
           <span title="Punto donde la cofradía espera su turno en la Carrera Oficial">🚩 Cabeza de Procesión</span>
         </div>
         <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-[#D4AF37]/20 pt-1.5">
-          <span className="font-semibold uppercase tracking-wider text-[#D4AF37]">Puntos icónicos:</span>
+          <span className="font-semibold uppercase tracking-wider oro-texto">Puntos icónicos:</span>
           <span title="Balcón oficial desde donde la autoridad saluda a los tronos">🏛️ Tribuna de los Pobres</span>
           <span title="Eje de la Carrera Oficial malagueña">🛍️ Calle Larios</span>
           <span title="Fachada donde los tronos estacionan ante la Santa Iglesia Catedral">⛪ Entorno de la Catedral</span>
         </div>
       </div>
 
-      {/* Radar de cruces de tronos (v2.0 Max) */}
+      <div className="relative">
+      {/* v10.0: Radar como bottom sheet deslizante (framer-motion drag) */}
       <RadarCruces
         hermandades={hermandades ?? []}
         minuto={minutoActual}
-        onCentrar={setFocoCruce}
+        onCentrar={(slug) => {
+          // Centra el mapa en la posición telemétrica de ese trono (v10.0)
+          const h = (hermandades ?? []).find((x) => x.slug === slug);
+          if (!h) return;
+          const pos = posicionEnMinuto(h, minutoActual);
+          if (pos) useUIStore.getState().centrarFoco({ lat: pos.lat, lng: pos.lng, zoom: 16 });
+        }}
       />
-
-      <div className="relative">
       <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
         {/* v8.0: capa base según tema — CartoDB Positron (Claro) / Dark Matter (Oscuro) */}
         <TileLayer
@@ -315,6 +331,8 @@ export function MapaInteligente() {
           maxZoom={20}
         />
         <AjustarVista bounds={boundsObjetivo} />
+        {/* v10.0: vuelo del Command Palette ⌘K */}
+        <VolarAFoco />
         {/* v6.0: dropdown de procesiones en la calle con flyTo */}
         <SelectorEnDirecto hermandades={hermandades ?? []} minuto={minutoActual} />
         {/* v7.0: itinerarios por callejero real (OSRM) — estilo GIS con casing
@@ -375,11 +393,11 @@ export function MapaInteligente() {
             const posPalio = posicionEnMinuto(h, minutoActual - h.tiempoPaso);
             const palioEnCalle = posPalio?.estado === "en_calle";
             // v7.0: divIcon institucional — escudo, siglas (EL RICO, ZA…) y pulso GPS
-            const iconoCristo = divIconTrono(h, "cristo", {
+            const iconoCristo = divIconCofrade(h, "cristo", {
               enDirecto: enCalle,
               seleccionado: esSeleccionado && seleccion?.tipo === "cristo",
             });
-            const iconoVirgen = divIconTrono(h, "virgen", {
+            const iconoVirgen = divIconCofrade(h, "virgen", {
               enDirecto: palioEnCalle,
               seleccionado: esSeleccionado && seleccion?.tipo === "virgen",
             });

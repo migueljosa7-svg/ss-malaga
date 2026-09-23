@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { motion } from "framer-motion";
 
 /**
  * Lightbox accesible a pantalla completa (v1.0 Pro).
@@ -43,7 +44,11 @@ export function Lightbox({
   }, [onClose, siguiente, anterior]);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90"
       role="dialog"
       aria-modal="true"
@@ -118,6 +123,6 @@ export function Lightbox({
       <p className="absolute bottom-4 w-full text-center text-sm text-white/80">
         {titulo} · {indice + 1}/{imagenes.length}
       </p>
-    </div>
+    </motion.div>
   );
 }

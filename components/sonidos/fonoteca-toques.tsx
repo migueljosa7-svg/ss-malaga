@@ -5,6 +5,7 @@ import { Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getAudioContext } from "@/lib/audio/campana-3d";
 import { tocarCampanaSintetica } from "@/lib/audio/sintetizador";
+import { vibrar } from "@/lib/haptica";
 
 /**
  * Fonoteca Sonora del Mayordomo de Trono (v6.0).
@@ -80,7 +81,7 @@ export function FonotecaToques() {
   async function reproducir(t: Toque) {
     if (sonando) return;
     setSonando(t.id);
-    navigator.vibrate?.(t.patronVibracion);
+    vibrar(t.patronVibracion);
 
     const ctx = getAudioContext();
     if (ctx && ctx.state === "suspended") await ctx.resume();
