@@ -23,6 +23,14 @@ function rateLimit(ip: string): { ok: boolean; remaining: number } {
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // v12.0: alias para el manifiesto PWA. `app/manifest.ts` (fuente única de
+  // verdad) se sirve por convención de Next.js en `/manifest.webmanifest`;
+  // este rewrite mantiene compatible `/manifest.json` (referenciada por
+  // `metadata.manifest` en app/layout.tsx, enlaces externos y caches).
+  if (pathname === "/manifest.json") {
+    return NextResponse.rewrite(new URL("/manifest.webmanifest", req.url));
+  }
+
   // Rate limit solo rutas API
   if (pathname.startsWith("/api/")) {
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
@@ -42,5 +50,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/api/:path*", "/manifest.json"],
 };

@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Málaga. Offline-first, con audio de toques de campana.",
   keywords: ["Semana Santa Málaga", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
   manifest: "/manifest.json",
+  // v12.0: `/manifest.json` se resuelve vía rewrite en middleware.ts hacia
+  // `/manifest.webmanifest`, la URL por convención que Next.js 15 genera a
+  // partir de app/manifest.ts (fuente única de verdad del manifiesto PWA).
   // v10.0: iconos resueltos por CONVENCIÓN de ficheros (Metadata API de Next.js).
   // `app/favicon.ico`, `app/icon.svg` y `app/apple-icon.png` se emiten
   // automáticamente sin preloads duplicados ni 404:
