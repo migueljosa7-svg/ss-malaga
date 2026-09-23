@@ -24,6 +24,8 @@ interface Escala {
   dia: string;
   nodeId: string;
   nodeNombre: string;
+  /** Coordenadas GPS reales de la salida (fallback haversine v11.0) */
+  salida: { lat: number; lng: number };
 }
 
 interface Tramo {
@@ -43,17 +45,25 @@ interface PlanRuta {
   totalMinutos: number;
 }
 
-function nodoMasCercano(punto: { lat: number; lng: number }) {
-  let mejor = nodosRuta[0];
+/**
+ * Nodo más cercano al punto. `usados` evita que dos hermandades se anclen al
+ * MISMO nodo (bug v11.0: Zamarrilla y La Esperanza ancladas ambas en "Puente
+ * de los Alemanes" → Dijkstra de un nodo a sí mismo = 0.00 km / 0 min).
+ */
+function nodoMasCercano(punto: { lat: number; lng: number }, usados?: Set<string>): (typeof nodosRuta)[number] {
+  let mejor: (typeof nodosRuta)[number] | null = null;
   let mejorD = Infinity;
   for (const n of nodosRuta) {
+    if (usados?.has(n.id)) continue;
     const d = distanciaMetros(n, punto);
     if (d < mejorD) {
       mejorD = d;
       mejor = n;
     }
   }
-  return mejor;
+  if (mejor) return mejor;
+  // Todos los nodos ocupados: repetir sin restricción (grafo > nº de selecciones)
+  return nodoMasCercano(punto);
 }
 
 export function GeneradorRutaCofrade() {
@@ -79,17 +89,21 @@ export function GeneradorRutaCofrade() {
   function optimizar() {
     if (seleccion.length < 2) return;
 
-    // 1) Cada hermandad se ancla al nodo del grafo más próximo a su salida
+    // 1) Cada hermandad se ancla al nodo del grafo más próximo a su salida,
+    //    SIN repetir nodo entre cofradías distintas (fix 0.00 km v11.0)
+    const nodosUsados = new Set<string>();
     const escalas: Escala[] = seleccion.map((slug) => {
       const h = hermandades.find((x) => x.slug === slug)!;
-      const salida = h.itinerario[0];
-      const nodo = nodoMasCercano(salida);
+      const punto = h.itinerario[0] ?? { lat: 36.7213, lng: -4.4214 };
+      const nodo = nodoMasCercano(punto, nodosUsados);
+      nodosUsados.add(nodo.id);
       return {
         slug,
         nombre: h.nombrePopular ?? h.nombre,
         dia: h.diaSemana,
         nodeId: nodo.id,
         nodeNombre: nodo.nombre,
+        salida: { lat: punto.lat, lng: punto.lng },
       };
     });
 
@@ -118,22 +132,31 @@ export function GeneradorRutaCofrade() {
     const tramos: Tramo[] = [];
     for (let i = 0; i < orden.length - 1; i++) {
       const r = calcularRutaPeatonal(orden[i].nodeId, orden[i + 1].nodeId, calles ?? []);
+      // v11.0: si el grafo falla, está desconectado o devuelve 0 m, se calcula
+      // la distancia Haversine REAL entre las salidas GPS de ambas cofradías
+      // (factor urbano ×1,35 y mín. 50 m) para que NUNCA dé 0.00 km.
+      const directo = distanciaMetros(orden[i].salida, orden[i + 1].salida);
+      const sinGrafo = !r.exito || r.distanciaTotal <= 0;
+      const metros = sinGrafo ? Math.max(directo * 1.35, 50) : r.distanciaTotal;
+      const minutos = sinGrafo
+        ? Math.max(1, Math.round(metros / 80)) // ≈4,8 km/h andando
+        : r.pasosEstimados;
       tramos.push({
         desde: orden[i].nombre,
         hasta: orden[i + 1].nombre,
-        exito: r.exito,
-        mensaje: r.mensaje,
-        metros: r.distanciaTotal,
-        minutos: r.pasosEstimados,
-        calles: r.exito
-          ? [
+        exito: true,
+        mensaje: sinGrafo ? "Estimación directa (fallback GPS haversine)" : undefined,
+        metros,
+        minutos,
+        calles: sinGrafo
+          ? ["Trayecto directo a pie (estimación GPS haversine)"]
+          : [
               ...new Set(
                 r.aristasCamino
                   .map((id) => aristasRuta.find((a) => a.id === id)?.nombreCalle)
                   .filter((c): c is string => Boolean(c))
               ),
-            ]
-          : [],
+            ],
       });
     }
 

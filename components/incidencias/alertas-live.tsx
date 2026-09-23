@@ -15,9 +15,11 @@ const iconos = {
 } as const;
 
 const nivelStyles = {
-  info: "border-l-info",
-  warning: "border-l-warning",
-  danger: "border-l-danger bg-red-50",
+  // v11.0 AA: pares explícitos fondo/texto por tema — antes `bg-red-50` fijo
+  // con texto heredado claro en dark → letras invisibles sobre fondo claro.
+  info: "border-l-sky-500 bg-sky-50 text-sky-950 dark:bg-sky-950/70 dark:text-sky-100",
+  warning: "border-l-amber-500 bg-amber-50 text-amber-950 dark:bg-amber-950/70 dark:text-amber-100",
+  danger: "border-l-red-500 bg-red-50 text-red-950 dark:bg-red-950/70 dark:text-red-100",
 } as const;
 
 export function BannerAlertaCritica() {
@@ -39,9 +41,9 @@ export function BannerAlertaCritica() {
       {criticas.slice(0, 2).map((i) => (
         <div
           key={i.id}
-          className="flex items-center gap-3 rounded-lg border-l-4 border-l-danger bg-red-50 px-4 py-3 text-red-900"
+          className="flex items-center gap-3 rounded-lg border-l-4 border-l-red-500 bg-red-50 px-4 py-3 text-red-950 dark:bg-red-950/80 dark:text-red-100"
         >
-          <AlertTriangle className="h-5 w-5 shrink-0 text-danger" />
+          <AlertTriangle className="h-5 w-5 shrink-0 text-red-700 dark:text-red-300" />
           <div className="min-w-0">
             <p className="truncate font-semibold">{i.titulo}</p>
             <p className="truncate text-sm">{i.descripcion}</p>
@@ -72,14 +74,14 @@ export function ListaIncidencias({ limit }: { limit?: number }) {
         const Icon = iconos[i.tipo];
         return (
           <li key={i.id}>
-            <div className={cn("rounded-lg border border-border bg-card p-4 border-l-4", nivelStyles[i.nivel])}>
+            <div className={cn("rounded-lg border border-l-4 border-border p-4", nivelStyles[i.nivel])}>
               <div className="flex flex-wrap items-center gap-2">
                 <Icon className="h-4 w-4" />
                 <span className="font-semibold">{i.titulo}</span>
                 <Badge variant={i.nivel}>{i.tipo.replace("_", " ")}</Badge>
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">{i.descripcion}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{formatFecha(i.timestamp)}</p>
+              <p className="mt-1 text-sm opacity-90">{i.descripcion}</p>
+              <p className="mt-1 text-xs opacity-70">{formatFecha(i.timestamp)}</p>
             </div>
           </li>
         );

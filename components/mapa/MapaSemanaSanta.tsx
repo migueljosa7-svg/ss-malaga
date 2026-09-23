@@ -318,17 +318,16 @@ export function MapaInteligente() {
         }}
       />
       <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
-        {/* v8.0: capa base según tema — CartoDB Positron (Claro) / Dark Matter (Oscuro) */}
+        {/* v11.0: CartoDB exige API key en dark_all/light_all (watermarks "API
+            KEY REQUIRED"). Basemap OSM estándar 100% libre; en tema oscuro se
+            invierte con la clase CSS `.tile-oscuro` (sin claves de terceros). */}
         <TileLayer
           key={resolvedTheme ?? "light"}
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url={
-            resolvedTheme === "dark"
-              ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          }
-          subdomains={["a", "b", "c", "d"]}
-          maxZoom={20}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          className={resolvedTheme === "dark" ? "tile-oscuro" : undefined}
+          errorTileUrl="/tile-vacio.png"
+          maxZoom={19}
         />
         <AjustarVista bounds={boundsObjetivo} />
         {/* v10.0: vuelo del Command Palette ⌘K */}

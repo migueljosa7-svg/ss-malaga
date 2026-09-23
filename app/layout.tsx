@@ -33,21 +33,22 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "SS Málaga",
     url: "/",
+    // v11.0: tarjeta OG dinámica 1200×630 generada con ImageResponse
     images: [
       {
-        url: "/icon.svg",
-        width: 512,
-        height: 512,
-        alt: "SS Málaga — cruz de nazareno dorada sobre púrpura nazareno",
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "SS Málaga — Semana Santa de Málaga en tiempo real",
       },
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "SS Málaga — Semana Santa de Málaga en tiempo real",
     description:
       "Mapa cofrade en vivo: tronos, traslados, incidencias e itinerarios de la Semana Santa de Málaga.",
-    images: ["/icon.svg"],
+    images: ["/api/og"],
   },
   appleWebApp: { capable: true, title: "SS Málaga", statusBarStyle: "black-translucent" },
 };

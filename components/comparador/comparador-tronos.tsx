@@ -60,7 +60,7 @@ function FichaComparacion({ opcion }: { opcion: Opcion }) {
       <CardContent className="space-y-3 text-sm">
         {p.img && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={p.img} alt={`Trono ${p.nombre}`} className="mx-auto h-40 w-auto rounded-md object-contain" />
+          <img src={p.img} alt={`Trono ${p.nombre}`} loading="lazy" decoding="async" width={400} height={320} className="mx-auto h-40 w-auto rounded-md object-contain" />
         )}
         <ul className="space-y-2">
           <li className="flex items-center gap-2">

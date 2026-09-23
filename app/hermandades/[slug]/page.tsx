@@ -20,7 +20,29 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const h = getHermandadBySlug(slug);
-  return { title: h?.nombre ?? "Hermandad" };
+  if (!h) return { title: "Hermandad" };
+  const nombre = h.nombrePopular ?? h.nombre;
+  const descripcion = `${h.diaSemana} · salida desde ${h.sede}. Sigue su trono en tiempo real en SS Málaga.`;
+  return {
+    title: h.nombre,
+    description: descripcion,
+    // v11.0: tarjeta OG/Twitter 1200×630 dinámica por cofradía (/api/og?slug=…)
+    openGraph: {
+      title: `${nombre} | SS Málaga`,
+      description: descripcion,
+      url: `/hermandades/${slug}`,
+      siteName: "SS Málaga",
+      locale: "es_ES",
+      type: "website",
+      images: [{ url: `/api/og?slug=${slug}`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${nombre} | SS Málaga`,
+      description: descripcion,
+      images: [`/api/og?slug=${slug}`],
+    },
+  };
 }
 
 export default async function FichaHermandadPage({

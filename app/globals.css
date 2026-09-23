@@ -342,6 +342,14 @@ body {
   color: #e8c86a;
 }
 
+/* ---------- v11.0: basemap OSM sin API key ---------- */
+/* Modo oscuro: inversión clásica de tiles claros (equivale a Dark Matter sin
+   depender de CartoDB ni de claves). Solo se aplica a los <img> de tiles. */
+.tile-oscuro {
+  filter: invert(1) hue-rotate(180deg) saturate(0.75) brightness(0.92) contrast(1.05);
+}
+
+
 /* WCAG AA modo oscuro: como COLOR DE TEXTO el primary debe ser claro.
    Los fondos bg-primary siguen siendo morado profundo con texto crema. */
 .dark .text-primary {
