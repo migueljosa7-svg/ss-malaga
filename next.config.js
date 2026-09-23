@@ -7,8 +7,11 @@ const withPWA = require("next-pwa")({
   disable: process.env.NODE_ENV === "development",
   runtimeCaching: [
     {
-      // Tiles de OpenStreetMap para uso offline del mapa
-      urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
+      // Tiles de OpenStreetMap para uso offline del mapa.
+      // v12.1: Leaflet carga desde el host RAÍZ https://tile.openstreetmap.org
+      // (no solo los subdominios [abc].) — sin cubrirlo, el service worker
+      // jamás cacheaba los tiles reales.
+      urlPattern: /^https:\/\/(?:[abc]\.)?tile\.openstreetmap\.org\/.*/i,
       handler: "CacheFirst",
       options: {
         cacheName: "osm-tiles",
@@ -85,7 +88,11 @@ const nextConfig = {
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
             "style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net",
-            "img-src 'self' blob: data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://images.pexels.com",
+            // v12.1: `https://tile.openstreetmap.org` (host raíz) debe ir
+            // EXPLÍCITO: el wildcard `https://*.tile.openstreetmap.org` NO
+            // matchea el host sin subdominio y Chrome bloqueaba todos los
+            // tiles con violación de CSP ("The action has been blocked").
+            "img-src 'self' blob: data: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://images.pexels.com",
             "font-src 'self' data:",
             "connect-src 'self' https://nominatim.openstreetmap.org https://routing.openstreetmap.de https://router.project-osrm.org",
             "frame-src https://www.youtube.com https://www.youtube-nocookie.com",

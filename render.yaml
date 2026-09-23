@@ -7,7 +7,13 @@ services:
     # El output standalone necesita los assets estáticos y public/ DENTRO de .next/standalone.
     # --include=dev es CRÍTICO: Render construye con NODE_ENV=production y npm omite
     # las devDependencies (tailwindcss, typescript, postcss...) sin este flag.
-    buildCommand: npm install --include=dev && npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
+    # v12.1: `.next/standalone/public` y `.next/standalone/.next/static` se
+    # eliminan ANTES de copiar: el build de Next ya crea `standalone/public`
+    # (parcial), y `cp -r public dest` con destino existente en Unix ANIDA el
+    # árbol como `standalone/public/public/...` → el server.js (chdir a
+    # __dirname) devolvía 404 para todo lo que vivía en public/
+    # (icon-192.png, tile-vacio.png, escudos, manifest.json antiguo...).
+    buildCommand: npm install --include=dev && npm run build && rm -rf .next/standalone/public .next/standalone/.next/static && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static
     startCommand: node .next/standalone/server.js
     envVars:
       - key: PORT
