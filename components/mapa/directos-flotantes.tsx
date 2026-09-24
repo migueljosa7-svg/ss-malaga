@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { CANALES_DIRECTO } from "@/lib/data/directos";
 
 /**
- * Panel Flotante de Directos (v4.0 "Málaga Real").
+ * Panel Flotante de Directos (v4.0 "Granada Real").
  * Botón compacto "🔴 En Vivo (TV)" en la barra del mapa que despliega un
- * panel lateral semitransparente con las cadenas (101 TV Málaga, Canal Sur,
- * Málaga TV). Solo se monta UN iframe y se conmuta el stream sin tapar la
+ * panel lateral semitransparente con las cadenas (TG7 Granada, Canal Sur).
+ * Solo se monta UN iframe y se conmuta el stream sin tapar la
  * telemetría ni los marcadores GPS del mapa.
  */
 export function DirectosFlotantes() {
@@ -26,8 +26,8 @@ export function DirectosFlotantes() {
         aria-expanded={abierto}
         aria-controls="panel-directos"
         className={cn(
-          "inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-3 py-1.5 text-sm font-semibold text-[#D4AF37] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95",
-          abierto && "ring-2 ring-[#D4AF37]/60"
+          "inline-flex items-center gap-2 rounded-full border border-[#C5A059]/60 bg-[#1E0A24] px-3 py-1.5 text-sm font-semibold text-[#C5A059] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95",
+          abierto && "ring-2 ring-[#C5A059]/60"
         )}
       >
         <span className="relative flex h-2.5 w-2.5">
@@ -45,11 +45,11 @@ export function DirectosFlotantes() {
           id="panel-directos"
           role="dialog"
           aria-label="Emisiones en directo"
-          className="fixed bottom-4 right-4 z-[600] w-[min(92vw,380px)] overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-[#1a1a1a]/90 shadow-[0_16px_48px_-12px_rgba(26,26,26,0.8)] backdrop-blur-md"
+          className="fixed bottom-4 right-4 z-[600] w-[min(92vw,380px)] overflow-hidden rounded-2xl border border-[#C5A059]/50 bg-[#1a1a1a]/90 shadow-[0_16px_48px_-12px_rgba(26,26,26,0.8)] backdrop-blur-md"
         >
-          <div className="flex items-center gap-2 border-b border-[#D4AF37]/30 bg-[#4A154B]/80 px-3 py-2">
-            <Radio className="h-4 w-4 text-[#D4AF37]" />
-            <p className="flex-1 text-sm font-bold text-[#D4AF37]">Directos — Semana Santa de Málaga</p>
+          <div className="flex items-center gap-2 border-b border-[#C5A059]/30 bg-[#1E0A24]/80 px-3 py-2">
+            <Radio className="h-4 w-4 text-[#C5A059]" />
+            <p className="flex-1 text-sm font-bold text-[#C5A059]">Directos — Semana Santa de Granada</p>
             <button
               type="button"
               onClick={() => setAbierto(false)}
@@ -71,8 +71,8 @@ export function DirectosFlotantes() {
                 className={cn(
                   "rounded-full border px-2.5 py-1 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5 active:scale-95",
                   c.id === canal.id
-                    ? "border-[#D4AF37] bg-[#4A154B] text-[#D4AF37]"
-                    : "border-white/20 bg-white/5 text-white/75 hover:border-[#D4AF37]/50 hover:text-white"
+                    ? "border-[#C5A059] bg-[#1E0A24] text-[#C5A059]"
+                    : "border-white/20 bg-white/5 text-white/75 hover:border-[#C5A059]/50 hover:text-white"
                 )}
               >
                 {c.id === canal.id && (

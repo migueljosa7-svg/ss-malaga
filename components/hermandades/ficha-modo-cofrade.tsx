@@ -2,17 +2,17 @@ import { Clock, MapPin, Music4, Shirt, Church } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Hermandad } from "@/types/hermandad";
 
-/** Puntos de la Carrera Oficial por los que la mayoría de tronos malagueños pasan. */
+/** Puntos de la Carrera Oficial por los que la mayoría de tronos pasan. */
 const PUNTOS_CLAVE: Array<{ etiqueta: string; re: RegExp }> = [
-  { etiqueta: "Tribuna de los Pobres", re: /tribuna|mercedes|constituci/i },
-  { etiqueta: "Cuesta del Desengaño", re: /desenga|mármoles|marmoles|arzobispo/i },
-  { etiqueta: "Entorno de la Catedral", re: /catedral|alameda|jardines/i },
+  { etiqueta: "Carrera de la Virgen", re: /carrera de la virgen|puente de la virgen|bibataub/i },
+  { etiqueta: "Puerta Real", re: /puerta real|ganivet|mesones/i },
+  { etiqueta: "Entorno de la Catedral", re: /catedral|pasiegas/i },
 ];
 
 /**
  * "Modo Cofrade" para la ficha de hermandad (v10.0 Ultimate):
  * datos prácticos de la calle → hábito, hombres de trono, marcha dedicada
- * y horarios teóricos en los puntos clave (Tribuna, Desengaño, Catedral).
+ * y horarios teóricos en los puntos clave (Carrera de la Virgen, Puerta Real, Catedral).
  */
 export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
   const claves: Array<{ etiqueta: string; hora: string; calle: string }> = [];
@@ -35,7 +35,7 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
       className="panel-vidrio borde-destello-dorado mb-6 rounded-xl p-4"
     >
       <header className="mb-3 flex flex-wrap items-center gap-2">
-        <Church className="h-5 w-5 text-[#4A154B] dark:text-[#e8c86a]" />
+        <Church className="h-5 w-5 text-[#1E0A24] dark:text-[#e8c86a]" />
         <h2 className="text-base font-bold">Modo Cofrade</h2>
         <Badge variant="secondary">{h.diaSemana}</Badge>
         <span className="text-xs text-muted-foreground">Lo esencial para salir a la calle</span>
@@ -43,7 +43,7 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
 
       <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
         <div className="flex items-start gap-2">
-          <Shirt className="mt-0.5 h-4 w-4 shrink-0 text-[#4A154B] dark:text-[#e8c86a]" />
+          <Shirt className="mt-0.5 h-4 w-4 shrink-0 text-[#1E0A24] dark:text-[#e8c86a]" />
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Hábito de nazareno
@@ -57,7 +57,7 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
         </div>
 
         <div className="flex items-start gap-2">
-          <span className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center text-[#4A154B] dark:text-[#e8c86a]">
+          <span className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center text-[#1E0A24] dark:text-[#e8c86a]">
             💪
           </span>
           <div className="min-w-0">
@@ -74,7 +74,7 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
         </div>
 
         <div className="flex items-start gap-2">
-          <Music4 className="mt-0.5 h-4 w-4 shrink-0 text-[#4A154B] dark:text-[#e8c86a]" />
+          <Music4 className="mt-0.5 h-4 w-4 shrink-0 text-[#1E0A24] dark:text-[#e8c86a]" />
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Marcha dedicada
@@ -84,7 +84,7 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
         </div>
 
         <div className="flex items-start gap-2">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#4A154B] dark:text-[#e8c86a]" />
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#1E0A24] dark:text-[#e8c86a]" />
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Sede canónica
@@ -97,9 +97,9 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
         </div>
       </div>
 
-      <div className="mt-4 border-t border-[#D4AF37]/30 pt-3">
+      <div className="mt-4 border-t border-[#C5A059]/30 pt-3">
         <p className="mb-2 flex items-center gap-2 text-sm font-bold">
-          <Clock className="h-4 w-4 text-[#4A154B] dark:text-[#e8c86a]" />
+          <Clock className="h-4 w-4 text-[#1E0A24] dark:text-[#e8c86a]" />
           Horarios por puntos clave
           {usarFallback && (
             <span className="font-normal text-muted-foreground">
@@ -111,9 +111,9 @@ export function FichaModoCofrade({ hermandad: h }: { hermandad: Hermandad }) {
           {horarios.map((p) => (
             <li
               key={`${p.etiqueta}-${p.hora}`}
-              className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 rounded-lg border border-[#D4AF37]/25 bg-[#D4AF37]/[0.07] px-3 py-2"
+              className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 rounded-lg border border-[#C5A059]/25 bg-[#C5A059]/[0.07] px-3 py-2"
             >
-              <span className="font-mono text-sm font-bold text-[#4A154B] dark:text-[#e8c86a]">
+              <span className="font-mono text-sm font-bold text-[#1E0A24] dark:text-[#e8c86a]">
                 {p.hora}
               </span>
               <span className="text-sm font-semibold">{p.etiqueta}</span>

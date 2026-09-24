@@ -4,7 +4,6 @@ import { DIAS_SEMANA } from "@/lib/utils";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Hermandades" };
-export const revalidate = 300;
 
 export default function HermandadesPage() {
   const porDia = getHermandadesPorDia();

@@ -48,7 +48,7 @@ export function BotonCampana({
       disabled={tocando}
       aria-label="Tocar campana de trono"
       className={cn(
-        "group relative inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-3 py-1.5 text-sm font-medium text-[#D4AF37] transition-transform hover:scale-105 disabled:opacity-70",
+        "group relative inline-flex items-center gap-2 rounded-full border border-[#C5A059]/60 bg-[#1E0A24] px-3 py-1.5 text-sm font-medium text-[#C5A059] transition-transform hover:scale-105 disabled:opacity-70",
         compacto && "px-2 py-1 text-xs"
       )}
     >

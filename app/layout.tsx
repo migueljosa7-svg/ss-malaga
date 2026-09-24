@@ -10,56 +10,52 @@ import { Footer } from "@/components/ui/footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ss-malaga.example.com"),
+  metadataBase: new URL("https://ss-granada.example.com"),
   title: {
-    default: "SS Málaga — Semana Santa de Málaga en tiempo real",
-    template: "%s | SS Málaga",
+    default: "SS Granada — Semana Santa de Granada en tiempo real",
+    template: "%s | SS Granada",
   },
   description:
-    "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Málaga. Offline-first, con audio de toques de campana.",
-  keywords: ["Semana Santa Málaga", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
+    "Seguimiento de tronos, traslados e itinerarios en tiempo real, incidencias, calles cortadas y mapa interactivo de la Semana Santa de Granada. Offline-first, con audio de toques de campana.",
+  keywords: ["Semana Santa Granada", "cofradías", "hermandades", "tronos", "hombres de trono", "incidencias", "mapa cofrade"],
+  // Export estático: Next 15 no emite metadata routes dinámicas
+  // (app/manifest.ts) en `output: 'export'` → se sirve public/manifest.json.
   manifest: "/manifest.json",
-  // v12.0: `/manifest.json` se resuelve vía rewrite en middleware.ts hacia
-  // `/manifest.webmanifest`, la URL por convención que Next.js 15 genera a
-  // partir de app/manifest.ts (fuente única de verdad del manifiesto PWA).
   // v10.0: iconos resueltos por CONVENCIÓN de ficheros (Metadata API de Next.js).
   // `app/favicon.ico`, `app/icon.svg` y `app/apple-icon.png` se emiten
-  // automáticamente sin preloads duplicados ni 404:
-  //   - Se elimina el bloque manual `icons: { icon: [...], apple: [...] }`
-  //     que apuntaba a un `/favicon.ico` inexistente en /public (error 404)
-  //     y duplicaba el <link rel="preload"> del CSS de Leaflet en rutas sin mapa.
+  // automáticamente sin preloads duplicados ni 404.
   openGraph: {
-    title: "SS Málaga — Semana Santa de Málaga en tiempo real",
+    title: "SS Granada — Semana Santa de Granada en tiempo real",
     description:
-      "Tronos, traslados, mapa e itinerarios en vivo de las hermandades de Málaga. Semana Santa de Málaga con toques de campana 3D y rutas sin calles cortadas.",
+      "Tronos, traslados, mapa e itinerarios en vivo de las hermandades de Granada. Semana Santa de Granada con toques de campana 3D y rutas sin calles cortadas.",
     locale: "es_ES",
     type: "website",
-    siteName: "SS Málaga",
+    siteName: "SS Granada",
     url: "/",
-    // v11.0: tarjeta OG dinámica 1200×630 generada con ImageResponse
+    // Export estático: sin Route Handler /api/og → se usa el icono estático.
     images: [
       {
-        url: "/api/og",
-        width: 1200,
-        height: 630,
-        alt: "SS Málaga — Semana Santa de Málaga en tiempo real",
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "SS Granada — Semana Santa de Granada en tiempo real",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SS Málaga — Semana Santa de Málaga en tiempo real",
+    title: "SS Granada — Semana Santa de Granada en tiempo real",
     description:
-      "Mapa cofrade en vivo: tronos, traslados, incidencias e itinerarios de la Semana Santa de Málaga.",
-    images: ["/api/og"],
+      "Mapa cofrade en vivo: tronos, traslados, incidencias e itinerarios de la Semana Santa de Granada.",
+    images: ["/icon-512.png"],
   },
-  appleWebApp: { capable: true, title: "SS Málaga", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: "SS Granada", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FAF7F2" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0F19" },
   ],
   width: "device-width",
   initialScale: 1,

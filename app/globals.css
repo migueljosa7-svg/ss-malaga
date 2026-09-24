@@ -2,13 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- Estética identitaria malagueña ---------- */
+/* ---------- Estética identitaria granadina (branding: #1E0A24 · #0B0F19 · #C5A059 · #8B0000) ---------- */
 :root {
-  --dorado-orfebre: #d4af37;
-  --purpura-nazareno: #4a154b;
+  --dorado-orfebre: #c5a059;
+  --purpura-nazareno: #1e0a24;
   --verde-esperanza: #1b4d3e;
   --negro-calvario: #1a1a1a;
   --crema-cera: #faf7f2;
+  --grana-granada: #8b0000;
 }
 
 /* ---------- v8.0: paleta semántica DÍA (blanco/orfebrería) ---------- */
@@ -17,9 +18,9 @@
   --background: 250 247 242; /* crema cera */
   --foreground: 26 26 26; /* negro calvario */
   --card: 255 255 255;
-  --primary: 74 21 75; /* púrpura nazareno */
+  --primary: 30 10 36; /* púrpura granadino #1E0A24 */
   --primary-foreground: 250 247 242;
-  --secondary: 212 175 55; /* dorado orfebre */
+  --secondary: 197 160 89; /* dorado orfebre #C5A059 */
   --secondary-foreground: 26 26 26;
   --esperanza: 27 77 62; /* verde esperanza */
   --esperanza-foreground: 250 247 242;
@@ -29,18 +30,18 @@
   --border: 228 220 203;
 }
 
-/* ---------- v8.0: paleta semántica NOCHE (morado nazareno/negro) ---------- */
+/* ---------- v8.0: paleta semántica NOCHE (púrpura granadino / azul noche) ---------- */
 .dark {
   color-scheme: dark;
-  --background: 15 23 42; /* azul noche */
+  --background: 11 15 25; /* azul noche #0B0F19 */
   --foreground: 240 237 230; /* crema cera */
   --card: 26 20 45; /* púrpura noche */
-  --primary: 109 40 117; /* púrpura nazareno iluminado */
+  --primary: 85 40 95; /* púrpura granadino iluminado */
   --primary-foreground: 245 241 232;
-  --secondary: 212 175 55;
-  --secondary-foreground: 15 23 42;
+  --secondary: 197 160 89;
+  --secondary-foreground: 11 15 25;
   --esperanza: 45 122 98;
-  --esperanza-foreground: 15 23 42;
+  --esperanza-foreground: 11 15 25;
   --calvario: 8 8 10;
   --muted: 36 30 60;
   --muted-foreground: 168 160 190;
@@ -48,8 +49,8 @@
 }
 .dark body {
   background-image:
-    radial-gradient(circle at top left, rgba(212, 175, 55, 0.08), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(109, 40, 117, 0.3), transparent 55%);
+    radial-gradient(circle at top left, rgba(197, 160, 89, 0.08), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(85, 40, 95, 0.3), transparent 55%);
 }
 
 body {
@@ -100,7 +101,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background: radial-gradient(circle, #d4af37 0%, rgba(212, 175, 55, 0) 70%);
+  background: radial-gradient(circle, #C5A059 0%, rgba(212, 175, 55, 0) 70%);
   animation: destello-flotante 0.7s ease-out 2;
   pointer-events: none;
 }
@@ -139,9 +140,9 @@ body {
   margin-top: 2px;
   padding: 1px 7px;
   border-radius: 9999px;
-  background: #4a154b;
-  border: 1px solid #d4af37;
-  color: #d4af37;
+  background: #1E0A24;
+  border: 1px solid #C5A059;
+  color: #C5A059;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -157,8 +158,8 @@ body {
   transform: translateY(-2px);
 }
 .divicon-trono-seleccionado .divicon-siglas {
-  background: #d4af37;
-  color: #4a154b;
+  background: #C5A059;
+  color: #1E0A24;
 }
 /* Anillo de micro-pulso: el GPS del trono emite en tiempo real */
 .divicon-pulso {
@@ -169,7 +170,7 @@ body {
   height: 36px;
   margin-left: -18px;
   border-radius: 9999px;
-  border: 2px solid #d4af37;
+  border: 2px solid #C5A059;
   opacity: 0;
   pointer-events: none;
 }
@@ -263,7 +264,7 @@ body {
 .popup-nombre {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #4a154b;
+  color: #1E0A24;
 }
 .popup-meta {
   font-size: 0.78rem;
@@ -274,7 +275,7 @@ body {
   margin-top: 6px;
   font-size: 0.68rem;
   font-weight: 600;
-  color: #4a154b;
+  color: #1E0A24;
   background: rgba(212, 175, 55, 0.14);
   border: 1px solid rgba(212, 175, 55, 0.35);
   border-radius: 9999px;
@@ -334,7 +335,7 @@ body {
 }
 
 /* Texto dorado con contraste AA sobre fondos claros
-   (el dorado brillante #D4AF37 solo es AA sobre morado/noche) */
+   (el dorado brillante #C5A059 solo es AA sobre morado/noche) */
 .oro-texto {
   color: #7c6318;
 }
@@ -374,7 +375,7 @@ body {
   width: 56px;
   height: 56px;
   margin-left: -28px;
-  border: 2.5px solid #d4af37;
+  border: 2.5px solid #C5A059;
   box-shadow: 0 0 18px 4px rgba(212, 175, 55, 0.5);
 }
 .divicon-trono-live.divicon-cofrade .divicon-escudo {

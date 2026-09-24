@@ -1,4 +1,4 @@
-// Canales de televisión y emisiones en directo de la Semana Santa de Málaga.
+// Canales de televisión y emisiones en directo de la Semana Santa de Granada.
 // Los youtubeId corresponden a los canales oficiales (se embeben como streams en vivo).
 export const CANALES_DIRECTO: Array<{
   id: string;
@@ -13,15 +13,10 @@ export const CANALES_DIRECTO: Array<{
     descripcion: "Retransmisión oficial de las procesiones andaluzas",
   },
   {
-    id: "101-tv",
-    nombre: "101 TV Málaga",
-    youtubeId: "UCZ0C4UJ7CkPMPXBhP2wE-hQ",
-    descripcion: "Televisión local malagueña: salidas y encierros",
-  },
-  {
-    id: "malaga-tv",
-    nombre: "Málaga TV",
-    youtubeId: "UCPt5B2UaEvKGbF3fRTo8zFA",
-    descripcion: "Emisiones en directo del Centro Histórico",
+    id: "tg7",
+    nombre: "TG7 Granada (canal municipal)",
+    youtubeId: "UC4svqJ0E5nUlvjo_fuzvjzA",
+    descripcion: "Televisión municipal de Granada: salidas y Carrera Oficial en directo",
   },
 ];
+

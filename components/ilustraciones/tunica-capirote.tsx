@@ -2,16 +2,16 @@
 
 import { cn } from "@/lib/utils";
 
-/** Mapa de colores de túnica/antifaz/cap por hermandad (Semana Santa de Málaga). */
+/** Mapa de colores de túnica/antifaz/cap por hermandad (Semana Santa de Granada). */
 const COLORES: Record<string, { tunica: string; antifaz: string; cordon: string; capa?: string; nombre: string }> = {
-  cautivo: { tunica: "#FFFFFF", antifaz: "#FFFFFF", cordon: "#FFFFFF", capa: "#FFFFFF", nombre: "El Cautivo" },
-  pollinica: { tunica: "#FFFFFF", antifaz: "#FFFFFF", cordon: "#B91C1C", nombre: "La Pollinica" },
-  rico: { tunica: "#FFFFFF", antifaz: "#1E3A8A", cordon: "#1E3A8A", capa: "#FFFFFF", nombre: "El Rico" },
-  zamarrilla: { tunica: "#FFFFFF", antifaz: "#4A154B", cordon: "#4A154B", capa: "#FFFFFF", nombre: "La Zamarrilla" },
-  esperanza: { tunica: "#1A1A1A", antifaz: "#14532D", cordon: "#14532D", capa: "#1A1A1A", nombre: "La Esperanza" },
-  expiracion: { tunica: "#FFFFFF", antifaz: "#B91C1C", cordon: "#B91C1C", capa: "#FFFFFF", nombre: "La Expiración" },
-  mena: { tunica: "#1A1A1A", antifaz: "#166534", cordon: "#166534", nombre: "La Mena" },
-  sepulcro: { tunica: "#1A1A1A", antifaz: "#1A1A1A", cordon: "#E5E7EB", capa: "#1A1A1A", nombre: "El Sepulcro" },
+  "santa-cena": { tunica: "#5B2C6F", antifaz: "#5B2C6F", cordon: "#C5A059", capa: "#5B2C6F", nombre: "La Santa Cena" },
+  "san-agustin": { tunica: "#1E0A24", antifaz: "#1E0A24", cordon: "#C5A059", capa: "#1E0A24", nombre: "San Agustín" },
+  "la-canilla": { tunica: "#F5F1E8", antifaz: "#F5F1E8", cordon: "#8A7350", nombre: "La Cañilla" },
+  "los-gitanos": { tunica: "#1E0A24", antifaz: "#1E0A24", cordon: "#C5A059", capa: "#1E0A24", nombre: "Los Gitanos" },
+  "los-estudiantes": { tunica: "#2E5E8C", antifaz: "#2E5E8C", cordon: "#C5A059", capa: "#2E5E8C", nombre: "Los Estudiantes" },
+  "la-aurora": { tunica: "#F5F1E8", antifaz: "#F5F1E8", cordon: "#C5A059", nombre: "La Aurora" },
+  "el-silencio": { tunica: "#1A1A1A", antifaz: "#1A1A1A", cordon: "#C5A059", capa: "#1A1A1A", nombre: "El Silencio" },
+  "la-soledad": { tunica: "#1A1A1A", antifaz: "#1A1A1A", cordon: "#E5E7EB", capa: "#1A1A1A", nombre: "La Soledad" },
 };
 
 /**
@@ -20,7 +20,7 @@ const COLORES: Record<string, { tunica: string; antifaz: string; cordon: string;
  * destello dorado orfebre y elevación 3D al hover.
  */
 export function TunicaCapirote({ slug, className }: { slug: string; className?: string }) {
-  const c = COLORES[slug] ?? { tunica: "#FFFFFF", antifaz: "#4A154B", cordon: "#D4AF37", nombre: "Nazareno" };
+  const c = COLORES[slug] ?? { tunica: "#FFFFFF", antifaz: "#1E0A24", cordon: "#C5A059", nombre: "Nazareno" };
   return (
     <figure
       className={cn(
@@ -37,8 +37,8 @@ export function TunicaCapirote({ slug, className }: { slug: string; className?: 
           </linearGradient>
         </defs>
         {/* Capirote */}
-        <path d="M60 8 L82 78 Q60 90 38 78 Z" fill={c.antifaz} stroke="#D4AF37" strokeOpacity="0.5" strokeWidth="1.5" />
-        <rect x="36" y="76" width="48" height="14" rx="4" fill={c.antifaz} stroke="#D4AF37" strokeOpacity="0.5" />
+        <path d="M60 8 L82 78 Q60 90 38 78 Z" fill={c.antifaz} stroke="#C5A059" strokeOpacity="0.5" strokeWidth="1.5" />
+        <rect x="36" y="76" width="48" height="14" rx="4" fill={c.antifaz} stroke="#C5A059" strokeOpacity="0.5" />
         {/* Antifaz (parte delantera del hombro) */}
         <path d="M46 90 L74 90 L72 118 L48 118 Z" fill={c.antifaz} opacity="0.85" />
         {/* Túnica */}
@@ -47,12 +47,12 @@ export function TunicaCapirote({ slug, className }: { slug: string; className?: 
         <path d="M52 120 L48 186 M68 120 L72 186" stroke="rgba(0,0,0,0.18)" strokeWidth="1.5" fill="none" />
         {/* Cordón / cíngulo */}
         <path d="M40 122 Q60 130 80 122" stroke={c.cordon} strokeWidth="5" fill="none" strokeLinecap="round" />
-        <circle cx="60" cy="127" r="3.5" fill="#D4AF37" />
+        <circle cx="60" cy="127" r="3.5" fill="#C5A059" />
         {/* Capa (si procede) */}
-        {c.capa && <path d="M30 96 Q60 88 90 96 L86 150 Q60 142 34 150 Z" fill={c.capa} opacity="0.75" stroke="#D4AF37" strokeOpacity="0.3" />}
+        {c.capa && <path d="M30 96 Q60 88 90 96 L86 150 Q60 142 34 150 Z" fill={c.capa} opacity="0.75" stroke="#C5A059" strokeOpacity="0.3" />}
         {/* Escudo dorado */}
-        <circle cx="60" cy="98" r="7" fill="none" stroke="#D4AF37" strokeWidth="2" />
-        <path d="M60 94 L60 102 M56 98 L64 98" stroke="#D4AF37" strokeWidth="1.8" strokeLinecap="round" />
+        <circle cx="60" cy="98" r="7" fill="none" stroke="#C5A059" strokeWidth="2" />
+        <path d="M60 94 L60 102 M56 98 L64 98" stroke="#C5A059" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
       <figcaption className="text-center text-xs font-medium text-muted-foreground">
         Túnica de <span className="text-primary">{c.nombre}</span>

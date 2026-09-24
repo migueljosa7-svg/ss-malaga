@@ -9,6 +9,7 @@ import { calcularRutaPeatonal } from "@/lib/rutas";
 import { itinerarioRealista, hermandadEnDirecto, posicionEnMinuto } from "@/lib/telemetria";
 import { useRutasCallejeras } from "@/lib/osrm";
 import { nodosRuta } from "@/lib/data/grafo-rutas";
+import { getCallesCortadas, getHermandades } from "@/lib/data";
 import { divIconCofrade } from "@/lib/iconos-tronos";
 import { HudTelemetria, type TronoSeleccionado } from "@/components/mapa/hud-telemetria";
 import { RadarCruces } from "@/components/radar/radar-cruces";
@@ -17,7 +18,8 @@ import { SelectorEnDirecto } from "@/components/mapa/selector-en-directo";
 import type { CalleCortada, Hermandad } from "@/types/hermandad";
 import "leaflet/dist/leaflet.css";
 
-const MALAGA: [number, number] = [36.7213, -4.4214];
+// Centro de Granada (Carrera Oficial / Plaza Nueva) — 37.17733, -3.59856
+const GRANADA: [number, number] = [37.17733, -3.59856];
 
 // ---------- Utilidades de tiempo ----------
 function formatearMinutos(total: number): string {
@@ -71,7 +73,7 @@ export function MapaInteligente() {
   const [sliderValor, setSliderValor] = useState(0);
 
   // Buscador de rutas A -> B
-  const [origen, setOrigen] = useState("larios-alameda");
+  const [origen, setOrigen] = useState("plaza-nueva");
   const [destino, setDestino] = useState("catedral");
   const [ruta, setRuta] = useState<ReturnType<typeof calcularRutaPeatonal> | null>(null);
 
@@ -89,11 +91,8 @@ export function MapaInteligente() {
 
   const { data: calles } = useQuery<CalleCortada[]>({
     queryKey: ["calles-cortadas"],
-    queryFn: async () => {
-      const res = await fetch("/api/incidencias?tipo=calles_cortadas");
-      if (!res.ok) throw new Error("Error cargando calles cortadas");
-      return res.json();
-    },
+    // Export estático: los datos viven en el bundle (sin API routes).
+    queryFn: async () => getCallesCortadas(),
     // v6.0: en modo ahorro se reduce el refetch y se confía en la caché PWA
     refetchInterval: modoAhorro ? 300_000 : 60_000,
     staleTime: modoAhorro ? 300_000 : 30_000,
@@ -102,12 +101,8 @@ export function MapaInteligente() {
 
   const { data: hermandades } = useQuery<Hermandad[]>({
     queryKey: ["hermandades"],
-    queryFn: async () => {
-      const res = await fetch("/api/hermandades");
-      if (!res.ok) throw new Error("Error cargando hermandades");
-      const json = await res.json();
-      return json.data as Hermandad[];
-    },
+    // Export estático: los datos viven en el bundle (sin API routes).
+    queryFn: async () => getHermandades(),
     refetchInterval: modoAhorro ? 300_000 : 60_000,
     staleTime: modoAhorro ? 300_000 : 30_000,
     gcTime: 3_600_000,
@@ -186,10 +181,10 @@ export function MapaInteligente() {
                 <p className="mb-1 text-[11px] text-muted-foreground">Saltar a un momento clave:</p>
                 <div className="flex flex-wrap gap-1.5 text-xs">
                   {([
-                    ["540", "09:00 Pollinica"],
-                    ["1080", "18:00 Cautivo / Sepulcro"],
-                    ["1200", "20:00 Tribuna"],
-                    ["180", "03:00 Esperanza Madrugá"],
+                    ["1035", "17:15 Santa Cena"],
+                    ["1140", "19:00 Sagrado Corazón"],
+                    ["1260", "21:00 Carrera de la Virgen (Jueves Santo)"],
+                    ["180", "03:00 Silencio"],
                   ] as Array<[string, string]>).map(([v, label]) => (
                     <button
                       key={v}
@@ -274,10 +269,10 @@ export function MapaInteligente() {
         </label>
         <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-[#4A154B] ring-2 ring-[#D4AF37]" /> Trono de Cristo
+            <span className="inline-block h-3 w-3 rounded-full bg-[#1E0A24] ring-2 ring-[#C5A059]" /> Trono de Cristo
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-[#1B4D3E] ring-2 ring-[#D4AF37]" /> Trono de Virgen (Palio)
+            <span className="inline-block h-3 w-3 rounded-full bg-[#1B4D3E] ring-2 ring-[#C5A059]" /> Trono de Virgen (Palio)
           </span>
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-1.5 w-6 rounded bg-[#B3261E]" /> Tramo cortado
@@ -285,8 +280,8 @@ export function MapaInteligente() {
         </span>
       </div>
 
-      {/* Leyenda de protocolo cofrade malagueño (v4.0, ampliada v6.0) */}
-      <div className="borde-destello-dorado rounded-lg border border-[#D4AF37]/40 bg-card px-3 py-2 text-[11px] text-muted-foreground">
+      {/* Leyenda de protocolo cofrade granadino (v4.0, ampliada v6.0) */}
+      <div className="borde-destello-dorado rounded-lg border border-[#C5A059]/40 bg-card px-3 py-2 text-[11px] text-muted-foreground">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
           <span className="font-semibold uppercase tracking-wider oro-texto">Protocolo:</span>
           <span title="Abre la procesión portando la cruz de la hermandad">✝️ Cruz de Guía</span>
@@ -296,10 +291,10 @@ export function MapaInteligente() {
           <span title="Coro de saetas y cantos que acompaña al paso">🎼 Masa Coral</span>
           <span title="Punto donde la cofradía espera su turno en la Carrera Oficial">🚩 Cabeza de Procesión</span>
         </div>
-        <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-[#D4AF37]/20 pt-1.5">
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-[#C5A059]/20 pt-1.5">
           <span className="font-semibold uppercase tracking-wider oro-texto">Puntos icónicos:</span>
-          <span title="Balcón oficial desde donde la autoridad saluda a los tronos">🏛️ Tribuna de los Pobres</span>
-          <span title="Eje de la Carrera Oficial malagueña">🛍️ Calle Larios</span>
+          <span title="Ribera del Darro por donde bajan los tronos del Albaicín">🏛️ Carrera del Darro</span>
+          <span title="Eje de la Carrera Oficial granadina">🛍️ Carrera de la Virgen</span>
           <span title="Fachada donde los tronos estacionan ante la Santa Iglesia Catedral">⛪ Entorno de la Catedral</span>
         </div>
       </div>
@@ -317,7 +312,7 @@ export function MapaInteligente() {
           if (pos) useUIStore.getState().centrarFoco({ lat: pos.lat, lng: pos.lng, zoom: 16 });
         }}
       />
-      <MapContainer center={MALAGA} zoom={15} className="h-[520px] rounded-lg z-0">
+      <MapContainer center={GRANADA} zoom={15} className="h-[520px] rounded-lg z-0">
         {/* v11.0: CartoDB exige API key en dark_all/light_all (watermarks "API
             KEY REQUIRED"). Basemap OSM estándar 100% libre; en tema oscuro se
             invierte con la clase CSS `.tile-oscuro` (sin claves de terceros). */}
@@ -408,8 +403,8 @@ export function MapaInteligente() {
                     center={[pos.lat, pos.lng]}
                     radius={18}
                     pathOptions={{
-                      color: seleccion?.tipo === "virgen" ? "#1B4D3E" : "#4A154B",
-                      fillColor: "#D4AF37",
+                      color: seleccion?.tipo === "virgen" ? "#1B4D3E" : "#1E0A24",
+                      fillColor: "#C5A059",
                       fillOpacity: 0.15,
                       weight: 3,
                       className: "pulso-trono",

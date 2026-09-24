@@ -46,24 +46,14 @@ const withPWA = require("next-pwa")({
   ],
 });
 
-const securityHeaders = [
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "X-Frame-Options", value: "DENY" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  {
-    key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(self), payment=(), usb=()",
-  },
-  {
-    key: "Strict-Transport-Security",
-    value: "max-age=63072000; includeSubDomains; preload",
-  },
-];
-
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  output: "standalone",
+  // Export 100% estático: la web se sirve desde `out/` (Render Static Site).
+  // NOTA: `headers()`, `redirects()`, `rewrites()`, ISR (`revalidate`) y las
+  // Route Handlers (`app/api/*`) NO son compatibles con `output: "export"`.
+  output: "export",
+  trailingSlash: true, // cada ruta emite su propio index.html (hosting estático)
   experimental: {
     // El CSS crítico agresivo (optimizeCss/critters) emitía <link rel="preload">
     // de hojas no utilizadas en rutas sin el mapa ("/comparador"), provocando el
@@ -71,40 +61,15 @@ const nextConfig = {
     // explícitamente: el CSS de Leaflet se sirve solo en su chunk dinámico.
     optimizeCss: false,
   },
-  images: { remotePatterns: [{ protocol: "https", hostname: "**" }] },
+  images: {
+    // Sin optimizador de imágenes en export estático (no existe el server de Next).
+    unoptimized: true,
+  },
   webpack: (config) => {
     // Alias explícito: '@/*' debe resolver SIEMPRE contra la raíz del proyecto,
     // independientemente del SO (Windows/Linux) o de la lectura de tsconfig paths.
     config.resolve.alias["@"] = path.resolve(__dirname);
     return config;
-  },
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [...securityHeaders, {
-          key: "Content-Security-Policy",
-          value: [
-            "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-            "style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net",
-            // v12.1: `https://tile.openstreetmap.org` (host raíz) debe ir
-            // EXPLÍCITO: el wildcard `https://*.tile.openstreetmap.org` NO
-            // matchea el host sin subdominio y Chrome bloqueaba todos los
-            // tiles con violación de CSP ("The action has been blocked").
-            "img-src 'self' blob: data: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://images.pexels.com",
-            "font-src 'self' data:",
-            "connect-src 'self' https://nominatim.openstreetmap.org https://routing.openstreetmap.de https://router.project-osrm.org",
-            "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
-            "frame-ancestors 'none'",
-            "object-src 'none'",
-            "base-uri 'self'",
-            "form-action 'self'",
-            "upgrade-insecure-requests",
-          ].join("; "),
-        }],
-      },
-    ];
   },
 };
 

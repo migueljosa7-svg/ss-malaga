@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Aviso legal y privacidad",
   description:
-    "Aviso legal, política de privacidad (RGPD), política de cookies y exención de responsabilidad sobre la telemetría GPS de la Semana Santa de Málaga.",
+    "Aviso legal, política de privacidad (RGPD), política de cookies y exención de responsabilidad sobre la telemetría GPS de la Semana Santa de Granada.",
 };
 
 const secciones = [
@@ -13,11 +13,11 @@ const secciones = [
     cuerpo: (
       <>
         <p>
-          <strong>Titularidad:</strong> «SS Málaga» es una aplicación comunitaria de carácter
+          <strong>Titularidad:</strong> «SS Granada» es una aplicación comunitaria de carácter
           informativo, desarrollada y mantenida de forma independiente sin ánimo de lucro. No
           representa oficialmente ni sustituye a la Agrupación de Cofradías de Semana Santa de
-          Málaga, al Ayuntamiento de Málaga ni a ninguna hermandad concreta; se ofrece como
-          herramienta auxiliar de utilidad pública para el peregrinaje cofrade malagueño.
+          Granada, al Ayuntamiento de Granada ni a ninguna hermandad concreta; se ofrece como
+          herramienta auxiliar de utilidad pública para el peregrinaje cofrade granadino.
         </p>
         <p>
           <strong>Propiedad intelectual:</strong> los escudos, imágenes, túnicas, ilustraciones
@@ -143,7 +143,7 @@ export default function PaginaLegal() {
         <p className="text-xs font-bold uppercase tracking-[0.2em] oro-texto">
           Cumplimiento normativo
         </p>
-        <h1 className="barroco-title text-3xl text-[#4A154B] dark:text-[#D4AF37]">
+        <h1 className="barroco-title text-3xl text-[#1E0A24] dark:text-[#C5A059]">
           Aviso Legal, Privacidad y Cookies
         </h1>
         <p className="text-sm text-muted-foreground">
@@ -157,9 +157,9 @@ export default function PaginaLegal() {
           <details
             key={s.id}
             id={s.id}
-            className="borde-destello-dorado group rounded-xl border border-[#D4AF37]/40 bg-card p-4 open:shadow-[0_12px_32px_-16px_rgba(74,21,75,0.5)]"
+            className="borde-destello-dorado group rounded-xl border border-[#C5A059]/40 bg-card p-4 open:shadow-[0_12px_32px_-16px_rgba(74,21,75,0.5)]"
           >
-            <summary className="cursor-pointer list-none text-sm font-bold text-[#4A154B] transition-colors hover:text-[#D4AF37] dark:text-[#D4AF37] [&::-webkit-details-marker]:hidden">
+            <summary className="cursor-pointer list-none text-sm font-bold text-[#1E0A24] transition-colors hover:text-[#C5A059] dark:text-[#C5A059] [&::-webkit-details-marker]:hidden">
               {s.titulo}
               <span className="float-right transition-transform group-open:rotate-90" aria-hidden>
                 ›

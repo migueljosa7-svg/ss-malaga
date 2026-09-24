@@ -1,9 +1,9 @@
 // ---------- Telemetría de tronos (v1.0 Pro) ----------
-// v4.0 "Málaga Real": la interpolación del GPS sigue la trama urbana del
-// Centro Histórico (esquinas de Larios, Constitución, Granada, Carretería,
-// Alameda Principal, Tribuna de los Pobres…) en lugar de líneas rectas.
+// v4.0 "Granada Real": la interpolación del GPS sigue la trama urbana del
+// Centro Histórico (esquinas de Carrera del Darro, Gran Vía de Colón,
+// Carrera de la Virgen, Puerta Real…) en lugar de líneas rectas.
 import type { Hermandad } from "@/types/hermandad";
-import { posicionEnPolilinea, polilineaTramo } from "@/lib/data/calles-malaga";
+import { posicionEnPolilinea, polilineaTramo } from "@/lib/data/calles-granada";
 
 export interface Telemetria {
   estado: "antes" | "en_calle" | "despues";
@@ -145,7 +145,7 @@ export function hermandadEnDirecto(h: Hermandad, minuto: number): boolean {
 
 /**
  * v6.0: Polilínea realista del itinerario completo (v4.0), ajustada a la trama
- * urbana de Málaga. La usa el mapa para dibujar los recorridos por las
+ * urbana de Granada. La usa el mapa para dibujar los recorridos por las
  * calles reales en vez de líneas rectas entre puntos clave.
  */
 export function itinerarioRealista(h: Hermandad): Array<[number, number]> {

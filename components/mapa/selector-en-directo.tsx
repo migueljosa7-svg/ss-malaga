@@ -48,8 +48,8 @@ export function SelectorEnDirecto({
             onClick={() => setAbierto((v) => !v)}
             aria-expanded={abierto}
             className={cn(
-              "flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-3 py-1.5 text-xs font-semibold text-[#D4AF37] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95",
-              abierto && "ring-2 ring-[#D4AF37]/60"
+              "flex items-center gap-2 rounded-full border border-[#C5A059]/60 bg-[#1E0A24] px-3 py-1.5 text-xs font-semibold text-[#C5A059] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95",
+              abierto && "ring-2 ring-[#C5A059]/60"
             )}
           >
             <span className="relative flex h-2 w-2">
@@ -60,8 +60,8 @@ export function SelectorEnDirecto({
           </button>
 
           {abierto && (
-            <div className="absolute right-0 mt-2 w-64 overflow-hidden rounded-xl border border-[#D4AF37]/50 bg-card/95 shadow-2xl backdrop-blur">
-              <p className="border-b border-[#D4AF37]/30 bg-[#4A154B]/90 px-3 py-2 text-xs font-bold text-[#D4AF37]">
+            <div className="absolute right-0 mt-2 w-64 overflow-hidden rounded-xl border border-[#C5A059]/50 bg-card/95 shadow-2xl backdrop-blur">
+              <p className="border-b border-[#C5A059]/30 bg-[#1E0A24]/90 px-3 py-2 text-xs font-bold text-[#C5A059]">
                 Procesiones en la Calle ({enCalle.length})
               </p>
               {enCalle.length === 0 ? (
@@ -75,9 +75,9 @@ export function SelectorEnDirecto({
                       <button
                         type="button"
                         onClick={() => volar(p.lat, p.lng)}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-[#4A154B]/15 active:scale-[0.98]"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-[#1E0A24]/15 active:scale-[0.98]"
                       >
-                        <Navigation className="h-3.5 w-3.5 shrink-0 text-[#D4AF37]" />
+                        <Navigation className="h-3.5 w-3.5 shrink-0 text-[#C5A059]" />
                         <span className="min-w-0 flex-1">
                           <span className="block truncate font-semibold">{p.h.nombrePopular ?? p.h.nombre}</span>
                           <span className="block truncate text-[10px] text-muted-foreground">{p.tramo}</span>

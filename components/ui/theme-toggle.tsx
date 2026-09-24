@@ -29,7 +29,7 @@ export function ThemeToggle() {
       aria-label={oscuro ? "Cambiar a modo día" : "Cambiar a modo noche"}
       title={oscuro ? "Modo día (blanco/orfebrería)" : "Modo noche (morado nazareno)"}
       onClick={() => setTheme(oscuro ? "light" : "dark")}
-      className="flex h-8 w-8 items-center justify-center rounded-full border border-[#D4AF37]/60 bg-white/10 text-[#D4AF37] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/20 active:scale-95"
+      className="flex h-8 w-8 items-center justify-center rounded-full border border-[#C5A059]/60 bg-white/10 text-[#C5A059] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/20 active:scale-95"
     >
       {oscuro ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </button>

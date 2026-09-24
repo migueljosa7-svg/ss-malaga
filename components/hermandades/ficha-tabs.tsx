@@ -79,7 +79,7 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
           {!modoAhorro && (
             <motion.span
               aria-hidden
-              className="pointer-events-none absolute -inset-1 rounded-xl ring-1 ring-[#D4AF37]"
+              className="pointer-events-none absolute -inset-1 rounded-xl ring-1 ring-[#C5A059]"
               initial={{ opacity: 0.95, boxShadow: "0 0 36px 6px rgba(212,175,55,0.5)" }}
               animate={{ opacity: 0, boxShadow: "0 0 0px 0px rgba(74,21,75,0)" }}
               transition={{ duration: 1.2, ease: "easeOut" }}
@@ -214,7 +214,7 @@ export function FichaTabs({ hermandad: h }: { hermandad: Hermandad }) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="rounded-lg border border-[#D4AF37]/40 bg-[#4A154B]/5 p-4">
+              <div className="rounded-lg border border-[#C5A059]/40 bg-[#1E0A24]/5 p-4">
                 <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
                   <Shirt className="h-4 w-4 text-primary" /> Toca la campana como un mayordomo de trono
                 </p>

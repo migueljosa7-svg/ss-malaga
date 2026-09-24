@@ -75,10 +75,10 @@ export function PanelCache() {
         <div
           role="dialog"
           aria-label="Ajustes y almacenamiento"
-          className="w-[min(90vw,340px)] overflow-hidden rounded-2xl border border-[#D4AF37]/50 bg-card/95 shadow-[0_16px_48px_-12px_rgba(26,26,26,0.6)] backdrop-blur-md"
+          className="w-[min(90vw,340px)] overflow-hidden rounded-2xl border border-[#C5A059]/50 bg-card/95 shadow-[0_16px_48px_-12px_rgba(26,26,26,0.6)] backdrop-blur-md"
         >
-          <div className="flex items-center justify-between border-b border-[#D4AF37]/30 bg-[#4A154B] px-3 py-2">
-            <p className="text-xs font-bold text-[#D4AF37]">Ajustes y Almacenamiento</p>
+          <div className="flex items-center justify-between border-b border-[#C5A059]/30 bg-[#1E0A24] px-3 py-2">
+            <p className="text-xs font-bold text-[#C5A059]">Ajustes y Almacenamiento</p>
             <button
               type="button"
               onClick={() => setAbierto(false)}
@@ -94,7 +94,7 @@ export function PanelCache() {
               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Datos guardados en el dispositivo
               </p>
-              <p className="text-lg font-bold text-[#4A154B] dark:text-[#D4AF37]">
+              <p className="text-lg font-bold text-[#1E0A24] dark:text-[#C5A059]">
                 {uso === null ? "No disponible" : formatearMb(uso)}
               </p>
               <p className="text-xs text-muted-foreground">
@@ -131,7 +131,7 @@ export function PanelCache() {
         onClick={() => setAbierto((v) => !v)}
         aria-expanded={abierto}
         aria-label="Ajustes y almacenamiento de datos"
-        className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF37]/60 bg-card text-[#4A154B] shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 dark:text-[#D4AF37]"
+        className="flex h-11 w-11 items-center justify-center rounded-full border border-[#C5A059]/60 bg-card text-[#1E0A24] shadow-lg transition-all duration-200 hover:-translate-y-0.5 active:scale-95 dark:text-[#C5A059]"
       >
         <Database className="h-5 w-5" />
       </button>

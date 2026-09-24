@@ -6,13 +6,14 @@ import type { Hermandad } from "@/types/hermandad";
  *
  * Pide a una instancia OSRM pública la ruta a PIE entre los puntos clave del
  * itinerario; la respuesta `overview=full&geometries=geojson` devuelve una
- * polilínea Densa que discurre por el eje real de las calles (Larios,
- * Granada, Carretería, Alameda…), rodeando las manzanas sin cortarlas.
+ * polilínea Densa que discurre por el eje real de las calles (Carrera del
+ * Darro, Gran Vía de Colón, Carrera de la Virgen, Ganivet…), rodeando las
+ * manzanas sin cortarlas.
  *
  * Cascada de servicio:
  *   1. Instancia OSRM a pie (routing.openstreetmap.de / routed-foot)
  *   2. Demo OSRM en coche (router.project-osrm.org) — sigue calles, peor perfil
- *   3. null → el mapa cae en el grafo local de esquinas (lib/data/calles-malaga)
+ *   3. null → el mapa cae en el grafo local de esquinas (lib/data/calles-granada)
  *
  * Todo se memoriza en caché para no saturar las instancias públicas.
  */

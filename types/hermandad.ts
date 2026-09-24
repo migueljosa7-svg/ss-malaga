@@ -37,7 +37,7 @@ export interface Paso {
   nombre: string;
   escultores: string[];
   capataz: string;
-  costaleros: number; // Hombres de trono en Málaga
+  costaleros: number; // Hombres de trono
   mayordomos?: number;
   banda?: string; // Banda que acompaña al trono
   anio: number;

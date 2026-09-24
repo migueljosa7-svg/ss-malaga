@@ -1,11 +1,12 @@
-# NOTA DE PRENSA — SS Málaga (PWA de Semana Santa)
+# NOTA DE PRENSA — SS Granada (PWA de Semana Santa)
 
-**Málaga, [fecha de emisión]**
+**Granada, [fecha de emisión]**
 
 ## BOLETÍN
 
-SS Málaga lanza la versión V11.0 de su Progressive Web App cofrade: seguimiento
-en tiempo real de los tronos de la Semana Santa de Málaga.
+SS Granada lanza la versión V11.0 de su Progressive Web App cofrade: seguimiento
+en tiempo real de los tronos de la Semana Santa de Granada 2026 (29 de marzo –
+5 de abril).
 
 ## DATOS CLAVE
 
@@ -20,15 +21,16 @@ en tiempo real de los tronos de la Semana Santa de Málaga.
 ## CITA
 
 "La app nace para que ningún cofrade se pierda un trono ni se encuentre con
-una calle cortada sin aviso." — Equipo SS Málaga.
+una calle cortada sin aviso." — Equipo SS Granada.
 
 ## CONTACTO DE PRENSA
 
-prensa@ss-malaga.example.com
-[Indicar aquí el contacto oficial de la Agrupación de Cofradías al publicar.]
+prensa@ss-granada.example.com
+[Indicar aquí el contacto oficial de la Real Federación de Hermandades y
+Cofradías de Granada al publicar.]
 
 ## NOTA TÉCNICA
 
-Next.js 15 (App Router), Leaflet, React Query, framer-motion y tarjetas
-Open Graph dinámicas (ImageResponse 1200×630) para compartir en WhatsApp y
-Twitter/X con la identidad corporativa morado nazareno y oro orfebre.
+Next.js 15 (App Router), Leaflet, React Query, framer-motion e iconos OG
+estáticos (icon-512.png) para compartir en WhatsApp y Twitter/X con la
+identidad corporativa púrpura granadino y oro orfebre.

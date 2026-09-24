@@ -9,8 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatFecha } from "@/lib/utils";
 
-export const revalidate = 60; // ISR: revalidar cada minuto
-
 export default function DashboardPage() {
   const hermandades = getHermandades().slice(0, 6);
   const incidencias = getIncidencias().slice(0, 4);
@@ -20,7 +18,7 @@ export default function DashboardPage() {
       <section className="relative mb-8 overflow-hidden text-center">
         <ParticulasIncienso />
         <h1 className="barroco-title relative z-10 text-3xl font-bold sm:text-4xl">
-          Semana Santa de Málaga <span className="text-primary">en tiempo real</span>
+          Semana Santa de Granada <span className="text-primary">en tiempo real</span>
         </h1>
         <p className="relative z-10 mx-auto mt-2 max-w-2xl text-muted-foreground">
           Tronos, traslados, retrasos, cambios de itinerario, calles cortadas y mapas — todo en una
@@ -109,8 +107,8 @@ export default function DashboardPage() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">
-              ¿250 Hombres de Trono en la Esperanza frente a 200 en el Cautivo? Compara peso,
-              cuadrillas y hechuras de los tronos de Málaga cara a cara.
+              ¿250 Hombres de Trono en la Aurora frente a 200 en la Santa Cena? Compara peso,
+              cuadrillas y hechuras de los tronos de Granada cara a cara.
             </p>
             <Link
               href="/comparador"

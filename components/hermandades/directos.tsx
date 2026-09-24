@@ -26,7 +26,7 @@ export function Directos({ hermandad }: { hermandad: Hermandad }) {
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
             Sigue en directo la salida, carrera oficial y encierro de {hermandad.nombrePopular ?? hermandad.nombre}{" "}
-            a través de las televisiones que retransmiten la Semana Santa malagueña. El stream solo
+            a través de las televisiones que retransmiten la Semana Santa granadina. El stream solo
             se carga cuando lo pides.
           </p>
           <div className="grid gap-4 lg:grid-cols-2">

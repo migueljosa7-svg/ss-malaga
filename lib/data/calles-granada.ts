@@ -2,11 +2,11 @@ import type { NodoRuta } from "./grafo-rutas";
 import { nodosRuta } from "./grafo-rutas";
 
 /**
- * Trazado realista por la trama urbana del Centro Histórico de Málaga (v4.0).
+ * Trazado realista por la trama urbana del Centro Histórico de Granada (v4.0).
  * En lugar de dibujar líneas rectas punto a punto (que atraviesan manzanas),
  * cada segmento del itinerario se ajusta a las esquinas reales conocidas
- * (Larios, Constitución, Granada, Carretería, Alameda Principal, Tribuna de
- * los Pobres…). La interpolación del GPS sigue esos giros.
+ * (Carrera del Darro, Gran Vía de Colón, Carrera de la Virgen, Ganivet,
+ * Puerta Real…). La interpolación del GPS sigue esos giros.
  */
 
 /** Distancia perpendicular aproximada de un punto C al segmento AB (metros, equirectangular). */

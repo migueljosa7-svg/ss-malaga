@@ -8,7 +8,7 @@ import { posicionEnMinuto } from "@/lib/telemetria";
 import { useUIStore } from "@/lib/store";
 import { PATRONES_HAPTICOS, vibrar } from "@/lib/haptica";
 
-const MALAGA: [number, number] = [36.7213, -4.4214];
+const GRANADA: [number, number] = [37.17733, -3.59856];
 
 function distanciaKm(a: [number, number], b: [number, number]): number {
   const R = 6371;
@@ -39,7 +39,7 @@ export function RadarCruces({
   const modoAhorro = useUIStore((s) => s.modoAhorro);
 
   const entradas = useMemo(() => {
-    const base = miPos ?? MALAGA;
+    const base = miPos ?? GRANADA;
     return hermandades
       .map((h) => {
         const pos = posicionEnMinuto(h, minuto);
@@ -78,7 +78,7 @@ export function RadarCruces({
         onClick={abrir}
         aria-expanded={abierto}
         aria-label="Abrir radar de tronos cercanos"
-        className="absolute bottom-4 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-4 py-2.5 text-sm font-semibold text-[#D4AF37] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-md transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
+        className="absolute bottom-4 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-2 rounded-full border border-[#C5A059]/60 bg-[#1E0A24] px-4 py-2.5 text-sm font-semibold text-[#C5A059] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.5)] backdrop-blur-md transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
       >
         <RadarIcon className="h-4 w-4" />
         Radar de tronos
@@ -115,21 +115,21 @@ export function RadarCruces({
               animate={modoAhorro ? { opacity: 1 } : { y: 0 }}
               exit={modoAhorro ? { opacity: 0 } : { y: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 32 }}
-              className="panel-vidrio absolute inset-x-0 bottom-0 z-[90] max-h-[78%] rounded-t-2xl border-t border-[#D4AF37]/50 shadow-[0_-16px_48px_-12px_rgba(0,0,0,0.5)]"
+              className="panel-vidrio absolute inset-x-0 bottom-0 z-[90] max-h-[78%] rounded-t-2xl border-t border-[#C5A059]/50 shadow-[0_-16px_48px_-12px_rgba(0,0,0,0.5)]"
             >
-              <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-[#D4AF37]/50" aria-hidden />
+              <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-[#C5A059]/50" aria-hidden />
               <div className="flex items-center gap-2 px-4 pb-2 pt-3">
-                <RadarIcon className="h-4 w-4 shrink-0 text-[#4A154B] dark:text-[#e8c86a]" />
+                <RadarIcon className="h-4 w-4 shrink-0 text-[#1E0A24] dark:text-[#e8c86a]" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-bold">Radar — {entradas.length} tronos</p>
                   <p className="text-[11px] text-muted-foreground">
-                    {miPos ? "Ordenado desde tu posición" : "Ordenado desde el centro de Málaga"}
+                    {miPos ? "Ordenado desde tu posición" : "Ordenado desde el centro de Granada"}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={pedirMiPos}
-                  className="flex items-center gap-1 rounded-full border border-[#D4AF37]/50 px-2.5 py-1 text-[11px] font-semibold transition-transform hover:scale-105 active:scale-95"
+                  className="flex items-center gap-1 rounded-full border border-[#C5A059]/50 px-2.5 py-1 text-[11px] font-semibold transition-transform hover:scale-105 active:scale-95"
                 >
                   <Crosshair className="h-3.5 w-3.5" /> Mi posición
                 </button>
@@ -152,10 +152,10 @@ export function RadarCruces({
                         vibrar(PATRONES_HAPTICOS.seleccion);
                         cerrar();
                       }}
-                      className="flex w-full items-center gap-3 rounded-lg border border-transparent px-2 py-2 text-left transition-colors hover:border-[#D4AF37]/40 hover:bg-[#D4AF37]/10 active:scale-[0.99]"
+                      className="flex w-full items-center gap-3 rounded-lg border border-transparent px-2 py-2 text-left transition-colors hover:border-[#C5A059]/40 hover:bg-[#C5A059]/10 active:scale-[0.99]"
                     >
                       <span
-                        className={`inline-block h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-[#D4AF37] ${
+                        className={`inline-block h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-[#C5A059] ${
                           e.enVivo ? "animate-pulse bg-red-600" : "bg-[#94a3b8]"
                         }`}
                         aria-hidden

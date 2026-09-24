@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, CloudRain, TrafficCone, Users, Clock, Route } from "lucide-react";
 import type { Incidencia } from "@/types/hermandad";
 import { formatFecha, cn } from "@/lib/utils";
+import { getIncidencias } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 
 const iconos = {
@@ -25,11 +26,8 @@ const nivelStyles = {
 export function BannerAlertaCritica() {
   const { data: incidencias } = useQuery<Incidencia[]>({
     queryKey: ["incidencias"],
-    queryFn: async () => {
-      const res = await fetch("/api/incidencias");
-      if (!res.ok) throw new Error("Error al cargar incidencias");
-      return res.json();
-    },
+    // Export estático: los datos viven en el bundle (sin API routes).
+    queryFn: async () => getIncidencias(),
     refetchInterval: 30_000, // actualización en vivo cada 30s
   });
 
@@ -57,11 +55,8 @@ export function BannerAlertaCritica() {
 export function ListaIncidencias({ limit }: { limit?: number }) {
   const { data, isLoading } = useQuery<Incidencia[]>({
     queryKey: ["incidencias"],
-    queryFn: async () => {
-      const res = await fetch("/api/incidencias");
-      if (!res.ok) throw new Error("Error al cargar incidencias");
-      return res.json();
-    },
+    // Export estático: los datos viven en el bundle (sin API routes).
+    queryFn: async () => getIncidencias(),
     refetchInterval: 30_000,
   });
 

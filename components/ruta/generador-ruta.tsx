@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Footprints, Sparkles, Route as RouteIcon } from "lucide-react";
-import { getHermandades } from "@/lib/data";
+import { getCallesCortadas, getHermandades } from "@/lib/data";
 import { nodosRuta, aristasRuta, distanciaMetros } from "@/lib/data/grafo-rutas";
 import { calcularRutaPeatonal } from "@/lib/rutas";
 import type { CalleCortada } from "@/types/hermandad";
@@ -72,11 +72,8 @@ export function GeneradorRutaCofrade() {
 
   const { data: calles } = useQuery<CalleCortada[]>({
     queryKey: ["calles-cortadas"],
-    queryFn: async () => {
-      const res = await fetch("/api/incidencias?tipo=calles_cortadas");
-      if (!res.ok) throw new Error("Error cargando calles cortadas");
-      return res.json();
-    },
+    // Export estático: los datos viven en el bundle (sin API routes).
+    queryFn: async () => getCallesCortadas(),
   });
 
   function toggle(slug: string) {
@@ -94,7 +91,7 @@ export function GeneradorRutaCofrade() {
     const nodosUsados = new Set<string>();
     const escalas: Escala[] = seleccion.map((slug) => {
       const h = hermandades.find((x) => x.slug === slug)!;
-      const punto = h.itinerario[0] ?? { lat: 36.7213, lng: -4.4214 };
+      const punto = h.itinerario[0] ?? { lat: 37.17733, lng: -3.59856 };
       const nodo = nodoMasCercano(punto, nodosUsados);
       nodosUsados.add(nodo.id);
       return {
@@ -202,7 +199,7 @@ export function GeneradorRutaCofrade() {
             type="button"
             onClick={optimizar}
             disabled={seleccion.length < 2}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-4 py-2 text-sm font-medium text-[#D4AF37] transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#1E0A24] px-4 py-2 text-sm font-medium text-[#C5A059] transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Sparkles className="h-4 w-4" />
             Optimizar mi ruta cofrade

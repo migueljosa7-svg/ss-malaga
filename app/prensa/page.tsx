@@ -13,10 +13,10 @@ import {
 export const metadata: Metadata = {
   title: "Prensa — Dossier oficial",
   description:
-    "Kit de prensa de SS Málaga: resumen ejecutivo, metadatos GPS, sistema de prevención de aglomeraciones y tecnología PWA para medios y Agrupación de Cofradías.",
+    "Kit de prensa de SS Granada: resumen ejecutivo, metadatos GPS, sistema de prevención de aglomeraciones y tecnología PWA para medios y la Real Federación de Hermandades y Cofradías de Granada.",
 };
 
-const CONTACTO = "prensa@ss-malaga.example.com"; // ← sustituir por el correo oficial de la Agrupación
+const CONTACTO = "prensa@ss-granada.example.com"; // ← sustituir por el correo oficial de la Federación de Hermandades de Granada
 
 export default function PrensaPage() {
   return (
@@ -26,11 +26,12 @@ export default function PrensaPage() {
           <Badge variant="warning">Kit de prensa</Badge>
           <Badge>v11.0</Badge>
         </div>
-        <h1 className="mt-2 text-3xl font-bold">Dossier oficial SS Málaga</h1>
+        <h1 className="mt-2 text-3xl font-bold">Dossier oficial SS Granada</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Recursos institucionales para medios de comunicación y la Agrupación de
-          Cofradías: qué es el proyecto, cómo protege a los cofrades y qué
-          tecnología lo sostiene.
+          Recursos institucionales para medios de comunicación y la Real Federación
+          de Hermandades y Cofradías de la Semana Santa de Granada (Ideal Granada,
+          Granada Hoy, TG7): qué es el proyecto, cómo protege a los cofrades y
+          qué tecnología lo sostiene.
         </p>
       </header>
 
@@ -43,9 +44,10 @@ export default function PrensaPage() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p>
-              <strong>SS Málaga</strong> es una Progressive Web App (PWA) offline-first
-              que sigue en tiempo real los tronos de la Semana Santa de Málaga:
-              posición telemétrica interpolada sobre el callejero real, radar de
+              <strong>SS Granada</strong> es una Progressive Web App (PWA) offline-first
+              que sigue en tiempo real los tronos de la Semana Santa de Granada:
+              posición telemétrica interpolada sobre el callejero real (Carrera
+              Oficial: Carrera de la Virgen, Puerta Real, S.I. Catedral), radar de
               proximidad, calculador de rutas peatonales que esquiva las calles
               cortadas, muro de incidencias y toques de campana con háptica.
             </p>
@@ -94,7 +96,7 @@ export default function PrensaPage() {
               </li>
               <li>
                 Radar de tronos cercanos para dosificar la afluencia por puntos
-                icónicos (Tribuna, Desembarco, Catedral).
+                icónicos (Carrera del Darro, Carrera de la Virgen, Catedral).
               </li>
               <li>
                 Filtro «solo en la calle»: el mapa solo dibuja procesiones activas,
@@ -124,15 +126,15 @@ export default function PrensaPage() {
 
         <div className="flex flex-wrap gap-3">
           <a
-            href="/nota-de-prensa-ss-malaga.md"
+            href="/nota-de-prensa-ss-granada.md"
             download
-            className="inline-flex items-center gap-2 rounded-full bg-[#4A154B] px-5 py-2.5 text-sm font-semibold text-[#D4AF37] transition-transform hover:-translate-y-0.5 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full bg-[#1E0A24] px-5 py-2.5 text-sm font-semibold text-[#C5A059] transition-transform hover:-translate-y-0.5 active:scale-95"
           >
             <FileDown className="h-4 w-4" /> Descargar nota de prensa
           </a>
           <a
-            href={`mailto:${CONTACTO}?subject=Prensa%20SS%20Malaga`}
-            className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/60 px-5 py-2.5 text-sm font-semibold transition-transform hover:-translate-y-0.5 active:scale-95"
+            href={`mailto:${CONTACTO}?subject=Prensa%20SS%20Granada`}
+            className="inline-flex items-center gap-2 rounded-full border border-[#C5A059]/60 px-5 py-2.5 text-sm font-semibold transition-transform hover:-translate-y-0.5 active:scale-95"
           >
             <Mail className="h-4 w-4" /> Contacto de prensa
           </a>

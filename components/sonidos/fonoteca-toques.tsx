@@ -9,7 +9,7 @@ import { vibrar } from "@/lib/haptica";
 
 /**
  * Fonoteca Sonora del Mayordomo de Trono (v6.0).
- * Simbología interactiva del toque de campana malagueño:
+ * Simbología interactiva del toque de campana de trono:
  * 1 toque = Atención · 3 toques = Arriba · 2 toques = Abajo ·
  * Mecida a pulso · Campanilla de guía.
  * Reproduce /audio/campana/ con fallback al sintetizador Web Audio API y
@@ -125,7 +125,7 @@ export function FonotecaToques() {
     <section aria-label="Fonoteca del mayordomo de trono" className="space-y-3">
       <header>
         <h3 className="flex items-center gap-2 text-base font-bold">
-          <Volume2 className="h-5 w-5 text-primary" /> Simbología del Toque de Campana en Málaga
+          <Volume2 className="h-5 w-5 text-primary" /> Simbología del Toque de Campana en Granada
         </h3>
         <p className="text-sm text-muted-foreground">
           El mayordomo gobierna el trono con la campana: cada toque es una orden. Pulsa para escuchar
@@ -158,7 +158,7 @@ function ToqueCard({
       aria-label={`Reproducir toque: ${t.nombre} — ${t.significado}`}
       className={cn(
         "ilustracion-cofrade flex items-center gap-3 rounded-xl p-3 text-left transition-transform duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-60",
-        sonando && "ring-2 ring-[#D4AF37]"
+        sonando && "ring-2 ring-[#C5A059]"
       )}
     >
       {/* Campana SVG que se balancea al son (dorado orfebre) */}
@@ -166,7 +166,7 @@ function ToqueCard({
         <svg viewBox="0 0 40 48" className="h-12 w-10" role="img" aria-hidden="true">
           <path
             d="M20 4 C11 4 8 12 8 20 L8 30 L5 34 L35 34 L32 30 L32 20 C32 12 29 4 20 4Z"
-            fill="#D4AF37"
+            fill="#C5A059"
             stroke="#A8842B"
             strokeWidth="1.5"
           />
@@ -181,9 +181,9 @@ function ToqueCard({
       </span>
       {sonando && (
         <span className="ml-auto flex h-3 items-end gap-0.5" aria-hidden>
-          <span className="w-1 animate-pulse rounded bg-[#D4AF37]" style={{ height: "60%" }} />
-          <span className="w-1 animate-pulse rounded bg-[#D4AF37]" style={{ height: "100%", animationDelay: "0.15s" }} />
-          <span className="w-1 animate-pulse rounded bg-[#D4AF37]" style={{ height: "45%", animationDelay: "0.3s" }} />
+          <span className="w-1 animate-pulse rounded bg-[#C5A059]" style={{ height: "60%" }} />
+          <span className="w-1 animate-pulse rounded bg-[#C5A059]" style={{ height: "100%", animationDelay: "0.15s" }} />
+          <span className="w-1 animate-pulse rounded bg-[#C5A059]" style={{ height: "45%", animationDelay: "0.3s" }} />
         </span>
       )}
     </button>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ListaIncidencias } from "@/components/incidencias/alertas-live";
 
 export const metadata: Metadata = { title: "Incidencias" };
-export const revalidate = 30;
 
 export default function IncidenciasPage() {
   return (

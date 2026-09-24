@@ -39,7 +39,7 @@ export function HudTelemetria({
     return {
       contenido: (
         <div
-          className="absolute bottom-4 left-4 z-[500] w-72 rounded-xl border border-[#D4AF37]/50 bg-card/95 p-4 shadow-2xl backdrop-blur"
+          className="absolute bottom-4 left-4 z-[500] w-72 rounded-xl border border-[#C5A059]/50 bg-card/95 p-4 shadow-2xl backdrop-blur"
           role="status"
           aria-live="polite"
         >

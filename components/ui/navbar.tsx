@@ -17,7 +17,7 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-border bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link href="/" className="text-lg font-bold tracking-wide">
-          SS Málaga <span className="text-dorado">✝</span>
+          SS Granada <span className="text-dorado">✝</span>
         </Link>
         <ul className="flex gap-1 sm:gap-4">
           {links.map(({ href, label, icon: Icon }) => (

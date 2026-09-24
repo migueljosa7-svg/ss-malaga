@@ -8,11 +8,11 @@ import { getHermandades } from "@/lib/data";
 import { useUIStore } from "@/lib/store";
 import { PATRONES_HAPTICOS, vibrar } from "@/lib/haptica";
 
-const MALAGA: [number, number] = [36.7213, -4.4214];
+const GRANADA: [number, number] = [37.17733, -3.59856];
 
 const PAGINAS = [
   { id: "pag:inicio", titulo: "Inicio", subtitulo: "Portada cofrade", href: "/" },
-  { id: "pag:hermandades", titulo: "Hermandades", subtitulo: "Las cofradías de Málaga", href: "/hermandades" },
+  { id: "pag:hermandades", titulo: "Hermandades", subtitulo: "Las cofradías de Granada", href: "/hermandades" },
   { id: "pag:mapa", titulo: "Mapa en vivo", subtitulo: "Posición de tronos y radar", href: "/mapa" },
   { id: "pag:ruta", titulo: "Mi Ruta", subtitulo: "Planifica por dónde ver los tronos", href: "/mi-ruta" },
   { id: "pag:comparador", titulo: "Comparador", subtitulo: "Compara hermandades", href: "/comparador" },
@@ -47,8 +47,8 @@ export function BuscadorCofrade() {
           titulo: h.nombrePopular ?? h.nombre,
           subtitulo: `${h.diaSemana} · ${h.sede}`,
           tipo: "hermandad" as const,
-          lat: p0?.lat ?? MALAGA[0],
-          lng: p0?.lng ?? MALAGA[1],
+          lat: p0?.lat ?? GRANADA[0],
+          lng: p0?.lng ?? GRANADA[1],
         };
       }),
     []
@@ -133,9 +133,9 @@ export function BuscadorCofrade() {
           aria-label="Abrir buscador (atajo Cmd+K)"
           className="panel-vidrio fixed right-4 top-20 z-[95] flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
         >
-          <Search className="h-4 w-4 text-[#4A154B] dark:text-[#e8c86a]" />
+          <Search className="h-4 w-4 text-[#1E0A24] dark:text-[#e8c86a]" />
           <span className="hidden sm:inline">Buscar</span>
-          <kbd className="rounded border border-[#D4AF37]/40 bg-[#4A154B]/10 px-1.5 py-0.5 text-[10px] font-bold">
+          <kbd className="rounded border border-[#C5A059]/40 bg-[#1E0A24]/10 px-1.5 py-0.5 text-[10px] font-bold">
             ⌘K
           </kbd>
         </button>
@@ -165,8 +165,8 @@ export function BuscadorCofrade() {
                 transition={{ duration: dur, ease: "easeOut" }}
                 className="panel-vidrio overflow-hidden rounded-2xl"
               >
-                <div className="flex items-center gap-2 border-b border-[#D4AF37]/35 px-3 py-2.5">
-                  <Search className="h-4 w-4 shrink-0 text-[#4A154B] dark:text-[#e8c86a]" />
+                <div className="flex items-center gap-2 border-b border-[#C5A059]/35 px-3 py-2.5">
+                  <Search className="h-4 w-4 shrink-0 text-[#1E0A24] dark:text-[#e8c86a]" />
                   <input
                     ref={inputRef}
                     value={consulta}
@@ -177,7 +177,7 @@ export function BuscadorCofrade() {
                     aria-controls="paleta-resultados"
                     className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   />
-                  <kbd className="rounded border border-[#D4AF37]/40 px-1.5 py-0.5 text-[10px] font-bold text-muted-foreground">
+                  <kbd className="rounded border border-[#C5A059]/40 px-1.5 py-0.5 text-[10px] font-bold text-muted-foreground">
                     ESC
                   </kbd>
                 </div>
@@ -197,7 +197,7 @@ export function BuscadorCofrade() {
                       onMouseEnter={() => setIndice(i)}
                       onClick={() => ejecutar(item)}
                       className={`flex cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 transition-colors ${
-                        i === indice ? "bg-[#4A154B] text-white" : "hover:bg-[#D4AF37]/10"
+                        i === indice ? "bg-[#1E0A24] text-white" : "hover:bg-[#C5A059]/10"
                       }`}
                     >
                       {item.tipo === "pagina" ? (
@@ -205,7 +205,7 @@ export function BuscadorCofrade() {
                       ) : (
                         <MapPin
                           className={`h-4 w-4 shrink-0 ${
-                            i === indice ? "text-[#D4AF37]" : "text-[#4A154B] dark:text-[#e8c86a]"
+                            i === indice ? "text-[#C5A059]" : "text-[#1E0A24] dark:text-[#e8c86a]"
                           }`}
                         />
                       )}
@@ -230,10 +230,10 @@ export function BuscadorCofrade() {
                     </li>
                   )}
                 </ul>
-                <footer className="flex items-center justify-between border-t border-[#D4AF37]/30 px-3 py-2 text-[11px] text-muted-foreground">
+                <footer className="flex items-center justify-between border-t border-[#C5A059]/30 px-3 py-2 text-[11px] text-muted-foreground">
                   <span>↑↓ navegar · ↵ centrar en el mapa</span>
                   <span className="flex items-center gap-1">
-                    <Route className="h-3 w-3" /> SS Málaga
+                    <Route className="h-3 w-3" /> SS Granada
                   </span>
                 </footer>
               </motion.div>

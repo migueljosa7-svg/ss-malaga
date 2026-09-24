@@ -7,8 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Users } from "lucide-react";
 import type { Metadata } from "next";
 
-export const revalidate = 60;
-
 export async function generateStaticParams() {
   return getHermandades().map((h) => ({ slug: h.slug }));
 }
@@ -22,25 +20,25 @@ export async function generateMetadata({
   const h = getHermandadBySlug(slug);
   if (!h) return { title: "Hermandad" };
   const nombre = h.nombrePopular ?? h.nombre;
-  const descripcion = `${h.diaSemana} · salida desde ${h.sede}. Sigue su trono en tiempo real en SS Málaga.`;
+  const descripcion = `${h.diaSemana} · salida desde ${h.sede}. Sigue su trono en tiempo real en SS Granada.`;
   return {
     title: h.nombre,
     description: descripcion,
-    // v11.0: tarjeta OG/Twitter 1200×630 dinámica por cofradía (/api/og?slug=…)
+    // Export estático: tarjeta OG con el icono estático (/icon-512.png).
     openGraph: {
-      title: `${nombre} | SS Málaga`,
+      title: `${nombre} | SS Granada`,
       description: descripcion,
       url: `/hermandades/${slug}`,
-      siteName: "SS Málaga",
+      siteName: "SS Granada",
       locale: "es_ES",
       type: "website",
-      images: [{ url: `/api/og?slug=${slug}`, width: 1200, height: 630 }],
+      images: [{ url: `/icon-512.png`, width: 512, height: 512 }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${nombre} | SS Málaga`,
+      title: `${nombre} | SS Granada`,
       description: descripcion,
-      images: [`/api/og?slug=${slug}`],
+      images: [`/icon-512.png`],
     },
   };
 }

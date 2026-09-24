@@ -70,14 +70,14 @@ export function InstallBanner() {
     <div
       role="dialog"
       aria-label="Instalar la aplicación"
-      className="fixed left-1/2 top-16 z-[85] w-[min(92vw,440px)] -translate-x-1/2 rounded-2xl border border-[#D4AF37]/50 bg-[#4A154B]/95 px-4 py-3 text-[#FAF7F2] shadow-[0_16px_48px_-12px_rgba(26,26,26,0.7)] backdrop-blur-md"
+      className="fixed left-1/2 top-16 z-[85] w-[min(92vw,440px)] -translate-x-1/2 rounded-2xl border border-[#C5A059]/50 bg-[#1E0A24]/95 px-4 py-3 text-[#FAF7F2] shadow-[0_16px_48px_-12px_rgba(26,26,26,0.7)] backdrop-blur-md"
     >
       <div className="flex items-center gap-3">
         <span className="text-2xl" aria-hidden="true">
           📲
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-[#D4AF37]">Instalar App Cofrade</p>
+          <p className="text-sm font-bold text-[#C5A059]">Instalar App Cofrade</p>
           <p className="text-xs text-[#FAF7F2]/80">
             Sigue los tronos incluso sin cobertura: funciona offline.
           </p>
@@ -86,7 +86,7 @@ export function InstallBanner() {
           type="button"
           onClick={instalar}
           disabled={instalando}
-          className="rounded-full bg-[#D4AF37] px-3 py-1.5 text-xs font-bold text-[#4A154B] transition-all duration-200 hover:-translate-y-0.5 active:scale-95 disabled:opacity-60"
+          className="rounded-full bg-[#C5A059] px-3 py-1.5 text-xs font-bold text-[#1E0A24] transition-all duration-200 hover:-translate-y-0.5 active:scale-95 disabled:opacity-60"
         >
           <Download className="mr-1 inline h-3.5 w-3.5" />
           {instalando ? "Instalando…" : "Instalar"}

@@ -63,13 +63,13 @@ export function ReproductorGlobalMarchas() {
           type="button"
           onClick={() => setAbierto(true)}
           aria-label="Abrir reproductor de marchas"
-          className="flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#4A154B] px-4 py-2.5 text-sm font-medium text-[#D4AF37] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
+          className="flex items-center gap-2 rounded-full border border-[#C5A059]/60 bg-[#1E0A24] px-4 py-2.5 text-sm font-medium text-[#C5A059] shadow-lg transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
         >
           <Music className="h-4 w-4" />
           <span className="hidden sm:inline">Marchas cofrades</span>
         </button>
       ) : (
-        <div className="w-72 rounded-xl border border-[#D4AF37]/40 bg-card p-3 shadow-xl">
+        <div className="w-72 rounded-xl border border-[#C5A059]/40 bg-card p-3 shadow-xl">
           <div className="mb-2 flex items-center gap-2">
             <Music className="h-4 w-4 text-primary" />
             <span className="flex-1 truncate text-sm font-medium">{marcha.titulo}</span>
@@ -97,7 +97,7 @@ export function ReproductorGlobalMarchas() {
               const audio = audioRef.current;
               if (audio && audio.duration) audio.currentTime = (v / 100) * audio.duration;
             }}
-            className="w-full accent-[#D4AF37]"
+            className="w-full accent-[#C5A059]"
             aria-label="Progreso de la marcha"
           />
           <div className="mt-2 flex items-center justify-between">
@@ -113,7 +113,7 @@ export function ReproductorGlobalMarchas() {
               type="button"
               onClick={toggle}
               aria-label={reproduciendo ? "Pausar marcha" : "Reproducir marcha"}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4A154B] text-[#D4AF37]"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1E0A24] text-[#C5A059]"
             >
               {reproduciendo ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </button>

@@ -13,8 +13,8 @@ export interface PosicionGeo {
   lng: number;
 }
 
-/** Centro por defecto del mapa de Málaga (posición del "oyente"). */
-export const CENTRO_MALAGA: PosicionGeo = { lat: 36.7213, lng: -4.4214 };
+/** Centro por defecto del mapa de Granada (posición del "oyente"). */
+export const CENTRO_GRANADA: PosicionGeo = { lat: 37.17733, lng: -3.59856 };
 
 let audioCtx: AudioContext | null = null;
 const bufferCache = new Map<string, AudioBuffer>();
@@ -57,8 +57,8 @@ function desplazamientoRelativo(pos: PosicionGeo, centro: PosicionGeo): { x: num
  * Lanza excepción si Web Audio no está disponible; el llamador debe hacer fallback.
  */
 /**
- * v4.0 "Audio Auténtico": cascada de carga de toques de campana de trono
- * malagueño. Prioriza grabaciones reales en /public/audio/campana/
+ * v4.0 "Audio Auténtico": cascada de carga de toques de campana de trono.
+ * Prioriza grabaciones reales en /public/audio/campana/
  * (campana-3toques.mp3, campana-1.mp3) y solo si no hay red o el archivo no
  * responde, cae al sintetizador Web Audio API.
  */
@@ -77,7 +77,7 @@ export async function tocarCampana3d(opts: {
     src = "/audio/campana/campana-3toques.mp3",
     toques = 3,
     posicion = null,
-    centro = CENTRO_MALAGA,
+    centro = CENTRO_GRANADA,
   } = opts;
 
   const ctx = getAudioContext();
