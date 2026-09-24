@@ -22,4 +22,4 @@ npm run build    # producción → genera ./out
 
 ## Despliegue en Render
 El archivo `render.yaml` define el Static Site `ss-granada` (plan free) con `buildCommand: npm ci && npm run build` y `staticPublishPath: ./out`.
-Conectar el repo de GitHub (`migueljosa7-svg/ss-malaga`) en Render y usar "Blueprint" con este archivo.
+Conectar el repo de GitHub (`migueljosa7-svg/ss-granada`) en Render y usar "Blueprint" con este archivo.
